@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/signupStep1Fragment">
+
+    <!-- 첫 번째 회원가입 단계 -->
+    <fragment
+        android:id="@+id/signupStep1Fragment"
+        android:name="com.example.memowithtags.SignupFragments.SignupStep1Fragment"
+        android:label="Step 1"
+        tools:layout="@layout/fragment_signup_step1">
+        <action
+            android:id="@+id/action_step1_to_step2"
+            app:destination="@id/signupStep2Fragment" />
+    </fragment>
+
+    <!-- 두 번째 회원가입 단계 -->
+    <fragment
+        android:id="@+id/signupStep2Fragment"
+        android:name="com.example.memowithtags.SignupFragments.SignupStep2Fragment"
+        android:label="Step 2"
+        tools:layout="@layout/fragment_signup_step2">
+        <action
+            android:id="@+id/action_step2_to_step3"
+            app:destination="@id/signupStep3Fragment" />
+    </fragment>
+
+    <!-- 세 번째 회원가입 단계 -->
+    <fragment
+        android:id="@+id/signupStep3Fragment"
+        android:name="com.example.memowithtags.SignupFragments.SignupStep3Fragment"
+        android:label="Step 3"
+        tools:layout="@layout/fragment_signup_step3" />
+</navigation>
