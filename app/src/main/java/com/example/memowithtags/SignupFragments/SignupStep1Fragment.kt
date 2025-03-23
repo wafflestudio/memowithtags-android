@@ -51,7 +51,12 @@ class SignupStep1Fragment : Fragment() {
             override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
                 if (response.isSuccessful) {
                     Toast.makeText(requireContext(), "인증 코드가 이메일로 전송되었습니다.", Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.action_step1_to_step2) // 성공하면 다음 단계로 이동
+
+                    val bundle = Bundle().apply {
+                        putString("email", email)
+                    }
+
+                    findNavController().navigate(R.id.action_step1_to_step2, bundle) // 성공하면 다음 단계로 이동
                 } else {
                     Toast.makeText(requireContext(), "이메일 인증 요청 실패", Toast.LENGTH_SHORT).show()
                 }

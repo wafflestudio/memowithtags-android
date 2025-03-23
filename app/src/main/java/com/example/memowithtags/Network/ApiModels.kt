@@ -10,6 +10,11 @@ data class SendEmailRequest(
     val email: String
 )
 
+data class VerifyEmailRequest(
+    val email: String,
+    val verificationCode: String
+)
+
 data class SignupResponse(
     val accessToken: String,
     val refreshToken: String
