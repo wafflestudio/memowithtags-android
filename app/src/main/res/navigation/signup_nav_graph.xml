@@ -31,5 +31,15 @@
         android:id="@+id/signupStep3Fragment"
         android:name="com.example.memowithtags.SignupFragments.SignupStep3Fragment"
         android:label="Step 3"
-        tools:layout="@layout/fragment_signup_step3" />
+        tools:layout="@layout/fragment_signup_step3">
+        <action
+            android:id="@+id/action_step3_to_step4"
+            app:destination="@id/signupStep4Fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/signupStep4Fragment"
+        android:name="com.example.memowithtags.SignupFragments.SignupStep4Fragment"
+        android:label="Step 4"
+        tools:layout="@layout/fragment_signup_step4" />
 </navigation>
