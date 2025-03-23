@@ -6,6 +6,10 @@ data class SignupRequest(
     val password: String
 )
 
+data class SendEmailRequest(
+    val email: String
+)
+
 data class SignupResponse(
     val accessToken: String,
     val refreshToken: String

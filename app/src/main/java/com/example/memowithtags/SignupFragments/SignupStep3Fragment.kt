@@ -11,7 +11,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.memowithtags.R
 import com.example.memowithtags.Viewmodels.SignupViewModel
 import com.example.memowithtags.databinding.FragmentSignupStep3Binding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SignupStep3Fragment : Fragment() {
     private var _binding: FragmentSignupStep3Binding? = null
     private val binding get() = _binding!!

@@ -4,6 +4,9 @@ plugins {
     id("kotlin-kapt")
     alias(libs.plugins.hilt)
 }
+hilt {
+    enableAggregatingTask = false
+}
 
 android {
     namespace = "com.example.memowithtags"
@@ -55,7 +58,8 @@ dependencies {
     implementation(libs.navigation.ui.ktx)
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
-    implementation(libs.okhttp.logging)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
 }

@@ -41,4 +41,10 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+
+    @Provides
+    @Singleton
+    fun provideApiClient(retrofit: Retrofit): ApiClient {
+        return ApiClient(retrofit)
+    }
 }
