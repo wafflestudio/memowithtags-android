@@ -13,4 +13,7 @@ interface UserApi{
 
     @POST("api/v1/auth/verify-email")
     fun verifyEmail(@Body verifyEmailRequest: VerifyEmailRequest): Call<Unit>
+
+    @POST("api/v1/auth/login")
+    fun login(@Body loginRequest: LoginRequest): Call<LoginResponse>
 }
