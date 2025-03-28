@@ -132,69 +132,6 @@
                     android:textColor="@android:color/black" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/lineview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/linearbuttonLayout">
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0.75dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/darker_gray"
-                    android:layout_marginEnd="8dp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="다른 계정으로 로그인"
-                    android:textSize="10sp"
-                    android:textColor="@android:color/darker_gray"/>
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0.75dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/darker_gray"
-                    android:layout_marginStart="8dp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_marginTop="16dp"
-                app:layout_constraintTop_toBottomOf="@id/lineview">
-
-                <ImageView
-                    android:id="@+id/kakaoButton"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:background="@drawable/icon_border_background"
-                    android:src="@drawable/kakao_icon"
-                    android:scaleType="centerInside"
-                    android:layout_marginEnd="20dp" />
-
-                <ImageView
-                    android:id="@+id/naverButton"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:background="@drawable/icon_border_background"
-                    android:src="@drawable/naver_icon"
-                    android:scaleType="centerInside"
-                    android:layout_marginEnd="20dp" />
-
-                <ImageView
-                    android:id="@+id/googleButton"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:background="@drawable/icon_border_background"
-                    android:src="@drawable/google_icon"
-                    android:scaleType="centerInside"/>
-            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
