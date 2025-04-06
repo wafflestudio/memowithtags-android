@@ -38,6 +38,10 @@ class SignupStep2Fragment : Fragment() {
 
         val email = arguments?.getString("email")!!
 
+        val md = requireActivity().intent.getStringExtra("mode")!!
+
+        if (md=="findPw"){ binding.signupTitle.text="비밀번호 찾기" }
+
         // 다음 단계로 이동
         binding.nextButton.setOnClickListener {
             val text1 = binding.certifinum1.text.toString().trim()
@@ -49,11 +53,11 @@ class SignupStep2Fragment : Fragment() {
 
             val verifyCode = "$text1$text2$text3$text4$text5$text6"
 
-            verifyEmailCode(email,verifyCode)
+            verifyEmailCode(email,verifyCode,md)
         }
     }
 
-    private fun verifyEmailCode(email: String, verifyCode: String) {
+    private fun verifyEmailCode(email: String, verifyCode: String, mode: String) {
         val call = apiClient.userApi.verifyEmail(VerifyEmailRequest(email,verifyCode))
 
         call.enqueue(object : Callback<Unit> {
@@ -65,7 +69,8 @@ class SignupStep2Fragment : Fragment() {
                         putString("email", email)
                     }
 
-                    findNavController().navigate(R.id.action_step2_to_step3, bundle) // 성공하면 다음 단계로 이동
+                    if(mode=="signUp"){findNavController().navigate(R.id.action_step2_to_step3, bundle)}
+                    else if(mode=="findPw"){findNavController().navigate(R.id.action_step2_to_chpw, bundle)}// 성공하면 다음 단계로 이동
                 } else {
                     Toast.makeText(requireContext(), "인증코드 오류", Toast.LENGTH_SHORT).show()
                 }

@@ -7,19 +7,20 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.memowithtags.Network.ChangePwRequest
+import com.example.memowithtags.Network.VerifyEmailRequest
 import com.example.memowithtags.R
-import com.example.memowithtags.databinding.FragmentSignupStep1Binding
+import com.example.memowithtags.databinding.FragmentChangePwBinding
 import com.example.wafflestudio_toyproject.network.ApiClient
 import dagger.hilt.android.AndroidEntryPoint
-import retrofit2.Response
-import javax.inject.Inject
 import retrofit2.Call
 import retrofit2.Callback
-import com.example.memowithtags.Network.SendEmailRequest
+import retrofit2.Response
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class SignupStep1Fragment : Fragment() {
-    private var _binding: FragmentSignupStep1Binding? = null
+class ChangePWFragment : Fragment() {
+    private var _binding: FragmentChangePwBinding? = null
     private val binding get() = _binding!!
 
     @Inject
@@ -29,41 +30,37 @@ class SignupStep1Fragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSignupStep1Binding.inflate(inflater, container, false)
+        _binding = FragmentChangePwBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val email = arguments?.getString("email")!!
 
-        val md = requireActivity().intent.getStringExtra("mode")
-
-        if (md=="findPw"){ binding.signupTitle.text="비밀번호 찾기" }
-
-        // 다음 단계로 이동
         binding.nextButton.setOnClickListener {
-            val email = binding.emailEditText.text.toString().trim()
+            val password = binding.passwordEditText.text.toString()
 
-            sendEmailVerification(email)
+            changePw(email, password)
         }
     }
 
-    private fun sendEmailVerification(email: String) {
-        val call = apiClient.userApi.sendEmail(SendEmailRequest(email))
+    private fun changePw(email: String, password: String) {
+        val call = apiClient.userApi.changePw(ChangePwRequest(email,password))
 
         call.enqueue(object : Callback<Unit> {
             override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
                 if (response.isSuccessful) {
-                    Toast.makeText(requireContext(), "인증 코드가 이메일로 전송되었습니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "비밀번호가 변경되었습니다.", Toast.LENGTH_SHORT).show()
 
                     val bundle = Bundle().apply {
                         putString("email", email)
                     }
 
-                    findNavController().navigate(R.id.action_step1_to_step2, bundle) // 성공하면 다음 단계로 이동
+                    findNavController().navigate(R.id.action_chpw_to_step4, bundle) // 성공하면 다음 단계로 이동
                 } else {
-                    Toast.makeText(requireContext(), "이메일 인증 요청 실패", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "인증코드 오류", Toast.LENGTH_SHORT).show()
                 }
             }
 

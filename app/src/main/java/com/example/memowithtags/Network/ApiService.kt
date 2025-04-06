@@ -16,4 +16,7 @@ interface UserApi{
 
     @POST("api/v1/auth/login")
     fun login(@Body loginRequest: LoginRequest): Call<LoginResponse>
+
+    @POST("api/v1/auth/reset-password")
+    fun changePw(@Body changePwRequest: ChangePwRequest): Call<Unit>
 }
