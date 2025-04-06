@@ -20,6 +20,13 @@ data class LoginRequest(
     val password: String
 )
 
+data class ChangePwRequest(
+    val email: String,
+    val password: String
+)
+
+
+
 data class SignupResponse(
     val accessToken: String,
     val refreshToken: String

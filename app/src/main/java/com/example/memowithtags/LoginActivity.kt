@@ -26,6 +26,14 @@ class LoginActivity : AppCompatActivity() {
         // 회원가입 화면으로 이동
         binding.signUpButton.setOnClickListener {
             val intent = Intent(this, SignupActivity::class.java)
+            intent.putExtra("mode", "signUp")
+            startActivity(intent)
+        }
+
+        //비밀번호 찾기 화면으로 이동
+        binding.forgotPwButton.setOnClickListener {
+            val intent = Intent(this, SignupActivity::class.java)
+            intent.putExtra("mode", "findPw")
             startActivity(intent)
         }
 
