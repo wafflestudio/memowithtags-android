@@ -13,7 +13,7 @@ import com.example.memowithtags.Memo
 import com.example.memowithtags.R
 
 class MemoAdapter(
-    private val memoList: List<Memo>
+    private var memoList: List<Memo>
 ) : RecyclerView.Adapter<MemoAdapter.MemoViewHolder>() {
 
     inner class MemoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -34,7 +34,8 @@ class MemoAdapter(
 
         holder.tagContainer.removeAllViews()
 
-        for (tag in memo.tags) {
+        /*태그 표시하기
+        for (tag in memo.tagIds) {
             val tagView = LayoutInflater.from(holder.itemView.context)
                 .inflate(R.layout.item_tag, holder.tagContainer, false) as TextView
 
@@ -52,5 +53,12 @@ class MemoAdapter(
             tagView.background = wrappedDrawable
             holder.tagContainer.addView(tagView)
         }
+         */
     }
+
+    fun updateData(newList: List<Memo>) {
+        this.memoList = newList
+        notifyDataSetChanged()
+    }
+
 }

@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.memowithtags.Network.LoginRequest
 import com.example.memowithtags.Network.LoginResponse
-import com.example.wafflestudio_toyproject.network.ApiClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -14,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val apiClient: ApiClient
+    private val loginRepository: AuthRepository
 ) : ViewModel() {
 
     private val _loginResult = MutableLiveData<Result<LoginResponse>>()
@@ -23,10 +22,16 @@ class LoginViewModel @Inject constructor(
     fun login(email: String, password: String) {
         val request = LoginRequest(email, password)
 
-        apiClient.userApi.login(request).enqueue(object : Callback<LoginResponse> {
+        loginRepository.login(request).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 if (response.isSuccessful) {
-                    _loginResult.value = Result.success(response.body()!!)
+                    val body = response.body()
+                    if (body != null) {
+                        loginRepository.saveToken(body.accessToken)
+                        _loginResult.value = Result.success(body)
+                    } else {
+                        _loginResult.value = Result.failure(Exception("응답 없음"))
+                    }
                 } else {
                     _loginResult.value = Result.failure(Exception("로그인 실패: ${response.message()}"))
                 }
