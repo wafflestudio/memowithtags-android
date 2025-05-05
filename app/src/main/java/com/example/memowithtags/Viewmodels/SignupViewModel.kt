@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignupViewModel @Inject constructor(
-    private val apiClient: ApiClient
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _signupResult = MutableLiveData<Result<SignupResponse>>()
@@ -23,10 +23,16 @@ class SignupViewModel @Inject constructor(
     fun signup(email: String, nickname: String, password: String) {
         val request = SignupRequest(email, nickname, password)
 
-        apiClient.userApi.signup(request).enqueue(object : Callback<SignupResponse> {
+        authRepository.signup(request).enqueue(object : Callback<SignupResponse> {
             override fun onResponse(call: Call<SignupResponse>, response: Response<SignupResponse>) {
                 if (response.isSuccessful) {
-                    _signupResult.value = Result.success(response.body()!!)
+                    val body = response.body()
+                    if (body != null) {
+                        authRepository.saveToken(body.accessToken)
+                        _signupResult.value = Result.success(body)
+                    } else {
+                        _signupResult.value = Result.failure(Exception("응답 없음"))
+                    }
                 } else {
                     _signupResult.value = Result.failure(Exception("회원가입 실패: ${response.message()}"))
                 }

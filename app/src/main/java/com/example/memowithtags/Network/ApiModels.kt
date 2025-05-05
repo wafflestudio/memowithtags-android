@@ -1,5 +1,7 @@
 package com.example.memowithtags.Network
 
+import com.example.memowithtags.Memo
+
 data class SignupRequest(
     val email: String,
     val nickname: String,
@@ -25,6 +27,21 @@ data class ChangePwRequest(
     val password: String
 )
 
+data class CreateMemoRequest(
+    val content: String,
+    val tagIds: List<Int>,
+    val locked: Boolean
+)
+
+data class SearchMemoRequest(
+    val content: String?,
+    val tagIds: List<Int>?,
+    val startDate: String?,
+    val endDate: String?,
+    val page: Int?
+)
+
+
 
 
 data class SignupResponse(
@@ -35,4 +52,18 @@ data class SignupResponse(
 data class LoginResponse(
     val accessToken: String,
     val refreshToken: String
+)
+
+data class CreateMemoResponse(
+    val page: Int,
+    val totalPages: Int,
+    val totalResults: Int,
+    val results: List<Memo>
+)
+
+data class SearchMemoResponse(
+    val page: Int,
+    val totalPages: Int,
+    val totalResults: Int,
+    val results: List<Memo>
 )

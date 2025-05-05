@@ -6,7 +6,12 @@ data class Tag(
 )
 
 data class Memo(
+    val id: Int,
+    val createdAt: String,
+    val updatedAt: String,
+    val locked: Boolean,
     val content: String,
-    val tags: List<Tag>
+    val tagIds: List<Int>
 )
+
 

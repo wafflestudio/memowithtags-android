@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,20 +15,19 @@ import com.example.memowithtags.Memo
 import com.example.memowithtags.R
 import com.example.wafflestudio_toyproject.network.ApiClient
 import dagger.hilt.android.AndroidEntryPoint
-import retrofit2.Response
-import javax.inject.Inject
-import retrofit2.Call
-import retrofit2.Callback
-import com.example.memowithtags.Network.SendEmailRequest
 import com.example.memowithtags.Tag
+import com.example.memowithtags.Viewmodels.MemoViewModel
 import com.example.memowithtags.databinding.FragmentMainMemoBinding
 
+@AndroidEntryPoint
 class MainMemoFragment : Fragment() {
     private var _binding: FragmentMainMemoBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var memoAdapter: MemoAdapter
+
+    private val viewModel: MemoViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,18 +40,29 @@ class MainMemoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recyclerView = binding.memoRecyclerView
-
-        val sampleMemoList = listOf(
-            Memo("메모 내용 1", listOf(Tag("태그1", "#FFE3DA"), Tag("태그2", "#92EDA1"))),
-            Memo("메모 내용 2", listOf(Tag("매우 긴 태그", "#DEBDFF")))
-        )
-
-        memoAdapter = MemoAdapter(sampleMemoList)
-
-        recyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        memoAdapter = MemoAdapter(emptyList())
+        binding.memoRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
             adapter = memoAdapter
+        }
+
+        viewModel.memoList.observe(viewLifecycleOwner) { memoList ->
+            memoAdapter.updateData(memoList)
+        }
+
+        viewModel.getMyMemos()
+
+        // 메모가 LiveData로 바뀔 때마다 어댑터 갱신
+        viewModel.memoList.observe(viewLifecycleOwner) { memoList ->
+            memoAdapter.updateData(memoList)
+        }
+
+        binding.newMemoIcon.setOnClickListener {
+            val content = binding.newMemoText.text.toString()
+            if (content.isNotBlank()) {
+                viewModel.postMemo(content)
+                binding.newMemoText.text.clear()
+            }
         }
     }
 }

@@ -2,6 +2,7 @@ package com.example.memowithtags.Network
 
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface UserApi{
@@ -19,4 +20,12 @@ interface UserApi{
 
     @POST("api/v1/auth/reset-password")
     fun changePw(@Body changePwRequest: ChangePwRequest): Call<Unit>
+}
+
+interface MemoApi{
+    @POST("api/v1/memo")
+    fun createMemo(@Body request: CreateMemoRequest): Call<CreateMemoResponse>
+
+    @GET("api/v1/search-memo")
+    fun searchMemo(@Body request: SearchMemoRequest): Call<SearchMemoResponse>
 }
