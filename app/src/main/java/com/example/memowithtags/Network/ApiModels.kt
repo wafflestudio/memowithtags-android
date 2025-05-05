@@ -33,14 +33,9 @@ data class CreateMemoRequest(
     val locked: Boolean
 )
 
-data class SearchMemoRequest(
-    val content: String?,
-    val tagIds: List<Int>?,
-    val startDate: String?,
-    val endDate: String?,
-    val page: Int?
+data class WithdrawalRequest(
+    val email: String
 )
-
 
 
 

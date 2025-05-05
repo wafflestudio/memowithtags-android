@@ -1,5 +1,6 @@
 package com.example.memowithtags.MainFragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.memowithtags.Adapters.MemoAdapter
 import com.example.memowithtags.Memo
 import com.example.memowithtags.R
+import com.example.memowithtags.SettingsActivity
 import com.example.wafflestudio_toyproject.network.ApiClient
 import dagger.hilt.android.AndroidEntryPoint
 import com.example.memowithtags.Tag
@@ -64,5 +66,12 @@ class MainMemoFragment : Fragment() {
                 binding.newMemoText.text.clear()
             }
         }
+
+        binding.iconSettings.setOnClickListener {
+            val intent = Intent(requireContext(), SettingsActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()  // MainActivity 종료
+        }
+
     }
 }

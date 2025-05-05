@@ -9,7 +9,6 @@ import com.example.memowithtags.Memo
 import com.example.memowithtags.Network.CreateMemoRequest
 import com.example.memowithtags.Network.CreateMemoResponse
 import com.example.memowithtags.Network.MemoApi
-import com.example.memowithtags.Network.SearchMemoRequest
 import com.example.memowithtags.Repository.MemoRepository
 import com.example.wafflestudio_toyproject.network.ApiClient
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,9 +29,12 @@ class MemoViewModel @Inject constructor(
     val memoList: LiveData<List<Memo>> = _memoList
 
     fun getMyMemos() {
-        val request = SearchMemoRequest("",null,null,null,null)
         repository.getMyMemos(
-            request = request,
+            content = "",
+            tagIds = null,
+            startDate = null,
+            endDate = null,
+            page = null,
             onResult = { memos -> _memoList.postValue(memos) },
             onError = { error -> Log.e("MemoViewModel", "메모 불러오기 실패", error) }
         )

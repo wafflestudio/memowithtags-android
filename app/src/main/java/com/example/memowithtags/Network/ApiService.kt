@@ -3,7 +3,10 @@ package com.example.memowithtags.Network
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.HTTP
+import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface UserApi{
     @POST("api/v1/auth/register")
@@ -20,6 +23,12 @@ interface UserApi{
 
     @POST("api/v1/auth/reset-password")
     fun changePw(@Body changePwRequest: ChangePwRequest): Call<Unit>
+
+    @HTTP(method = "DELETE", path = "api/v1/auth/withdrawal", hasBody = true)
+    fun withdrawUser(
+        @Header("Authorization") token: String,
+        @Body request: WithdrawalRequest
+    ): Call<Void>
 }
 
 interface MemoApi{
@@ -27,5 +36,11 @@ interface MemoApi{
     fun createMemo(@Body request: CreateMemoRequest): Call<CreateMemoResponse>
 
     @GET("api/v1/search-memo")
-    fun searchMemo(@Body request: SearchMemoRequest): Call<SearchMemoResponse>
+    fun searchMemo(
+        @Query("content") content: String?,
+        @Query("tagIds") tagId: List<Int>?,
+        @Query("startDate") startDate: String?,
+        @Query("endDate") endDate: String?,
+        @Query("page") page: Int?
+    ): Call<SearchMemoResponse>
 }
