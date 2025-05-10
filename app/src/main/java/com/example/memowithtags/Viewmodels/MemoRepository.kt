@@ -4,7 +4,6 @@ import com.example.memowithtags.Memo
 import com.example.memowithtags.Network.CreateMemoRequest
 import com.example.memowithtags.Network.CreateMemoResponse
 import com.example.memowithtags.Network.MemoApi
-import com.example.memowithtags.Network.SearchMemoRequest
 import com.example.memowithtags.Network.SearchMemoResponse
 import com.example.wafflestudio_toyproject.network.ApiClient
 import retrofit2.Call
@@ -17,24 +16,29 @@ class MemoRepository @Inject constructor(
 ) {
     private val memoApi = apiClient.memoApi
 
-    fun getMyMemos(request: SearchMemoRequest, onResult: (List<Memo>) -> Unit, onError: (Throwable) -> Unit) {
-        memoApi.searchMemo(request).enqueue(object : Callback<SearchMemoResponse> {
-            override fun onResponse(
-                call: Call<SearchMemoResponse>,
-                response: Response<SearchMemoResponse>
-            ) {
-                if (response.isSuccessful) {
-                    onResult(response.body()?.results ?: emptyList())
-                } else {
-                    onError(Throwable("서버 응답 실패: ${response.code()}"))
+    fun getMyMemos(content: String?, tagIds: List<Int>?, startDate: String?, endDate: String?, page: Int?,
+        onResult: (List<Memo>) -> Unit,
+        onError: (Throwable) -> Unit
+    ) {
+        memoApi.searchMemo(content, tagIds, startDate, endDate, page)
+            .enqueue(object : Callback<SearchMemoResponse> {
+                override fun onResponse(
+                    call: Call<SearchMemoResponse>,
+                    response: Response<SearchMemoResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        onResult(response.body()?.results ?: emptyList())
+                    } else {
+                        onError(Throwable("서버 응답 실패: ${response.code()}"))
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<SearchMemoResponse>, t: Throwable) {
-                onError(t)
-            }
-        })
+                override fun onFailure(call: Call<SearchMemoResponse>, t: Throwable) {
+                    onError(t)
+                }
+            })
     }
+
 
     fun postMemo(
         request: CreateMemoRequest, onSuccess: (Memo) -> Unit, onError: (Throwable) -> Unit

@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginRepository: AuthRepository
+    private val repository: AuthRepository
 ) : ViewModel() {
 
     private val _loginResult = MutableLiveData<Result<LoginResponse>>()
@@ -22,12 +22,13 @@ class LoginViewModel @Inject constructor(
     fun login(email: String, password: String) {
         val request = LoginRequest(email, password)
 
-        loginRepository.login(request).enqueue(object : Callback<LoginResponse> {
+        repository.login(request).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null) {
-                        loginRepository.saveToken(body.accessToken)
+                        repository.saveToken(body.accessToken)
+                        repository.saveEmail(email)
                         _loginResult.value = Result.success(body)
                     } else {
                         _loginResult.value = Result.failure(Exception("응답 없음"))

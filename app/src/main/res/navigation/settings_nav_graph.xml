@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/mainSettingsFragment">
+
+    <fragment
+        android:id="@+id/mainSettingsFragment"
+        android:name="com.example.memowithtags.SettingsFragments.MainSettingsFragment"
+        tools:layout="@layout/fragment_main_settings">
+    </fragment>
+
+</navigation>
