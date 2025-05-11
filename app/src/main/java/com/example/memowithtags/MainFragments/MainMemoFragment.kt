@@ -42,7 +42,7 @@ class MainMemoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        memoAdapter = MemoAdapter(emptyList())
+        memoAdapter = MemoAdapter()
         binding.memoRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = memoAdapter
@@ -52,12 +52,8 @@ class MainMemoFragment : Fragment() {
             memoAdapter.updateData(memoList)
         }
 
+        // 메모 처음 불러오기
         viewModel.getMyMemos()
-
-        // 메모가 LiveData로 바뀔 때마다 어댑터 갱신
-        viewModel.memoList.observe(viewLifecycleOwner) { memoList ->
-            memoAdapter.updateData(memoList)
-        }
 
         binding.newMemoIcon.setOnClickListener {
             val content = binding.newMemoText.text.toString()

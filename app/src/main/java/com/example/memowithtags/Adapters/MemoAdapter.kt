@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.Memo
 import com.example.memowithtags.R
 
-class MemoAdapter(
-    private var memoList: List<Memo>
-) : RecyclerView.Adapter<MemoAdapter.MemoViewHolder>() {
+class MemoAdapter: RecyclerView.Adapter<MemoAdapter.MemoViewHolder>() {
+
+    private var memoList: List<Memo> = emptyList()
 
     inner class MemoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val memoContent: TextView = itemView.findViewById(R.id.memoContent)
