@@ -1,6 +1,7 @@
 package com.example.memowithtags.MainFragments
 
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -54,6 +55,24 @@ class MainMemoFragment : Fragment() {
 
         // 메모 처음 불러오기
         viewModel.getMyMemos()
+
+        val tagRecyclerView = view.findViewById<RecyclerView>(R.id.tagRecyclerView)
+        tagRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        //tagRecyclerView.adapter = TagAdapter(tagList)
+
+        //태그 생성창 보이기 설정
+        view.viewTreeObserver.addOnGlobalLayoutListener {
+            val r = Rect()
+            view.getWindowVisibleDisplayFrame(r)
+            val screenHeight = view.rootView.height
+            val keypadHeight = screenHeight - r.bottom
+
+            binding.tagInputLayout.visibility = if (keypadHeight > screenHeight * 0.15) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+        }
 
         binding.newMemoIcon.setOnClickListener {
             val content = binding.newMemoText.text.toString()
