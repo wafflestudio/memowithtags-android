@@ -71,18 +71,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:background="#F1F1F3"/>
 
+
     <androidx.cardview.widget.CardView
         android:id="@+id/newMemoCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="7dp"
-        android:layout_margin="7dp"
+        android:layout_margin="4dp"
         app:cardElevation="4dp"
         app:cardCornerRadius="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tagInputLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="@android:color/transparent">
+        android:background="@android:color/transparent"
+        app:cardBackgroundColor="@android:color/transparent">
 
         <LinearLayout
             android:id="@+id/newMemoBar"
@@ -111,4 +113,48 @@
                 android:src="@drawable/newmemo_icon" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+        android:id="@+id/tagInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:padding="8dp"
+        android:background="#F1F1F3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- 새 태그 입력 영역 -->
+        <EditText
+            android:id="@+id/tagInputEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="태그 찾기"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="3dp"
+            android:background="@drawable/rounded_noborder"
+            android:backgroundTint="#E5E5E6"
+            android:textColor="@color/black"
+            android:textSize="14sp"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="8dp"
+            android:background="#DDDDDD" />
+
+        <!-- 기존 태그 RecyclerView (가로 스크롤) -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tagRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="8dp"
+            android:paddingEnd="4dp"
+            android:overScrollMode="never"
+            android:scrollbars="horizontal"
+            tools:listitem="@layout/item_tag" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

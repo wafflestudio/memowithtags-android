@@ -30,11 +30,11 @@ class MemoViewModel @Inject constructor(
 
     fun getMyMemos() {
         repository.getMyMemos(
-            content = "",
+            content = null,
             tagIds = null,
             startDate = null,
             endDate = null,
-            page = null,
+            page = 1,
             onResult = { memos -> _memoList.postValue(memos) },
             onError = { error -> Log.e("MemoViewModel", "메모 불러오기 실패", error) }
         )
@@ -47,10 +47,7 @@ class MemoViewModel @Inject constructor(
         repository.postMemo(
             request = request,
             onSuccess = { memo ->
-                val updatedList = _memoList.value.orEmpty().toMutableList().apply {
-                    add(0, memo)
-                }
-                _memoList.postValue(updatedList)
+                getMyMemos()
             },
             onError = { error ->
                 Log.e("MemoViewModel", "메모 등록 실패", error)

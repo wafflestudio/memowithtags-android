@@ -50,11 +50,14 @@ data class LoginResponse(
 )
 
 data class CreateMemoResponse(
-    val page: Int,
-    val totalPages: Int,
-    val totalResults: Int,
-    val results: List<Memo>
+    val id: Int,
+    val content: String,
+    val tagIds: List<Int>,
+    val createdAt: String,
+    val updatedAt: String,
+    val locked: Boolean
 )
+
 
 data class SearchMemoResponse(
     val page: Int,

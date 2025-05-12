@@ -49,7 +49,7 @@ class MemoRepository @Inject constructor(
                 response: Response<CreateMemoResponse>
             ) {
                 if (response.isSuccessful) {
-                    val result = response.body()?.results?.firstOrNull()
+                    val result = response.body()
                     if (result != null) {
                         val memo = Memo(
                             id = result.id,
