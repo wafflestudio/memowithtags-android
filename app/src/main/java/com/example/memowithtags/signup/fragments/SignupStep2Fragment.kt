@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.memowithtags.common.network.VerifyEmailRequest
 import com.example.memowithtags.R
+import com.example.memowithtags.common.network.VerifyEmailRequest
 import com.example.memowithtags.databinding.FragmentSignupStep2Binding
 import com.example.memowithtags.network.ApiClient
 import dagger.hilt.android.AndroidEntryPoint
