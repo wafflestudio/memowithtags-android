@@ -44,7 +44,8 @@ class SignupStep1Fragment : Fragment() {
         // 다음 단계로 이동
         binding.nextButton.setOnClickListener {
             val email = binding.emailEditText.text.toString().trim()
-
+            binding.nextButton.isEnabled = false
+            binding.nextButton.isClickable = false
             sendEmailVerification(email)
         }
     }

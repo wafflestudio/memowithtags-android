@@ -6,18 +6,35 @@
     android:background="#F1F1F3">
 
     <Button
+        android:id="@+id/logoutBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="@color/white"
+        android:gravity="start"
+        android:paddingVertical="15dp"
+        android:text="로그아웃"
+        android:textColor="@android:color/holo_red_dark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
         android:id="@+id/WithdrawalBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="계정 삭제"
-        android:gravity="start"
-        android:layout_marginTop="40dp"
         android:layout_marginHorizontal="12dp"
-        android:paddingVertical="15dp"
+        android:layout_marginTop="116dp"
         android:backgroundTint="@color/white"
+        android:gravity="start"
+        android:paddingVertical="15dp"
+        android:text="계정 삭제"
         android:textColor="@android:color/holo_red_dark"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

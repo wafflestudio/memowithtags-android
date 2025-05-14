@@ -85,7 +85,6 @@ class MainMemoFragment : Fragment() {
         binding.iconSettings.setOnClickListener {
             val intent = Intent(requireContext(), SettingsActivity::class.java)
             startActivity(intent)
-            requireActivity().finish()  // MainActivity 종료
         }
 
     }

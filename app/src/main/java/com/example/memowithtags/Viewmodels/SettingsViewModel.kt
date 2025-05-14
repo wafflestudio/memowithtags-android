@@ -47,4 +47,7 @@ class SettingsViewModel @Inject constructor(
             }
         })
     }
+    fun logoutAccount() {
+        repository.clearAuthData()
+    }
 }
