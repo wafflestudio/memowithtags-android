@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.memowithtags.Memo
-import com.example.memowithtags.Network.CreateMemoRequest
+import com.example.memowithtags.common.model.Memo
+import com.example.memowithtags.common.network.CreateMemoRequest
 import com.example.memowithtags.mainMemo.repository.MemoRepository
 import com.example.wafflestudio_toyproject.network.ApiClient
 import dagger.hilt.android.lifecycle.HiltViewModel

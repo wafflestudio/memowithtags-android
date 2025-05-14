@@ -3,8 +3,8 @@ package com.example.memowithtags.settings.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.memowithtags.Network.WithdrawalRequest
-import com.example.memowithtags.Viewmodels.AuthRepository
+import com.example.memowithtags.common.network.WithdrawalRequest
+import com.example.memowithtags.signup.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
 import retrofit2.Callback

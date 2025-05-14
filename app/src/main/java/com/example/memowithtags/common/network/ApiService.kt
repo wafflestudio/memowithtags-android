@@ -1,4 +1,4 @@
-package com.example.memowithtags.Network
+package com.example.memowithtags.common.network
 
 import retrofit2.Call
 import retrofit2.http.Body

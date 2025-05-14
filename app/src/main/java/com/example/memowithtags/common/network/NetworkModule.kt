@@ -2,7 +2,7 @@ package com.example.memowithtags.network
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.memowithtags.Network.AuthInterceptor
+import com.example.memowithtags.common.network.AuthInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

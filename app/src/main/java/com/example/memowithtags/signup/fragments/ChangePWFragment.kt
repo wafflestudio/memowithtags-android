@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.memowithtags.Network.ChangePwRequest
+import com.example.memowithtags.common.network.ChangePwRequest
 import com.example.memowithtags.R
 import com.example.memowithtags.databinding.FragmentChangePwBinding
 import com.example.memowithtags.network.ApiClient

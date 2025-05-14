@@ -1,4 +1,4 @@
-package com.example.memowithtags
+package com.example.memowithtags.common.model
 
 data class Tag(
     val name: String,

@@ -3,9 +3,9 @@ package com.example.memowithtags.login.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.memowithtags.Network.LoginRequest
-import com.example.memowithtags.Network.LoginResponse
-import com.example.memowithtags.Viewmodels.AuthRepository
+import com.example.memowithtags.common.network.LoginRequest
+import com.example.memowithtags.common.network.LoginResponse
+import com.example.memowithtags.signup.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
 import retrofit2.Callback

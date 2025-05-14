@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.memowithtags.Memo
+import com.example.memowithtags.common.model.Memo
 import com.example.memowithtags.R
 
 class MemoAdapter : RecyclerView.Adapter<MemoAdapter.MemoViewHolder>() {

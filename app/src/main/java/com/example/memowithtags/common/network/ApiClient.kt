@@ -1,7 +1,7 @@
 package com.example.memowithtags.network
 
-import com.example.memowithtags.Network.MemoApi
-import com.example.memowithtags.Network.UserApi
+import com.example.memowithtags.common.network.MemoApi
+import com.example.memowithtags.common.network.UserApi
 import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Singleton
