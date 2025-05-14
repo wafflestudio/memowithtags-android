@@ -4,8 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
+import com.example.memowithtags.mainMemo.MainActivity
 import com.example.memowithtags.Viewmodels.LauncherViewModel
+import com.example.memowithtags.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

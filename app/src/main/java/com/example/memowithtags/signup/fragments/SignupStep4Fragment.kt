@@ -1,4 +1,4 @@
-package com.example.memowithtags.SignupFragments
+package com.example.memowithtags.signup.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.memowithtags.MainActivity
+import com.example.memowithtags.mainMemo.MainActivity
 import com.example.memowithtags.databinding.FragmentSignupStep4Binding
 
 class SignupStep4Fragment : Fragment() {

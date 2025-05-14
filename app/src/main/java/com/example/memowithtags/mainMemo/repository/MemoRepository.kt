@@ -1,4 +1,4 @@
-package com.example.memowithtags.Repository
+package com.example.memowithtags.mainMemo.repository
 
 import com.example.memowithtags.Memo
 import com.example.memowithtags.Network.CreateMemoRequest
