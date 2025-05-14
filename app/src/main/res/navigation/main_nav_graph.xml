@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/mainMemoFragment"
-        android:name="com.example.memowithtags.MainFragments.MainMemoFragment"
+        android:name="com.example.memowithtags.mainMemo.fragments.MainMemoFragment"
         android:label="Step 1"
         tools:layout="@layout/fragment_main_memo">
     </fragment>

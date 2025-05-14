@@ -1,4 +1,4 @@
-package com.example.memowithtags.Adapters
+package com.example.memowithtags.mainMemo.Adapters
 
 import android.view.LayoutInflater
 import android.view.View

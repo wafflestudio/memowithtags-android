@@ -1,4 +1,4 @@
-package com.example.memowithtags.MainFragments
+package com.example.memowithtags.mainMemo.fragments
 
 import android.content.Intent
 import android.graphics.Rect
@@ -10,11 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.memowithtags.Adapters.MemoAdapter
 import com.example.memowithtags.R
-import com.example.memowithtags.SettingsActivity
-import com.example.memowithtags.Viewmodels.MemoViewModel
 import com.example.memowithtags.databinding.FragmentMainMemoBinding
+import com.example.memowithtags.mainMemo.Adapters.MemoAdapter
+import com.example.memowithtags.mainMemo.viewModel.MemoViewModel
+import com.example.memowithtags.settings.SettingsActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

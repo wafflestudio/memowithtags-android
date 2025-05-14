@@ -1,4 +1,4 @@
-package com.example.memowithtags.Viewmodels
+package com.example.memowithtags.mainMemo.viewModel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.memowithtags.Memo
 import com.example.memowithtags.Network.CreateMemoRequest
-import com.example.memowithtags.Repository.MemoRepository
+import com.example.memowithtags.mainMemo.repository.MemoRepository
 import com.example.wafflestudio_toyproject.network.ApiClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

@@ -1,10 +1,11 @@
-package com.example.memowithtags.Viewmodels
+package com.example.memowithtags.signup.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.memowithtags.Network.SignupRequest
 import com.example.memowithtags.Network.SignupResponse
+import com.example.memowithtags.Viewmodels.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
 import retrofit2.Callback

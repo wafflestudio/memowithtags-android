@@ -6,7 +6,7 @@ import com.example.memowithtags.Network.LoginResponse
 import com.example.memowithtags.Network.SignupRequest
 import com.example.memowithtags.Network.SignupResponse
 import com.example.memowithtags.Network.WithdrawalRequest
-import com.example.wafflestudio_toyproject.network.ApiClient
+import com.example.memowithtags.network.ApiClient
 import retrofit2.Call
 import javax.inject.Inject
 

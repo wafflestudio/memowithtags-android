@@ -7,7 +7,7 @@
     <!-- 첫 번째 회원가입 단계 -->
     <fragment
         android:id="@+id/signupStep1Fragment"
-        android:name="com.example.memowithtags.SignupFragments.SignupStep1Fragment"
+        android:name="com.example.memowithtags.signup.fragments.SignupStep1Fragment"
         android:label="Step 1"
         tools:layout="@layout/fragment_signup_step1">
         <action
@@ -18,7 +18,7 @@
     <!-- 두 번째 회원가입 단계 -->
     <fragment
         android:id="@+id/signupStep2Fragment"
-        android:name="com.example.memowithtags.SignupFragments.SignupStep2Fragment"
+        android:name="com.example.memowithtags.signup.fragments.SignupStep2Fragment"
         android:label="Step 2"
         tools:layout="@layout/fragment_signup_step2">
         <action
@@ -32,7 +32,7 @@
     <!-- 세 번째 회원가입 단계 -->
     <fragment
         android:id="@+id/signupStep3Fragment"
-        android:name="com.example.memowithtags.SignupFragments.SignupStep3Fragment"
+        android:name="com.example.memowithtags.signup.fragments.SignupStep3Fragment"
         android:label="Step 3"
         tools:layout="@layout/fragment_signup_step3">
         <action
@@ -42,7 +42,7 @@
 
     <fragment
         android:id="@+id/changePWFragment"
-        android:name="com.example.memowithtags.SignupFragments.ChangePWFragment"
+        android:name="com.example.memowithtags.signup.fragments.ChangePWFragment"
         android:label="Change PW"
         tools:layout="@layout/fragment_change_pw">
         <action
@@ -52,7 +52,7 @@
 
     <fragment
         android:id="@+id/signupStep4Fragment"
-        android:name="com.example.memowithtags.SignupFragments.SignupStep4Fragment"
+        android:name="com.example.memowithtags.signup.fragments.SignupStep4Fragment"
         android:label="Step 4"
         tools:layout="@layout/fragment_signup_step4" />
 </navigation>

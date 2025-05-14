@@ -1,4 +1,4 @@
-package com.example.memowithtags.SignupFragments
+package com.example.memowithtags.signup.fragments
 
 import android.os.Bundle
 import android.text.Editable
@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.memowithtags.Network.VerifyEmailRequest
 import com.example.memowithtags.R
 import com.example.memowithtags.databinding.FragmentSignupStep2Binding
-import com.example.wafflestudio_toyproject.network.ApiClient
+import com.example.memowithtags.network.ApiClient
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback

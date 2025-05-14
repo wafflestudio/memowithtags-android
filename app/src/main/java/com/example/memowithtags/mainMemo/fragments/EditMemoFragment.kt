@@ -1,4 +1,4 @@
-package com.example.memowithtags.MainFragments
+package com.example.memowithtags.mainMemo.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -1,15 +1,16 @@
-package com.example.memowithtags
+package com.example.memowithtags.settings
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import com.example.memowithtags.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SignupActivity : AppCompatActivity() {
+class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_signup)
+        setContentView(R.layout.activity_settings)
     }
 
     override fun onSupportNavigateUp(): Boolean {
