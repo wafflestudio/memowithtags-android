@@ -4,19 +4,12 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.memowithtags.Memo
 import com.example.memowithtags.Network.CreateMemoRequest
-import com.example.memowithtags.Network.CreateMemoResponse
-import com.example.memowithtags.Network.MemoApi
 import com.example.memowithtags.Repository.MemoRepository
 import com.example.wafflestudio_toyproject.network.ApiClient
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import retrofit2.Response
 import javax.inject.Inject
-import retrofit2.Call
-import retrofit2.Callback
 
 @HiltViewModel
 class MemoViewModel @Inject constructor(

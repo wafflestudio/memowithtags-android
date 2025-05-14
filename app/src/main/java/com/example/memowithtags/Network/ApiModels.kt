@@ -37,8 +37,6 @@ data class WithdrawalRequest(
     val email: String
 )
 
-
-
 data class SignupResponse(
     val accessToken: String,
     val refreshToken: String
@@ -57,7 +55,6 @@ data class CreateMemoResponse(
     val updatedAt: String,
     val locked: Boolean
 )
-
 
 data class SearchMemoResponse(
     val page: Int,

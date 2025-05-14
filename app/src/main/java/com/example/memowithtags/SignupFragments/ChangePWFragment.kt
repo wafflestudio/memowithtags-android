@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.memowithtags.Network.ChangePwRequest
-import com.example.memowithtags.Network.VerifyEmailRequest
 import com.example.memowithtags.R
 import com.example.memowithtags.databinding.FragmentChangePwBinding
 import com.example.wafflestudio_toyproject.network.ApiClient
@@ -27,7 +26,8 @@ class ChangePWFragment : Fragment() {
     lateinit var apiClient: ApiClient
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentChangePwBinding.inflate(inflater, container, false)
@@ -47,7 +47,7 @@ class ChangePWFragment : Fragment() {
     }
 
     private fun changePw(email: String, password: String) {
-        val call = apiClient.userApi.changePw(ChangePwRequest(email,password))
+        val call = apiClient.userApi.changePw(ChangePwRequest(email, password))
 
         call.enqueue(object : Callback<Unit> {
             override fun onResponse(call: Call<Unit>, response: Response<Unit>) {

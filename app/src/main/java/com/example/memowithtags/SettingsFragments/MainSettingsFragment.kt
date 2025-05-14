@@ -24,7 +24,8 @@ class MainSettingsFragment : Fragment() {
     private val viewModel: SettingsViewModel by viewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainSettingsBinding.inflate(inflater, container, false)

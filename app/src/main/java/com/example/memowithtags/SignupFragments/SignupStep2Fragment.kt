@@ -26,7 +26,8 @@ class SignupStep2Fragment : Fragment() {
     lateinit var apiClient: ApiClient
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSignupStep2Binding.inflate(inflater, container, false)
@@ -40,7 +41,7 @@ class SignupStep2Fragment : Fragment() {
 
         val md = requireActivity().intent.getStringExtra("mode")!!
 
-        if (md=="findPw"){ binding.signupTitle.text="비밀번호 찾기" }
+        if (md == "findPw") { binding.signupTitle.text = "비밀번호 찾기" }
 
         // 다음 단계로 이동
         binding.nextButton.setOnClickListener {
@@ -53,12 +54,12 @@ class SignupStep2Fragment : Fragment() {
 
             val verifyCode = "$text1$text2$text3$text4$text5$text6"
 
-            verifyEmailCode(email,verifyCode,md)
+            verifyEmailCode(email, verifyCode, md)
         }
     }
 
     private fun verifyEmailCode(email: String, verifyCode: String, mode: String) {
-        val call = apiClient.userApi.verifyEmail(VerifyEmailRequest(email,verifyCode))
+        val call = apiClient.userApi.verifyEmail(VerifyEmailRequest(email, verifyCode))
 
         call.enqueue(object : Callback<Unit> {
             override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
@@ -69,8 +70,7 @@ class SignupStep2Fragment : Fragment() {
                         putString("email", email)
                     }
 
-                    if(mode=="signUp"){findNavController().navigate(R.id.action_step2_to_step3, bundle)}
-                    else if(mode=="findPw"){findNavController().navigate(R.id.action_step2_to_chpw, bundle)}// 성공하면 다음 단계로 이동
+                    if (mode == "signUp") { findNavController().navigate(R.id.action_step2_to_step3, bundle) } else if (mode == "findPw") { findNavController().navigate(R.id.action_step2_to_chpw, bundle) } // 성공하면 다음 단계로 이동
                 } else {
                     Toast.makeText(requireContext(), "인증코드 오류", Toast.LENGTH_SHORT).show()
                 }

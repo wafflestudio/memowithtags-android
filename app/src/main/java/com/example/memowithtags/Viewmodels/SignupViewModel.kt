@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.memowithtags.Network.SignupRequest
 import com.example.memowithtags.Network.SignupResponse
-import com.example.wafflestudio_toyproject.network.ApiClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
 import retrofit2.Callback

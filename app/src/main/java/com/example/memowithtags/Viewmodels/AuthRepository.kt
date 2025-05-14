@@ -1,18 +1,14 @@
 package com.example.memowithtags.Viewmodels
 
-import android.content.Intent
 import android.content.SharedPreferences
 import com.example.memowithtags.Network.LoginRequest
 import com.example.memowithtags.Network.LoginResponse
 import com.example.memowithtags.Network.SignupRequest
 import com.example.memowithtags.Network.SignupResponse
-import com.example.memowithtags.Network.UserApi
 import com.example.memowithtags.Network.WithdrawalRequest
 import com.example.wafflestudio_toyproject.network.ApiClient
 import retrofit2.Call
 import javax.inject.Inject
-import retrofit2.Callback
-import retrofit2.Response
 
 class AuthRepository @Inject constructor(
     private val apiClient: ApiClient,
@@ -38,7 +34,7 @@ class AuthRepository @Inject constructor(
 
     fun getToken(): String? = prefs.getString("access_token", null)
 
-    fun getEmail(): String? = prefs.getString("email",null)
+    fun getEmail(): String? = prefs.getString("email", null)
 
     fun clearAuthData() {
         prefs.edit().clear().apply()
