@@ -82,6 +82,7 @@ class MainMemoFragment : Fragment() {
             val intent = Intent(requireContext(), SettingsActivity::class.java)
             startActivity(intent)
             requireActivity().finish() // MainActivity 종료
+
         }
     }
 }

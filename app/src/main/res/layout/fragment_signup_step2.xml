@@ -76,6 +76,7 @@
                     android:textColor="#000000"
                     android:textSize="24sp"
                     android:textStyle="bold"
+                    android:inputType="number"
                     android:background="@drawable/rounded_edittext"
                     android:padding="12dp"/>
 
@@ -90,6 +91,7 @@
                     android:textColor="#000000"
                     android:textSize="24sp"
                     android:textStyle="bold"
+                    android:inputType="number"
                     android:background="@drawable/rounded_edittext"
                     android:padding="12dp"/>
 
@@ -104,6 +106,7 @@
                     android:textColor="#000000"
                     android:textSize="24sp"
                     android:textStyle="bold"
+                    android:inputType="number"
                     android:background="@drawable/rounded_edittext"
                     android:padding="12dp"/>
 
@@ -118,6 +121,7 @@
                     android:textColor="#000000"
                     android:textSize="24sp"
                     android:textStyle="bold"
+                    android:inputType="number"
                     android:background="@drawable/rounded_edittext"
                     android:padding="12dp"/>
 
@@ -132,6 +136,7 @@
                     android:textColor="#000000"
                     android:textSize="24sp"
                     android:textStyle="bold"
+                    android:inputType="number"
                     android:background="@drawable/rounded_edittext"
                     android:padding="12dp"/>
 
@@ -146,6 +151,7 @@
                     android:textColor="#000000"
                     android:textSize="24sp"
                     android:textStyle="bold"
+                    android:inputType="number"
                     android:background="@drawable/rounded_edittext"
                     android:padding="12dp"/>
             </LinearLayout>

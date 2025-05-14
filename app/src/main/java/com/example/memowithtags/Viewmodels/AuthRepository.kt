@@ -36,6 +36,11 @@ class AuthRepository @Inject constructor(
 
     fun getEmail(): String? = prefs.getString("email", null)
 
+    fun isLoggedIn(): Boolean {
+        val token = getToken()
+        return !token.isNullOrBlank()
+    }
+
     fun clearAuthData() {
         prefs.edit().clear().apply()
     }

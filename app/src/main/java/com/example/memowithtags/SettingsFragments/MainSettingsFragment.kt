@@ -40,6 +40,11 @@ class MainSettingsFragment : Fragment() {
             showWithdrawalConfirmDialog()
         }
 
+        binding.logoutBtn.setOnClickListener {
+            viewModel.logoutAccount()
+            goToLogin()
+        }
+
         observeViewModel()
     }
 
