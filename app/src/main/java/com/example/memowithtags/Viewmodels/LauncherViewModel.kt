@@ -7,9 +7,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LauncherViewModel @Inject constructor(
     private val authRepository: AuthRepository
-): ViewModel() {
+) : ViewModel() {
     fun isLoggedIn(): Boolean {
         return authRepository.isLoggedIn()
-
     }
 }

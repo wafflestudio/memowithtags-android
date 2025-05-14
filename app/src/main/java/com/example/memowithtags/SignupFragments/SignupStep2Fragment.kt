@@ -2,11 +2,11 @@ package com.example.memowithtags.SignupFragments
 
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.memowithtags.Network.VerifyEmailRequest
@@ -35,8 +35,12 @@ class SignupStep2Fragment : Fragment() {
         _binding = FragmentSignupStep2Binding.inflate(inflater, container, false)
 
         val editTexts = listOf(
-            binding.certifinum1, binding.certifinum2, binding.certifinum3,
-            binding.certifinum4, binding.certifinum5, binding.certifinum6
+            binding.certifinum1,
+            binding.certifinum2,
+            binding.certifinum3,
+            binding.certifinum4,
+            binding.certifinum5,
+            binding.certifinum6
         )
 
         for (i in 0 until editTexts.size) {
