@@ -8,7 +8,7 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Query
 
-interface UserApi{
+interface UserApi {
     @POST("api/v1/auth/register")
     fun signup(@Body signupRequest: SignupRequest): Call<SignupResponse>
 
@@ -31,7 +31,7 @@ interface UserApi{
     ): Call<Void>
 }
 
-interface MemoApi{
+interface MemoApi {
     @POST("api/v1/memo")
     fun createMemo(@Body request: CreateMemoRequest): Call<CreateMemoResponse>
 

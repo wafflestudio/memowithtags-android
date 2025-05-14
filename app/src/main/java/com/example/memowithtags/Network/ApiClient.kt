@@ -1,4 +1,4 @@
-package com.example.wafflestudio_toyproject.network
+package com.example.memowithtags.network
 
 import com.example.memowithtags.Network.MemoApi
 import com.example.memowithtags.Network.UserApi

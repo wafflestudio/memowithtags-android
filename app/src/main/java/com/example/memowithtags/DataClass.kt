@@ -13,5 +13,3 @@ data class Memo(
     val content: String,
     val tagIds: List<Int>
 )
-
-

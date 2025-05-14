@@ -14,7 +14,8 @@ class SignupStep4Fragment : Fragment() {
     private val binding get() = _binding!!
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSignupStep4Binding.inflate(inflater, container, false)
@@ -26,9 +27,9 @@ class SignupStep4Fragment : Fragment() {
 
         val md = requireActivity().intent.getStringExtra("mode")!!
 
-        if (md=="findPw"){ binding.signupTitle.text="재설정 완료!" }
+        if (md == "findPw") { binding.signupTitle.text = "재설정 완료!" }
 
-        binding.nextButton.setOnClickListener{
+        binding.nextButton.setOnClickListener {
             val intent = Intent(requireContext(), MainActivity::class.java)
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)

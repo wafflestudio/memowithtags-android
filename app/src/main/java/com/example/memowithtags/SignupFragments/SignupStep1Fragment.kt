@@ -7,15 +7,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.memowithtags.Network.SendEmailRequest
 import com.example.memowithtags.R
 import com.example.memowithtags.databinding.FragmentSignupStep1Binding
 import com.example.wafflestudio_toyproject.network.ApiClient
 import dagger.hilt.android.AndroidEntryPoint
-import retrofit2.Response
-import javax.inject.Inject
 import retrofit2.Call
 import retrofit2.Callback
-import com.example.memowithtags.Network.SendEmailRequest
+import retrofit2.Response
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SignupStep1Fragment : Fragment() {
@@ -26,7 +26,8 @@ class SignupStep1Fragment : Fragment() {
     lateinit var apiClient: ApiClient
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSignupStep1Binding.inflate(inflater, container, false)
@@ -36,10 +37,9 @@ class SignupStep1Fragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         val md = requireActivity().intent.getStringExtra("mode")
 
-        if (md=="findPw"){ binding.signupTitle.text="비밀번호 찾기" }
+        if (md == "findPw") { binding.signupTitle.text = "비밀번호 찾기" }
 
         // 다음 단계로 이동
         binding.nextButton.setOnClickListener {

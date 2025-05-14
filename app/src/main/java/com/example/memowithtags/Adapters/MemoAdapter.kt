@@ -1,18 +1,15 @@
 package com.example.memowithtags.Adapters
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.Memo
 import com.example.memowithtags.R
 
-class MemoAdapter: RecyclerView.Adapter<MemoAdapter.MemoViewHolder>() {
+class MemoAdapter : RecyclerView.Adapter<MemoAdapter.MemoViewHolder>() {
 
     private var memoList: List<Memo> = emptyList()
 
@@ -60,5 +57,4 @@ class MemoAdapter: RecyclerView.Adapter<MemoAdapter.MemoViewHolder>() {
         this.memoList = newList
         notifyDataSetChanged()
     }
-
 }

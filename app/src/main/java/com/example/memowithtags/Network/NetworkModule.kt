@@ -1,4 +1,4 @@
-package com.example.wafflestudio_toyproject.network
+package com.example.memowithtags.network
 
 import android.content.Context
 import android.content.SharedPreferences

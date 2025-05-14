@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
+    id("org.jlleitschuh.gradle.ktlint") version "11.5.1"
     alias(libs.plugins.hilt)
 }
 hilt {
@@ -63,4 +64,3 @@ dependencies {
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
 }
-

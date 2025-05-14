@@ -3,20 +3,24 @@ package com.example.memowithtags.Repository
 import com.example.memowithtags.Memo
 import com.example.memowithtags.Network.CreateMemoRequest
 import com.example.memowithtags.Network.CreateMemoResponse
-import com.example.memowithtags.Network.MemoApi
 import com.example.memowithtags.Network.SearchMemoResponse
 import com.example.wafflestudio_toyproject.network.ApiClient
 import retrofit2.Call
-import javax.inject.Inject
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
 class MemoRepository @Inject constructor(
     private val apiClient: ApiClient
 ) {
     private val memoApi = apiClient.memoApi
 
-    fun getMyMemos(content: String?, tagIds: List<Int>?, startDate: String?, endDate: String?, page: Int?,
+    fun getMyMemos(
+        content: String?,
+        tagIds: List<Int>?,
+        startDate: String?,
+        endDate: String?,
+        page: Int?,
         onResult: (List<Memo>) -> Unit,
         onError: (Throwable) -> Unit
     ) {
@@ -39,9 +43,10 @@ class MemoRepository @Inject constructor(
             })
     }
 
-
     fun postMemo(
-        request: CreateMemoRequest, onSuccess: (Memo) -> Unit, onError: (Throwable) -> Unit
+        request: CreateMemoRequest,
+        onSuccess: (Memo) -> Unit,
+        onError: (Throwable) -> Unit
     ) {
         memoApi.createMemo(request).enqueue(object : Callback<CreateMemoResponse> {
             override fun onResponse(

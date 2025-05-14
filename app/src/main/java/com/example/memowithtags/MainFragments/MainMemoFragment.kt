@@ -6,21 +6,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.Adapters.MemoAdapter
-import com.example.memowithtags.Memo
 import com.example.memowithtags.R
 import com.example.memowithtags.SettingsActivity
-import com.example.wafflestudio_toyproject.network.ApiClient
-import dagger.hilt.android.AndroidEntryPoint
-import com.example.memowithtags.Tag
 import com.example.memowithtags.Viewmodels.MemoViewModel
 import com.example.memowithtags.databinding.FragmentMainMemoBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainMemoFragment : Fragment() {
@@ -33,7 +28,8 @@ class MainMemoFragment : Fragment() {
     private val viewModel: MemoViewModel by viewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMainMemoBinding.inflate(inflater, container, false)
@@ -58,9 +54,9 @@ class MainMemoFragment : Fragment() {
 
         val tagRecyclerView = view.findViewById<RecyclerView>(R.id.tagRecyclerView)
         tagRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        //tagRecyclerView.adapter = TagAdapter(tagList)
+        // tagRecyclerView.adapter = TagAdapter(tagList)
 
-        //태그 생성창 보이기 설정
+        // 태그 생성창 보이기 설정
         view.viewTreeObserver.addOnGlobalLayoutListener {
             val r = Rect()
             view.getWindowVisibleDisplayFrame(r)
@@ -85,7 +81,7 @@ class MainMemoFragment : Fragment() {
         binding.iconSettings.setOnClickListener {
             val intent = Intent(requireContext(), SettingsActivity::class.java)
             startActivity(intent)
+            requireActivity().finish() // MainActivity 종료
         }
-
     }
 }
