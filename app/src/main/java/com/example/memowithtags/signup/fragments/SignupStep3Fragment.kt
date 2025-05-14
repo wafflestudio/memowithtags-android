@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.memowithtags.R
-import com.example.memowithtags.signup.viewModel.SignupViewModel
 import com.example.memowithtags.databinding.FragmentSignupStep3Binding
+import com.example.memowithtags.signup.viewModel.SignupViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

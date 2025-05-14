@@ -4,10 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.memowithtags.signup.SignupActivity
-import com.example.memowithtags.mainMemo.MainActivity
-import com.example.memowithtags.login.viewModel.LoginViewModel
 import com.example.memowithtags.databinding.ActivityLoginBinding
+import com.example.memowithtags.login.viewModel.LoginViewModel
+import com.example.memowithtags.mainMemo.MainActivity
+import com.example.memowithtags.signup.SignupActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
