@@ -1,10 +1,10 @@
 package com.example.memowithtags.mainMemo.repository
 
-import com.example.memowithtags.Memo
-import com.example.memowithtags.Network.CreateMemoRequest
-import com.example.memowithtags.Network.CreateMemoResponse
-import com.example.memowithtags.Network.SearchMemoResponse
-import com.example.wafflestudio_toyproject.network.ApiClient
+import com.example.memowithtags.common.model.Memo
+import com.example.memowithtags.common.network.CreateMemoRequest
+import com.example.memowithtags.common.network.CreateMemoResponse
+import com.example.memowithtags.common.network.SearchMemoResponse
+import com.example.memowithtags.network.ApiClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

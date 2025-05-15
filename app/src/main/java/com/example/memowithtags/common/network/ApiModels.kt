@@ -1,6 +1,6 @@
-package com.example.memowithtags.Network
+package com.example.memowithtags.common.network
 
-import com.example.memowithtags.Memo
+import com.example.memowithtags.common.model.Memo
 
 data class SignupRequest(
     val email: String,

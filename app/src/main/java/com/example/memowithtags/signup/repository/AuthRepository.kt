@@ -1,11 +1,11 @@
-package com.example.memowithtags.Viewmodels
+package com.example.memowithtags.signup.repository
 
 import android.content.SharedPreferences
-import com.example.memowithtags.Network.LoginRequest
-import com.example.memowithtags.Network.LoginResponse
-import com.example.memowithtags.Network.SignupRequest
-import com.example.memowithtags.Network.SignupResponse
-import com.example.memowithtags.Network.WithdrawalRequest
+import com.example.memowithtags.common.network.LoginRequest
+import com.example.memowithtags.common.network.LoginResponse
+import com.example.memowithtags.common.network.SignupRequest
+import com.example.memowithtags.common.network.SignupResponse
+import com.example.memowithtags.common.network.WithdrawalRequest
 import com.example.memowithtags.network.ApiClient
 import retrofit2.Call
 import javax.inject.Inject
