@@ -1,8 +1,12 @@
 package com.example.memowithtags.mainMemo.fragments
 
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
+import com.example.memowithtags.common.model.tagColors
 import com.example.memowithtags.databinding.FragmentMainMemoBinding
 import com.example.memowithtags.mainMemo.Adapters.MemoAdapter
 import com.example.memowithtags.mainMemo.viewModel.MemoViewModel
@@ -69,6 +74,29 @@ class MainMemoFragment : Fragment() {
                 View.GONE
             }
         }
+
+        var randomColor: String? = null
+        binding.tagInputEditText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val text = s?.toString()?.trim()
+                if (!text.isNullOrEmpty()) {
+                    binding.inputTagButton.text = text
+                    binding.inputTagButton.visibility = View.VISIBLE
+                    binding.makeTagText.visibility = View.VISIBLE
+
+                    if (randomColor == null) { randomColor = tagColors.random() }
+                    binding.inputTagButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor(randomColor))
+                } else {
+                    randomColor = null
+                    binding.inputTagButton.visibility = View.GONE
+                    binding.makeTagText.visibility = View.GONE
+                }
+            }
+        })
 
         binding.newMemoIcon.setOnClickListener {
             val content = binding.newMemoText.text.toString()

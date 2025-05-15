@@ -95,34 +95,38 @@
                 android:layout_marginTop="16dp"
                 app:layout_constraintTop_toBottomOf="@id/loginButton">
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/signUpButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="회원가입"
-                    android:padding="0dp"
+                    android:paddingHorizontal="6dp"
+                    android:paddingVertical="2dp"
                     android:minHeight="0dp"
                     android:minWidth="0dp"
-                    android:textSize="10sp"
-                    android:backgroundTint="@android:color/white"
-                    android:textColor="@android:color/black" />
+                    android:textSize="14sp"
+                    android:backgroundTint="#FFBDBD"
+                    android:background="@drawable/tag_background"
+                    android:textColor="#634F50" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/forgotPwButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="비밀번호 찾기"
-                    android:padding="0dp"
                     android:minHeight="0dp"
                     android:minWidth="0dp"
-                    android:textSize="10sp"
-                    android:backgroundTint="@android:color/white"
-                    android:textColor="@android:color/black" />
+                    android:paddingHorizontal="6dp"
+                    android:paddingVertical="2dp"
+                    android:textSize="14sp"
+                    android:background="@drawable/tag_background"
+                    android:backgroundTint="#F1F1F3"
+                    android:textColor="#5F5F60" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

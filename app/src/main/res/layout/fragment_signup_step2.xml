@@ -171,17 +171,19 @@
                 android:layout_marginEnd="8dp"
                 app:layout_constraintTop_toBottomOf="@+id/certifinumInputs" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/prevButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="이전"
-                android:padding="0dp"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="2dp"
                 android:minHeight="0dp"
                 android:minWidth="0dp"
-                android:textSize="10sp"
-                android:backgroundTint="@android:color/white"
-                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:background="@drawable/tag_background"
+                android:backgroundTint="#E3E3E7"
+                android:textColor="#414144"
                 android:layout_marginTop="12dp"
                 android:layout_marginStart="8dp"
                 app:layout_constraintTop_toBottomOf="@+id/nextButton"

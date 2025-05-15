@@ -129,7 +129,7 @@
         <!-- 새 태그 입력 영역 -->
         <EditText
             android:id="@+id/tagInputEditText"
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:hint="태그 찾기"
             android:paddingHorizontal="10dp"
@@ -137,13 +137,39 @@
             android:background="@drawable/rounded_noborder"
             android:backgroundTint="#E5E5E6"
             android:textColor="@color/black"
-            android:textSize="14sp"/>
+            android:textSize="14sp"
+            android:singleLine="true"
+            android:ellipsize="none"
+            android:scrollHorizontally="true"/>
 
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="8dp"
             android:background="#DDDDDD" />
+
+        <!-- 신규 태그 만들기 -->
+        <TextView
+            android:id="@+id/inputTagButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/tag_background"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="2dp"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/makeTagText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="만들기"
+            android:textSize="14sp"
+            android:visibility="gone"
+            android:gravity="center_vertical" />
 
         <!-- 기존 태그 RecyclerView (가로 스크롤) -->
         <androidx.recyclerview.widget.RecyclerView
