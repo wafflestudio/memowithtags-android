@@ -44,3 +44,8 @@ interface MemoApi {
         @Query("page") page: Int?
     ): Call<SearchMemoResponse>
 }
+
+interface TagApi {
+    @POST("/api/v1/tag")
+    fun createTag(@Body request: CreateTagRequest): Call<TagResponse>
+}

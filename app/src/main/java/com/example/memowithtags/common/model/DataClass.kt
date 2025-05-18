@@ -1,8 +1,11 @@
 package com.example.memowithtags.common.model
 
 data class Tag(
+    val id: Int,
     val name: String,
-    val colorHex: String
+    val colorHex: String,
+    val createdAt: String,
+    val updatedAt: String,
 )
 
 data class Memo(

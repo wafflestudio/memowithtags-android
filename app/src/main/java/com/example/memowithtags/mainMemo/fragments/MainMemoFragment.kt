@@ -10,6 +10,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,7 @@ import com.example.memowithtags.common.model.tagColors
 import com.example.memowithtags.databinding.FragmentMainMemoBinding
 import com.example.memowithtags.mainMemo.Adapters.MemoAdapter
 import com.example.memowithtags.mainMemo.viewModel.MemoViewModel
+import com.example.memowithtags.mainMemo.viewModel.TagViewModel
 import com.example.memowithtags.settings.SettingsActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,7 +32,8 @@ class MainMemoFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var memoAdapter: MemoAdapter
 
-    private val viewModel: MemoViewModel by viewModels()
+    private val memoViewModel: MemoViewModel by viewModels()
+    private val tagViewModel: TagViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,12 +53,12 @@ class MainMemoFragment : Fragment() {
             adapter = memoAdapter
         }
 
-        viewModel.memoList.observe(viewLifecycleOwner) { memoList ->
+        memoViewModel.memoList.observe(viewLifecycleOwner) { memoList ->
             memoAdapter.updateData(memoList)
         }
 
         // 메모 처음 불러오기
-        viewModel.getMyMemos()
+        memoViewModel.getMyMemos()
 
         val tagRecyclerView = view.findViewById<RecyclerView>(R.id.tagRecyclerView)
         tagRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -75,7 +78,7 @@ class MainMemoFragment : Fragment() {
             }
         }
 
-        var randomColor: String? = null
+        var selectedColor: String? = null
         binding.tagInputEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
 
@@ -88,24 +91,37 @@ class MainMemoFragment : Fragment() {
                     binding.inputTagButton.visibility = View.VISIBLE
                     binding.makeTagText.visibility = View.VISIBLE
 
-                    if (randomColor == null) { randomColor = tagColors.random() }
-                    binding.inputTagButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor(randomColor))
+                    if (selectedColor == null) { selectedColor = tagColors.random() }
+                    binding.inputTagButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor(selectedColor))
                 } else {
-                    randomColor = null
+                    selectedColor = null
                     binding.inputTagButton.visibility = View.GONE
                     binding.makeTagText.visibility = View.GONE
                 }
             }
         })
 
+        //태그 생성하기
+        binding.inputTagButton.setOnClickListener {
+            val name = binding.tagInputEditText.text.toString().trim()
+            val color = selectedColor
+
+            if (name.isNotEmpty() && color != null) {
+                tagViewModel.createTag(name, color)
+                binding.tagInputEditText.text.clear()
+            }
+        }
+
+        //메모 쓰기 버튼
         binding.newMemoIcon.setOnClickListener {
             val content = binding.newMemoText.text.toString()
             if (content.isNotBlank()) {
-                viewModel.postMemo(content)
+                memoViewModel.postMemo(content)
                 binding.newMemoText.text.clear()
             }
         }
 
+        //설정 버튼
         binding.iconSettings.setOnClickListener {
             val intent = Intent(requireContext(), SettingsActivity::class.java)
             startActivity(intent)

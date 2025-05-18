@@ -1,6 +1,7 @@
 package com.example.memowithtags.network
 
 import com.example.memowithtags.common.network.MemoApi
+import com.example.memowithtags.common.network.TagApi
 import com.example.memowithtags.common.network.UserApi
 import retrofit2.Retrofit
 import javax.inject.Inject
@@ -12,5 +13,6 @@ class ApiClient @Inject constructor(
     retrofitWithAuth: Retrofit
 ) {
     val userApi: UserApi = retrofit.create(UserApi::class.java)
+    val tagApi: TagApi = retrofitWithAuth.create(TagApi::class.java)
     val memoApi: MemoApi = retrofitWithAuth.create(MemoApi::class.java)
 }
