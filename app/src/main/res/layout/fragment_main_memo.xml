@@ -145,7 +145,7 @@
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="8dp"
+            android:layout_marginStart="8dp"
             android:background="#DDDDDD" />
 
         <!-- 신규 태그 만들기 -->
@@ -157,7 +157,7 @@
             android:background="@drawable/tag_background"
             android:paddingHorizontal="6dp"
             android:paddingVertical="2dp"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/black"
             android:textSize="14sp"
             android:visibility="gone" />
 
@@ -177,8 +177,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingStart="8dp"
-            android:paddingEnd="4dp"
             android:overScrollMode="never"
             android:scrollbars="horizontal"
             tools:listitem="@layout/item_tag" />

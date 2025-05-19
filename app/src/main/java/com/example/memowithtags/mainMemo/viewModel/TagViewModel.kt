@@ -31,4 +31,15 @@ class TagViewModel @Inject constructor(
             }
         )
     }
+
+    fun getMyTags() {
+        repository.getMyTags(
+            onSuccess = { tagList ->
+                _tagList.postValue(tagList)
+            },
+            onError = { error ->
+                Log.e("TAG_FETCH", "태그 불러오기 실패: ${error.localizedMessage}")
+            }
+        )
+    }
 }

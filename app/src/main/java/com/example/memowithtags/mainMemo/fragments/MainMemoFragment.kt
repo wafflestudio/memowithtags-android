@@ -19,6 +19,7 @@ import com.example.memowithtags.R
 import com.example.memowithtags.common.model.tagColors
 import com.example.memowithtags.databinding.FragmentMainMemoBinding
 import com.example.memowithtags.mainMemo.Adapters.MemoAdapter
+import com.example.memowithtags.mainMemo.Adapters.TagAdapter
 import com.example.memowithtags.mainMemo.viewModel.MemoViewModel
 import com.example.memowithtags.mainMemo.viewModel.TagViewModel
 import com.example.memowithtags.settings.SettingsActivity
@@ -31,6 +32,7 @@ class MainMemoFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var memoAdapter: MemoAdapter
+    private lateinit var tagAdapter: TagAdapter
 
     private val memoViewModel: MemoViewModel by viewModels()
     private val tagViewModel: TagViewModel by viewModels()
@@ -47,6 +49,7 @@ class MainMemoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 메모 recycler view 세팅
         memoAdapter = MemoAdapter()
         binding.memoRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -57,12 +60,20 @@ class MainMemoFragment : Fragment() {
             memoAdapter.updateData(memoList)
         }
 
-        // 메모 처음 불러오기
         memoViewModel.getMyMemos()
 
-        val tagRecyclerView = view.findViewById<RecyclerView>(R.id.tagRecyclerView)
-        tagRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        // tagRecyclerView.adapter = TagAdapter(tagList)
+        // 태그 recycler view 세팅
+        tagAdapter = TagAdapter()
+        binding.tagRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = tagAdapter
+        }
+
+        tagViewModel.tagList.observe(viewLifecycleOwner) { tagList ->
+            tagAdapter.updateData(tagList)
+        }
+
+        tagViewModel.getMyTags()
 
         // 태그 생성창 보이기 설정
         view.viewTreeObserver.addOnGlobalLayoutListener {

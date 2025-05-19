@@ -14,6 +14,7 @@ class TagRepository @Inject constructor(
     private val apiClient: ApiClient
 ) {
     private val tagApi = apiClient.tagApi
+
     fun createTag(
         name: String,
         colorHex: String,
@@ -43,6 +44,25 @@ class TagRepository @Inject constructor(
             }
 
             override fun onFailure(call: Call<TagResponse>, t: Throwable) {
+                onError(t)
+            }
+        })
+    }
+
+    fun getMyTags(
+        onSuccess: (List<Tag>) -> Unit,
+        onError: (Throwable) -> Unit
+    ) {
+        tagApi.getTags().enqueue(object : Callback<List<Tag>> {
+            override fun onResponse(call: Call<List<Tag>>, response: Response<List<Tag>>) {
+                if (response.isSuccessful) {
+                    onSuccess(response.body() ?: emptyList())
+                } else {
+                    onError(Throwable("서버 응답 실패: ${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<List<Tag>>, t: Throwable) {
                 onError(t)
             }
         })
