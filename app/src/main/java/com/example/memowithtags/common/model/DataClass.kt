@@ -6,6 +6,7 @@ data class Tag(
     val colorHex: String,
     val createdAt: String,
     val updatedAt: String,
+    var isVisible: Boolean = true
 )
 
 data class Memo(

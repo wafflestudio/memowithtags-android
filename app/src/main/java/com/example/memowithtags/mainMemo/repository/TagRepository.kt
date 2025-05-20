@@ -32,7 +32,8 @@ class TagRepository @Inject constructor(
                             name = result.name,
                             colorHex = result.colorHex,
                             createdAt= result.createdAt,
-                            updatedAt = result.updatedAt
+                            updatedAt = result.updatedAt,
+                            isVisible = true
                         )
                         onSuccess(tag)
                     } else {

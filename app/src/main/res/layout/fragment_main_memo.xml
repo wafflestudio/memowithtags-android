@@ -76,7 +76,7 @@
         android:id="@+id/newMemoCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="7dp"
+        android:padding="9dp"
         android:layout_margin="4dp"
         app:cardElevation="4dp"
         app:cardCornerRadius="12dp"
@@ -87,30 +87,47 @@
         app:cardBackgroundColor="@android:color/transparent">
 
         <LinearLayout
-            android:id="@+id/newMemoBar"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="16dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="9dp"
+            android:paddingVertical="10dp"
             android:background="@drawable/rounded_noborder">
 
-            <EditText
-                android:id="@+id/newMemoText"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/newMemoBar"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="새로운 메모"
-                android:padding="10dp"
-                android:background="@drawable/rounded_noborder"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:orientation="horizontal"
+                android:paddingHorizontal="8dp"
+                android:gravity="center_vertical"
+                android:background="@android:color/transparent">
 
-            <ImageView
-                android:id="@+id/newMemoIcon"
-                android:layout_width="24dp"
-                android:layout_height="25dp"
-                android:src="@drawable/newmemo_icon" />
+                <EditText
+                    android:id="@+id/newMemoText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="새로운 메모"
+                    android:background="@drawable/rounded_noborder"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/newMemoIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/newmemo_icon" />
+            </LinearLayout>
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/selectedTagContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                app:flexWrap="wrap"
+                app:justifyContent="flex_start"
+                app:flexDirection="row" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

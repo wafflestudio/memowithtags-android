@@ -4,18 +4,21 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Rect
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
+import com.example.memowithtags.common.model.Tag
 import com.example.memowithtags.common.model.tagColors
 import com.example.memowithtags.databinding.FragmentMainMemoBinding
 import com.example.memowithtags.mainMemo.Adapters.MemoAdapter
@@ -63,14 +66,21 @@ class MainMemoFragment : Fragment() {
         memoViewModel.getMyMemos()
 
         // 태그 recycler view 세팅
-        tagAdapter = TagAdapter()
+        tagAdapter = TagAdapter() { tag ->
+            tagViewModel.selectTag(tag)
+        }
         binding.tagRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = tagAdapter
         }
 
         tagViewModel.tagList.observe(viewLifecycleOwner) { tagList ->
-            tagAdapter.updateData(tagList)
+            val visibleTags = tagList.filter { it.isVisible }
+            tagAdapter.updateData(visibleTags)
+        }
+
+        tagViewModel.selectedTags.observe(viewLifecycleOwner) {
+            renderSelectedTags(it)
         }
 
         tagViewModel.getMyTags()
@@ -137,6 +147,33 @@ class MainMemoFragment : Fragment() {
             val intent = Intent(requireContext(), SettingsActivity::class.java)
             startActivity(intent)
             requireActivity().finish() // MainActivity 종료
+        }
+    }
+
+    private fun renderSelectedTags(tags: List<Tag>) {
+        binding.selectedTagContainer.removeAllViews()
+
+        for (tag in tags) {
+            val tagView = LayoutInflater.from(requireContext())
+                .inflate(R.layout.item_selected_tag, binding.selectedTagContainer, false)
+
+            val textView = tagView.findViewById<TextView>(R.id.tagText)
+            textView.text = tag.name
+
+            val background = textView.background
+            if (background is GradientDrawable) {
+                try {
+                    background.setColor(Color.parseColor(tag.colorHex))
+                } catch (e: IllegalArgumentException) {
+                    background.setColor(Color.LTGRAY)
+                }
+            }
+
+            textView.setOnClickListener {
+                tagViewModel.unselectTag(tag)
+            }
+
+            binding.selectedTagContainer.addView(tagView)
         }
     }
 }

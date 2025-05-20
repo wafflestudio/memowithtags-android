@@ -10,7 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Tag
 
-class TagAdapter() : RecyclerView.Adapter<TagAdapter.TagViewHolder>() {
+class TagAdapter(
+    private val onTagClick: (Tag) -> Unit
+) : RecyclerView.Adapter<TagAdapter.TagViewHolder>() {
 
     private var tagList: List<Tag> = emptyList()
 
@@ -26,7 +28,13 @@ class TagAdapter() : RecyclerView.Adapter<TagAdapter.TagViewHolder>() {
 
     override fun onBindViewHolder(holder: TagViewHolder, position: Int) {
         val tag = tagList[position]
+
+        holder.itemView.setOnClickListener {
+            onTagClick(tag)
+        }
+
         holder.tagName.text = tag.name
+
         val background = holder.tagName.background
         if (background is GradientDrawable) {
             try {
