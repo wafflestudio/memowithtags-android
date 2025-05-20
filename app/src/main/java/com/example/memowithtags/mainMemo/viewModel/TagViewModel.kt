@@ -64,4 +64,10 @@ class TagViewModel @Inject constructor(
         val selected = _selectedTags.value.orEmpty().toMutableList().apply { remove(tag) }
         _selectedTags.value = selected
     }
+
+    fun clearSelectedTags() {
+        val updatedTags = _tagList.value?.map { it.copy(isVisible = true) } ?: return
+        _tagList.value = updatedTags
+        _selectedTags.value = emptyList()
+    }
 }

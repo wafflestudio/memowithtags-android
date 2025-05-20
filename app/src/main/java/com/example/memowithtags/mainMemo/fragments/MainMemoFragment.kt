@@ -1,5 +1,6 @@
 package com.example.memowithtags.mainMemo.fragments
 
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -8,6 +9,7 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +28,7 @@ import com.example.memowithtags.mainMemo.Adapters.TagAdapter
 import com.example.memowithtags.mainMemo.viewModel.MemoViewModel
 import com.example.memowithtags.mainMemo.viewModel.TagViewModel
 import com.example.memowithtags.settings.SettingsActivity
+import com.google.android.flexbox.FlexboxLayout
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -52,19 +55,6 @@ class MainMemoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 메모 recycler view 세팅
-        memoAdapter = MemoAdapter()
-        binding.memoRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = memoAdapter
-        }
-
-        memoViewModel.memoList.observe(viewLifecycleOwner) { memoList ->
-            memoAdapter.updateData(memoList)
-        }
-
-        memoViewModel.getMyMemos()
-
         // 태그 recycler view 세팅
         tagAdapter = TagAdapter() { tag ->
             tagViewModel.selectTag(tag)
@@ -77,6 +67,7 @@ class MainMemoFragment : Fragment() {
         tagViewModel.tagList.observe(viewLifecycleOwner) { tagList ->
             val visibleTags = tagList.filter { it.isVisible }
             tagAdapter.updateData(visibleTags)
+            memoAdapter.notifyDataSetChanged()
         }
 
         tagViewModel.selectedTags.observe(viewLifecycleOwner) {
@@ -84,6 +75,23 @@ class MainMemoFragment : Fragment() {
         }
 
         tagViewModel.getMyTags()
+
+        // 메모 recycler view 세팅
+        val tagResolver: (Int) -> Tag? = { id ->
+            tagViewModel.tagList.value?.find { it.id == id }
+        }
+
+        memoAdapter = MemoAdapter(tagResolver)
+        binding.memoRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = memoAdapter
+        }
+
+        memoViewModel.memoList.observe(viewLifecycleOwner) { memoList ->
+            memoAdapter.updateData(memoList)
+        }
+
+        memoViewModel.getMyMemos()
 
         // 태그 생성창 보이기 설정
         view.viewTreeObserver.addOnGlobalLayoutListener {
@@ -136,9 +144,11 @@ class MainMemoFragment : Fragment() {
         //메모 쓰기 버튼
         binding.newMemoIcon.setOnClickListener {
             val content = binding.newMemoText.text.toString()
+            val tagIds = tagViewModel.selectedTags.value?.takeIf { it.isNotEmpty() }?.map { it.id } ?: listOf(0)
             if (content.isNotBlank()) {
-                memoViewModel.postMemo(content)
+                memoViewModel.postMemo(content, tagIds)
                 binding.newMemoText.text.clear()
+                tagViewModel.clearSelectedTags()
             }
         }
 

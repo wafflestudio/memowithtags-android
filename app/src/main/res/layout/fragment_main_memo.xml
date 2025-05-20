@@ -91,7 +91,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingHorizontal="9dp"
-            android:paddingVertical="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="7dp"
             android:background="@drawable/rounded_noborder">
 
             <LinearLayout
@@ -109,9 +110,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="새로운 메모"
+                    android:lineSpacingMultiplier="1.3"
                     android:background="@drawable/rounded_noborder"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <ImageView
                     android:id="@+id/newMemoIcon"
@@ -124,7 +126,7 @@
                 android:id="@+id/selectedTagContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="3dp"
                 app:flexWrap="wrap"
                 app:justifyContent="flex_start"
                 app:flexDirection="row" />

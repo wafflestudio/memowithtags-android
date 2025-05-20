@@ -30,9 +30,8 @@ class MemoViewModel @Inject constructor(
         )
     }
 
-    fun postMemo(content: String) {
-        // 태그 추가하면 태그 ID 보내도록 수정할것!!
-        val request = CreateMemoRequest(content, listOf(0), false)
+    fun postMemo(content: String, tagIds: List<Int>) {
+        val request = CreateMemoRequest(content, tagIds, false)
 
         repository.postMemo(
             request = request,
