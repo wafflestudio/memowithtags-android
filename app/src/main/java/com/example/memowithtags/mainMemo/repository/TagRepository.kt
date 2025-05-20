@@ -2,7 +2,6 @@ package com.example.memowithtags.mainMemo.repository
 
 import com.example.memowithtags.common.model.Tag
 import com.example.memowithtags.common.network.CreateTagRequest
-import com.example.memowithtags.common.network.TagApi
 import com.example.memowithtags.common.network.TagResponse
 import com.example.memowithtags.network.ApiClient
 import retrofit2.Call
@@ -31,7 +30,7 @@ class TagRepository @Inject constructor(
                             id = result.id,
                             name = result.name,
                             colorHex = result.colorHex,
-                            createdAt= result.createdAt,
+                            createdAt = result.createdAt,
                             updatedAt = result.updatedAt,
                             isVisible = true
                         )

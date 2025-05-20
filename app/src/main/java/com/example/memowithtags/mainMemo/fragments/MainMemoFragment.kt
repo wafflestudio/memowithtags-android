@@ -1,6 +1,5 @@
 package com.example.memowithtags.mainMemo.fragments
 
-import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -9,12 +8,10 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,7 +25,6 @@ import com.example.memowithtags.mainMemo.Adapters.TagAdapter
 import com.example.memowithtags.mainMemo.viewModel.MemoViewModel
 import com.example.memowithtags.mainMemo.viewModel.TagViewModel
 import com.example.memowithtags.settings.SettingsActivity
-import com.google.android.flexbox.FlexboxLayout
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -130,7 +126,7 @@ class MainMemoFragment : Fragment() {
             }
         })
 
-        //태그 생성하기
+        // 태그 생성하기
         binding.inputTagButton.setOnClickListener {
             val name = binding.tagInputEditText.text.toString().trim()
             val color = selectedColor
@@ -141,7 +137,7 @@ class MainMemoFragment : Fragment() {
             }
         }
 
-        //메모 쓰기 버튼
+        // 메모 쓰기 버튼
         binding.newMemoIcon.setOnClickListener {
             val content = binding.newMemoText.text.toString()
             val tagIds = tagViewModel.selectedTags.value?.takeIf { it.isNotEmpty() }?.map { it.id } ?: listOf(0)
@@ -152,7 +148,7 @@ class MainMemoFragment : Fragment() {
             }
         }
 
-        //설정 버튼
+        // 설정 버튼
         binding.iconSettings.setOnClickListener {
             val intent = Intent(requireContext(), SettingsActivity::class.java)
             startActivity(intent)
