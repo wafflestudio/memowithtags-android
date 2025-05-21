@@ -14,6 +14,7 @@ navigation = "2.7.5"
 retrofit = "2.11.0"
 okhttp = "4.10.0"
 hilt = "2.52"
+flexbox = "3.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -32,6 +33,7 @@ okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-i
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp"}
 hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

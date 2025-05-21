@@ -37,6 +37,11 @@ data class WithdrawalRequest(
     val email: String
 )
 
+data class CreateTagRequest(
+    val name: String,
+    val colorHex: String
+)
+
 data class SignupResponse(
     val accessToken: String,
     val refreshToken: String
@@ -61,4 +66,12 @@ data class SearchMemoResponse(
     val totalPages: Int,
     val totalResults: Int,
     val results: List<Memo>
+)
+
+data class TagResponse(
+    val id: Int,
+    val name: String,
+    val colorHex: String,
+    val createdAt: String,
+    val updatedAt: String
 )

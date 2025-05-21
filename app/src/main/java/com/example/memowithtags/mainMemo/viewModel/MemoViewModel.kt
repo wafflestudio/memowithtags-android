@@ -7,16 +7,13 @@ import androidx.lifecycle.ViewModel
 import com.example.memowithtags.common.model.Memo
 import com.example.memowithtags.common.network.CreateMemoRequest
 import com.example.memowithtags.mainMemo.repository.MemoRepository
-import com.example.wafflestudio_toyproject.network.ApiClient
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class MemoViewModel @Inject constructor(
-    private val apiClient: ApiClient,
     private val repository: MemoRepository
 ) : ViewModel() {
-    private val memoApi = apiClient.memoApi
 
     private val _memoList = MutableLiveData<List<Memo>>(emptyList())
     val memoList: LiveData<List<Memo>> = _memoList
@@ -33,9 +30,8 @@ class MemoViewModel @Inject constructor(
         )
     }
 
-    fun postMemo(content: String) {
-        // 태그 추가하면 태그 ID 보내도록 수정할것!!
-        val request = CreateMemoRequest(content, listOf(0), false)
+    fun postMemo(content: String, tagIds: List<Int>) {
+        val request = CreateMemoRequest(content, tagIds, false)
 
         repository.postMemo(
             request = request,

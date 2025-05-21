@@ -63,4 +63,5 @@ dependencies {
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
+    implementation(libs.flexbox)
 }
