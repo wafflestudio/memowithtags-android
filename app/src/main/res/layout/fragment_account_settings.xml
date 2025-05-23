@@ -150,13 +150,6 @@
                     android:textSize="12sp"
                     android:textColor="@color/colorSecondary"/>
 
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:tint="@color/colorPrimary"
-                    app:srcCompat="@drawable/right_arrow"/>
-
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/ChangePWLayout"
