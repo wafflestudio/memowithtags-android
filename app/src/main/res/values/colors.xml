@@ -2,4 +2,18 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Background -->
+    <color name="colorBackground">#F1F1F3</color>
+    <color name="colorMemoBackground">#FFFFFF</color>
+
+    <!-- Text -->
+    <color name="colorPrimary">#202021</color>
+    <color name="colorSecondary">#A0A0A1</color>
+    <color name="colorDanger">#FF5151</color>
+
+    <!-- Icon -->
+    <color name="colorChecked">#FF9C9C</color>
+    <color name="colorUnchecked">#FFFFFF</color>
+
 </resources>

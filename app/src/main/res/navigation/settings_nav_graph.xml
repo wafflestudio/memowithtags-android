@@ -8,6 +8,47 @@
         android:id="@+id/mainSettingsFragment"
         android:name="com.example.memowithtags.settings.fragments.MainSettingsFragment"
         tools:layout="@layout/fragment_main_settings">
+        <action
+            android:id="@+id/action_mainSettings_to_accountSettings"
+            app:destination="@id/accountSettingsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
+
+    <fragment
+        android:id="@+id/accountSettingsFragment"
+        android:name="com.example.memowithtags.settings.fragments.AccountSettingsFragment"
+        tools:layout="@layout/fragment_account_settings">
+        <action
+            android:id="@+id/action_accountSettings_to_changeNickname"
+            app:destination="@id/changeNicknameFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_accountSettingsFragment_to_changePWLoginedFragment"
+            app:destination="@id/changePWLoginedFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/changeNicknameFragment"
+        android:name="com.example.memowithtags.settings.fragments.ChangeNicknameFragment"
+        tools:layout="@layout/fragment_change_nickname">
+    </fragment>
+
+    <fragment
+        android:id="@+id/changePWLoginedFragment"
+        android:name="com.example.memowithtags.settings.fragments.ChangePWLoginedFragment"
+        tools:layout="@layout/fragment_change_pw_logined">
+    </fragment>
+
+
 
 </navigation>
