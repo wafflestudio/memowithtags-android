@@ -1,18 +1,16 @@
 package com.example.memowithtags.settings.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.example.memowithtags.R
 import com.example.memowithtags.databinding.FragmentMainSettingsBinding
-import com.example.memowithtags.login.LoginActivity
-import com.example.memowithtags.settings.viewModel.SettingsViewModel
+import com.example.memowithtags.settings.viewModel.MainSettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,7 +19,7 @@ class MainSettingsFragment : Fragment() {
     private var _binding: FragmentMainSettingsBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: SettingsViewModel by viewModels()
+    private val viewModel: MainSettingsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,45 +33,57 @@ class MainSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.WithdrawalBtn.setOnClickListener {
-            Log.d("MainSettingsFragment", "탈퇴 버튼 클릭됨")
-            showWithdrawalConfirmDialog()
+        binding.MyAccountLayout.setOnClickListener {
+            Log.d("MainSettingsFragment", "내 계정 버튼 클릭됨")
+            findNavController().navigate(R.id.action_mainSettings_to_accountSettings)
         }
 
-        binding.logoutBtn.setOnClickListener {
-            viewModel.logoutAccount()
-            goToLogin()
+        binding.leftArrowIcon.setOnClickListener {
+            Log.d("MainSettingsFragment", "뒤로 가기 버튼 클릭됨")
+            requireActivity().finish()
+        }
+
+        binding.searchFilterAndLayout.setOnClickListener {
+            viewModel.setSearchFilterOption("and")
+        }
+
+        binding.searchFilterOrLayout.setOnClickListener {
+            viewModel.setSearchFilterOption("or")
+        }
+
+        binding.searchSortCreatedLayout.setOnClickListener {
+            viewModel.setSearchSortOption("created")
+        }
+
+        binding.searchSortModifiedLayout.setOnClickListener {
+            viewModel.setSearchSortOption("modified")
         }
 
         observeViewModel()
     }
 
-    private fun showWithdrawalConfirmDialog() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("회원 탈퇴")
-            .setMessage("정말 탈퇴하시겠습니까? 모든 데이터가 삭제됩니다.")
-            .setPositiveButton("탈퇴") { _, _ ->
-                viewModel.withdrawAccount()
-            }
-            .setNegativeButton("취소", null)
-            .show()
-    }
-
     private fun observeViewModel() {
-        viewModel.withdrawalResult.observe(viewLifecycleOwner) { result ->
-            result.onSuccess {
-                Toast.makeText(requireContext(), "회원 탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show()
-                goToLogin()
-            }.onFailure {
-                Toast.makeText(requireContext(), "오류: ${it.message}", Toast.LENGTH_SHORT).show()
+        // 검색 필터 기준
+        viewModel.searchFilterOption.observe(viewLifecycleOwner) { option ->
+            if (option == "and") {
+                binding.searchFilterCheckAnd.imageTintList = resources.getColorStateList(R.color.colorChecked, null)
+                binding.searchFilterCheckOr.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
+            } else if (option == "or") {
+                binding.searchFilterCheckAnd.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
+                binding.searchFilterCheckOr.imageTintList = resources.getColorStateList(R.color.colorChecked, null)
             }
         }
-    }
 
-    private fun goToLogin() {
-        val intent = Intent(requireContext(), LoginActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
+        // 검색 정렬 기준
+        viewModel.searchSortOption.observe(viewLifecycleOwner) { option ->
+            if (option == "created") {
+                binding.searchSortCheckCreated.imageTintList = resources.getColorStateList(R.color.colorChecked, null)
+                binding.searchSortCheckModified.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
+            } else if (option == "modified") {
+                binding.searchSortCheckCreated.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
+                binding.searchSortCheckModified.imageTintList = resources.getColorStateList(R.color.colorChecked, null)
+            }
+        }
     }
 
     override fun onDestroyView() {
