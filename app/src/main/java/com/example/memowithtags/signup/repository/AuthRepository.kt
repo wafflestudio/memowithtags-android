@@ -3,6 +3,8 @@ package com.example.memowithtags.signup.repository
 import android.content.SharedPreferences
 import com.example.memowithtags.common.network.ChangeNicknameRequest
 import com.example.memowithtags.common.network.ChangeNicknameResponse
+import com.example.memowithtags.common.network.ChangePWLoginedRequest
+import com.example.memowithtags.common.network.ChangePWLoginedResponse
 import com.example.memowithtags.common.network.LoginRequest
 import com.example.memowithtags.common.network.LoginResponse
 import com.example.memowithtags.common.network.MeResponse
@@ -33,6 +35,10 @@ class AuthRepository @Inject constructor(
 
     fun changeNickname(token: String, request: ChangeNicknameRequest): Call<ChangeNicknameResponse> {
         return userApi.changeNickname(token, request)
+    }
+
+    fun changePWLogined(token: String, request: ChangePWLoginedRequest): Call<ChangePWLoginedResponse> {
+        return userApi.changePWLogined(token, request)
     }
 
     fun saveToken(token: String) {

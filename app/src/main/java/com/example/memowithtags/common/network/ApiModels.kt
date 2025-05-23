@@ -42,9 +42,23 @@ data class ChangeNicknameRequest(
     val nickname: String
 )
 
+data class ChangePWLoginedRequest(
+    val originalPassword: String,
+    val newPassword: String
+)
+
 data class CreateTagRequest(
     val name: String,
     val colorHex: String
+)
+
+data class ChangePWLoginedResponse(
+    val id: UUID,
+    val userNumber: Int,
+    val email: String,
+    val nickname: String,
+    val isSocial: Boolean,
+    val createdAt: String
 )
 
 data class SignupResponse(

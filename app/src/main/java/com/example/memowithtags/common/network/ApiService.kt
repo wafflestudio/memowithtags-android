@@ -32,6 +32,9 @@ interface UserApi {
     @PUT("api/v1/auth/nickname")
     fun changeNickname(@Header("Authorization") token: String, @Body request: ChangeNicknameRequest): Call<ChangeNicknameResponse>
 
+    @PUT("api/v1/auth/password")
+    fun changePWLogined(@Header("Authorization") token: String, @Body request: ChangePWLoginedRequest): Call<ChangePWLoginedResponse>
+
     @HTTP(method = "DELETE", path = "api/v1/auth/withdrawal", hasBody = true)
     fun withdrawUser(
         @Header("Authorization") token: String,

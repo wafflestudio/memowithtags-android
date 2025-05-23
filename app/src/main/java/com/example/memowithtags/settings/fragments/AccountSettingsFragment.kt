@@ -57,6 +57,7 @@ class AccountSettingsFragment : Fragment() {
 
         binding.ChangePWLayout.setOnClickListener {
             Log.d("AccountSettingsFragment", "비밀번호 변경 버튼 클릭됨")
+            findNavController().navigate(R.id.action_accountSettingsFragment_to_changePWLoginedFragment)
         }
 
         binding.leftArrowIcon.setOnClickListener {
