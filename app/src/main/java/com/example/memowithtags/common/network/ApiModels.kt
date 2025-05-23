@@ -1,6 +1,7 @@
 package com.example.memowithtags.common.network
 
 import com.example.memowithtags.common.model.Memo
+import java.util.UUID
 
 data class SignupRequest(
     val email: String,
@@ -37,6 +38,10 @@ data class WithdrawalRequest(
     val email: String
 )
 
+data class ChangeNicknameRequest(
+    val nickname: String
+)
+
 data class CreateTagRequest(
     val name: String,
     val colorHex: String
@@ -50,6 +55,24 @@ data class SignupResponse(
 data class LoginResponse(
     val accessToken: String,
     val refreshToken: String
+)
+
+data class MeResponse(
+    val id: UUID,
+    val userNumber: Int,
+    val email: String,
+    val nickname: String,
+    val isSocial: Boolean,
+    val createdAt: String
+)
+
+data class ChangeNicknameResponse(
+    val id: UUID,
+    val userNumber: Int,
+    val email: String,
+    val nickname: String,
+    val isSocial: Boolean,
+    val createdAt: String
 )
 
 data class CreateMemoResponse(
