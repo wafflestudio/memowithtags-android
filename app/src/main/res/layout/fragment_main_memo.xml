@@ -126,10 +126,47 @@
                 android:id="@+id/selectedTagContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="6dp"
                 app:flexWrap="wrap"
                 app:justifyContent="flex_start"
                 app:flexDirection="row" />
+
+            <LinearLayout
+                android:id="@+id/newMemoIconBar"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="8dp"
+                android:layout_marginTop="6dp"
+                android:background="@android:color/transparent">
+
+                <ImageView
+                    android:id="@+id/zoomButton"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/zoom_icon" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/cancelButton"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/cancel_icon" />
+
+                <ImageView
+                    android:id="@+id/newMemoButton"
+                    android:layout_width="24dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/newmemo_icon" />
+
+            </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
