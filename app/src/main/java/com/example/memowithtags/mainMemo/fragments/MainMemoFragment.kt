@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
@@ -32,7 +33,6 @@ class MainMemoFragment : Fragment() {
     private var _binding: FragmentMainMemoBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var recyclerView: RecyclerView
     private lateinit var memoAdapter: MemoAdapter
     private lateinit var tagAdapter: TagAdapter
 
@@ -146,6 +146,15 @@ class MainMemoFragment : Fragment() {
                 binding.newMemoText.text.clear()
                 tagViewModel.clearSelectedTags()
             }
+        }
+
+        //편집 화면으로 이동 버튼
+        binding.zoomButton.setOnClickListener {
+            val currentText = binding.newMemoText.text.toString()
+            val bundle = Bundle().apply {
+                putString("memoText", currentText)
+            }
+            findNavController().navigate(R.id.action_mainMemo_to_editMemo, bundle)
         }
 
         // 설정 버튼
