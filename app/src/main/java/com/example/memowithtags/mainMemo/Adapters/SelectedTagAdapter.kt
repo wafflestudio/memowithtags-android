@@ -28,8 +28,7 @@ class SelectedTagAdapter(
         fun bind(tag: Tag) {
             tagText.text = tag.name
             (tagText.background as? GradientDrawable)?.setColor(
-                try { Color.parseColor(tag.colorHex) }
-                catch (e: IllegalArgumentException) { Color.LTGRAY }
+                try { Color.parseColor(tag.colorHex) } catch (e: IllegalArgumentException) { Color.LTGRAY }
             )
 
             tagText.setOnClickListener { onTagUnselect(tag) }

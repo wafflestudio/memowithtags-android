@@ -1,21 +1,16 @@
 package com.example.memowithtags.mainMemo.fragments
 
-import android.graphics.Color
 import android.graphics.Rect
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.memowithtags.R
-import com.example.memowithtags.common.model.Tag
 import com.example.memowithtags.databinding.FragmentEditMemoBinding
 import com.example.memowithtags.mainMemo.Adapters.SelectedTagAdapter
 import com.example.memowithtags.mainMemo.Adapters.TagAdapter
@@ -92,7 +87,8 @@ class EditMemoFragment : Fragment() {
             binding.tagInputLayout.visibility = if (isKeyboardVisible) View.VISIBLE else View.GONE
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     handleBackPressed()

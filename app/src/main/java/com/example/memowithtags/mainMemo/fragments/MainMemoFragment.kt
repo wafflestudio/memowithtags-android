@@ -14,10 +14,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Tag
 import com.example.memowithtags.common.model.tagColors
@@ -149,7 +147,7 @@ class MainMemoFragment : Fragment() {
             }
         }
 
-        //편집 화면으로 이동 버튼
+        // 편집 화면으로 이동 버튼
         binding.zoomButton.setOnClickListener {
             val currentText = binding.newMemoText.text.toString()
             val bundle = Bundle().apply {
