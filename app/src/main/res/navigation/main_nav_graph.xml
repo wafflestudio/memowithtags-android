@@ -7,8 +7,19 @@
     <fragment
         android:id="@+id/mainMemoFragment"
         android:name="com.example.memowithtags.mainMemo.fragments.MainMemoFragment"
-        android:label="Step 1"
         tools:layout="@layout/fragment_main_memo">
+        <action
+            android:id="@+id/action_mainMemo_to_editMemo"
+            app:destination="@id/editMemoFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editMemoFragment"
+        android:name="com.example.memowithtags.mainMemo.fragments.EditMemoFragment"
+        tools:layout="@layout/fragment_edit_memo">
+        <action
+            android:id="@+id/action_editMemo_to_mainMemo"
+            app:destination="@id/mainMemoFragment" />
     </fragment>
 
 </navigation>

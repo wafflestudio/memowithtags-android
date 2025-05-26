@@ -13,9 +13,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Tag
 import com.example.memowithtags.common.model.tagColors
@@ -32,12 +32,11 @@ class MainMemoFragment : Fragment() {
     private var _binding: FragmentMainMemoBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var recyclerView: RecyclerView
     private lateinit var memoAdapter: MemoAdapter
     private lateinit var tagAdapter: TagAdapter
 
-    private val memoViewModel: MemoViewModel by viewModels()
-    private val tagViewModel: TagViewModel by viewModels()
+    private val memoViewModel: MemoViewModel by activityViewModels()
+    private val tagViewModel: TagViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,18 +88,18 @@ class MainMemoFragment : Fragment() {
 
         memoViewModel.getMyMemos()
 
-        // 태그 생성창 보이기 설정
+        // 키보드 활성화 -> 태그 생성창 보이기, 메모 수정 아이콘 바 보이기
         view.viewTreeObserver.addOnGlobalLayoutListener {
             val r = Rect()
             view.getWindowVisibleDisplayFrame(r)
             val screenHeight = view.rootView.height
             val keypadHeight = screenHeight - r.bottom
 
-            binding.tagInputLayout.visibility = if (keypadHeight > screenHeight * 0.15) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
+            val isKeyboardVisible = keypadHeight > screenHeight * 0.15
+
+            binding.tagInputLayout.visibility = if (isKeyboardVisible) View.VISIBLE else View.GONE
+            binding.newMemoIconBar.visibility = if (isKeyboardVisible) View.VISIBLE else View.GONE
+            binding.newMemoIcon.visibility = if (isKeyboardVisible) View.GONE else View.VISIBLE
         }
 
         var selectedColor: String? = null
@@ -138,7 +137,7 @@ class MainMemoFragment : Fragment() {
         }
 
         // 메모 쓰기 버튼
-        binding.newMemoIcon.setOnClickListener {
+        binding.newMemoButton.setOnClickListener {
             val content = binding.newMemoText.text.toString()
             val tagIds = tagViewModel.selectedTags.value?.takeIf { it.isNotEmpty() }?.map { it.id } ?: listOf(0)
             if (content.isNotBlank()) {
@@ -146,6 +145,15 @@ class MainMemoFragment : Fragment() {
                 binding.newMemoText.text.clear()
                 tagViewModel.clearSelectedTags()
             }
+        }
+
+        // 편집 화면으로 이동 버튼
+        binding.zoomButton.setOnClickListener {
+            val currentText = binding.newMemoText.text.toString()
+            val bundle = Bundle().apply {
+                putString("memoText", currentText)
+            }
+            findNavController().navigate(R.id.action_mainMemo_to_editMemo, bundle)
         }
 
         // 설정 버튼
