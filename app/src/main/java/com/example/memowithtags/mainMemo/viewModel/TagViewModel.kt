@@ -20,6 +20,8 @@ class TagViewModel @Inject constructor(
     private val _selectedTags = MutableLiveData<List<Tag>>()
     val selectedTags: LiveData<List<Tag>> = _selectedTags
 
+    private var initialized = false
+
     fun createTag(name: String, colorHex: String) {
         repository.createTag(
             name = name,
@@ -35,6 +37,9 @@ class TagViewModel @Inject constructor(
     }
 
     fun getMyTags() {
+        if (initialized) return
+        initialized = true
+
         repository.getMyTags(
             onSuccess = { tagList ->
                 _tagList.value = tagList.map { it.copy(isVisible = true) }

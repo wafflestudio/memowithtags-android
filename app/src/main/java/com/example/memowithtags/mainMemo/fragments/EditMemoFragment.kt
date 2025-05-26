@@ -8,14 +8,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Tag
 import com.example.memowithtags.databinding.FragmentEditMemoBinding
 import com.example.memowithtags.mainMemo.Adapters.SelectedTagAdapter
 import com.example.memowithtags.mainMemo.Adapters.TagAdapter
+import com.example.memowithtags.mainMemo.viewModel.MemoViewModel
 import com.example.memowithtags.mainMemo.viewModel.TagViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,7 +31,8 @@ class EditMemoFragment : Fragment() {
     private lateinit var tagAdapter: TagAdapter
     private lateinit var selectedTagAdapter: SelectedTagAdapter
 
-    private val tagViewModel: TagViewModel by viewModels()
+    private val memoViewModel: MemoViewModel by activityViewModels()
+    private val tagViewModel: TagViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -86,5 +91,30 @@ class EditMemoFragment : Fragment() {
 
             binding.tagInputLayout.visibility = if (isKeyboardVisible) View.VISIBLE else View.GONE
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    handleBackPressed()
+                }
+            }
+        )
+
+        binding.leftArrowIcon.setOnClickListener {
+            handleBackPressed()
+        }
+    }
+
+    private fun handleBackPressed() {
+        val content = binding.newMemoText.text.toString()
+        val tagIds = tagViewModel.selectedTags.value?.takeIf { it.isNotEmpty() }?.map { it.id } ?: listOf(0)
+
+        if (content.isNotBlank()) {
+            memoViewModel.postMemo(content, tagIds)
+            binding.newMemoText.text.clear()
+            tagViewModel.clearSelectedTags()
+        }
+
+        findNavController().navigate(R.id.action_editMemo_to_mainMemo)
     }
 }
