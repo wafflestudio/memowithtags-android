@@ -8,9 +8,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.memowithtags.R
-import com.example.memowithtags.common.network.SendEmailRequest
+import com.example.memowithtags.common.network.api.AuthApi
+import com.example.memowithtags.common.network.api.SendEmailRequest
 import com.example.memowithtags.databinding.FragmentSignupStep1Binding
-import com.example.memowithtags.network.ApiClient
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,7 +23,7 @@ class SignupStep1Fragment : Fragment() {
     private val binding get() = _binding!!
 
     @Inject
-    lateinit var apiClient: ApiClient
+    lateinit var authApi: AuthApi
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,7 +51,7 @@ class SignupStep1Fragment : Fragment() {
     }
 
     private fun sendEmailVerification(email: String) {
-        val call = apiClient.userApi.sendEmail(SendEmailRequest(email))
+        val call = authApi.sendEmail(SendEmailRequest(email))
 
         call.enqueue(object : Callback<Unit> {
             override fun onResponse(call: Call<Unit>, response: Response<Unit>) {

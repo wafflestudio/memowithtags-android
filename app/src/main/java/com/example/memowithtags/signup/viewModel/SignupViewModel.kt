@@ -3,8 +3,8 @@ package com.example.memowithtags.signup.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.memowithtags.common.network.SignupRequest
-import com.example.memowithtags.common.network.SignupResponse
+import com.example.memowithtags.common.network.api.SignupRequest
+import com.example.memowithtags.common.network.api.SignupResponse
 import com.example.memowithtags.signup.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call

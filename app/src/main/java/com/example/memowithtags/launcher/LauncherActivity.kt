@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.memowithtags.launcher.viewModel.LauncherViewModel
 import com.example.memowithtags.login.LoginActivity
+import com.example.memowithtags.mainMemo.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,18 +18,10 @@ class LauncherActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         if (launcherViewModel.isLoggedIn()) {
-            startActivity(Intent(this, LoginActivity::class.java))
-        } else {
-            startActivity(Intent(this, LoginActivity::class.java))
-        }
-
-        /*자동 로그인
-        if (launcherViewModel.isLoggedIn()) {
             startActivity(Intent(this, MainActivity::class.java))
         } else {
             startActivity(Intent(this, LoginActivity::class.java))
         }
-         */
 
         finish() // LauncherActivity는 종료
     }

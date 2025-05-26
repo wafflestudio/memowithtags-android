@@ -3,8 +3,8 @@ package com.example.memowithtags.settings.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.memowithtags.common.network.ChangeNicknameRequest
-import com.example.memowithtags.common.network.ChangeNicknameResponse
+import com.example.memowithtags.common.network.api.ChangeNicknameRequest
+import com.example.memowithtags.common.network.api.ChangeNicknameResponse
 import com.example.memowithtags.signup.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
