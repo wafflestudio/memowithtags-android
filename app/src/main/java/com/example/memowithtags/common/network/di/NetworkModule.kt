@@ -44,9 +44,9 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideTokenProvider(
-        @ApplicationContext context: Context
+        sharedPreferences: SharedPreferences
     ): TokenProvider {
-        return SharedPrefsTokenProvider(context)
+        return SharedPrefsTokenProvider(sharedPreferences)
     }
 
     @Provides
