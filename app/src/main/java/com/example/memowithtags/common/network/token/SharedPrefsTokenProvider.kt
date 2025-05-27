@@ -12,11 +12,11 @@ class SharedPrefsTokenProvider @Inject constructor(
     override fun getRefreshToken(): String? = prefs.getString("refresh_token", null)
 
     override fun saveAccessToken(token: String) {
-        prefs.edit() { putString("access_token", token).commit() }
+        prefs.edit() { putString("access_token", token).apply() }
     }
 
     override fun saveRefreshToken(token: String) {
-        prefs.edit() { putString("refresh_token", token).commit() }
+        prefs.edit() { putString("refresh_token", token).apply() }
     }
 
     override fun clearTokens() {
