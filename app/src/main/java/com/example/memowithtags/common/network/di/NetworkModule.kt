@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import com.example.memowithtags.common.network.api.AuthApi
 import com.example.memowithtags.common.network.api.MemoApi
 import com.example.memowithtags.common.network.api.TagApi
+import com.example.memowithtags.common.network.api.UserApi
 import com.example.memowithtags.common.network.interceptor.AuthInterceptor
 import com.example.memowithtags.common.network.interceptor.TokenAuthenticator
 import com.example.memowithtags.common.network.token.SharedPrefsTokenProvider
@@ -109,6 +110,11 @@ object NetworkModule {
     @Singleton
     fun provideAuthApi(@Named("NoAuth") retrofit: Retrofit): AuthApi =
         retrofit.create(AuthApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideUserApi(@Named("WithAuth") retrofitWithAuth: Retrofit): UserApi =
+        retrofitWithAuth.create(UserApi::class.java)
 
     @Provides
     @Singleton

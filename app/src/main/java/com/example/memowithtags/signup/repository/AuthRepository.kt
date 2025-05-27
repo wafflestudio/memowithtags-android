@@ -11,6 +11,7 @@ import com.example.memowithtags.common.network.api.LoginResponse
 import com.example.memowithtags.common.network.api.MeResponse
 import com.example.memowithtags.common.network.api.SignupRequest
 import com.example.memowithtags.common.network.api.SignupResponse
+import com.example.memowithtags.common.network.api.UserApi
 import com.example.memowithtags.common.network.api.WithdrawalRequest
 import com.example.memowithtags.common.network.token.TokenProvider
 import retrofit2.Call
@@ -18,6 +19,7 @@ import javax.inject.Inject
 
 class AuthRepository @Inject constructor(
     private val authApi: AuthApi,
+    private val userApi: UserApi,
     private val prefs: SharedPreferences,
     private val tokenProvider: TokenProvider
 ) {
@@ -30,20 +32,24 @@ class AuthRepository @Inject constructor(
         return authApi.signup(request)
     }
 
-    fun me(token: String): Call<MeResponse> {
-        return authApi.me(token)
+    fun me(): Call<MeResponse> {
+        return userApi.me()
     }
 
-    fun changeNickname(token: String, request: ChangeNicknameRequest): Call<ChangeNicknameResponse> {
-        return authApi.changeNickname(token, request)
+    fun changeNickname(request: ChangeNicknameRequest): Call<ChangeNicknameResponse> {
+        return userApi.changeNickname(request)
     }
 
-    fun changePWLogined(token: String, request: ChangePWLoginedRequest): Call<ChangePWLoginedResponse> {
-        return authApi.changePWLogined(token, request)
+    fun changePWLogined(request: ChangePWLoginedRequest): Call<ChangePWLoginedResponse> {
+        return userApi.changePWLogined(request)
     }
 
-    fun saveToken(token: String) {
+    fun saveAccessToken(token: String) {
         tokenProvider.saveAccessToken(token)
+    }
+
+    fun saveRefreshToken(token: String) {
+        tokenProvider.saveRefreshToken(token)
     }
 
     fun saveEmail(email: String) {
@@ -75,7 +81,7 @@ class AuthRepository @Inject constructor(
         tokenProvider.clearTokens()
     }
 
-    fun withdrawUser(token: String, request: WithdrawalRequest): Call<Void> {
-        return authApi.withdrawUser(token, request)
+    fun withdrawUser(request: WithdrawalRequest): Call<Void> {
+        return userApi.withdrawUser(request)
     }
 }

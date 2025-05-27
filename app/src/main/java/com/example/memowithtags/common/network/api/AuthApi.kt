@@ -26,19 +26,4 @@ interface AuthApi {
 
     @POST("api/v1/auth/reset-password")
     fun changePw(@Body changePwRequest: ChangePwRequest): Call<Unit>
-
-    @GET("api/v1/auth/me")
-    fun me(@Header("Authorization") token: String): Call<MeResponse>
-
-    @PUT("api/v1/auth/nickname")
-    fun changeNickname(@Header("Authorization") token: String, @Body request: ChangeNicknameRequest): Call<ChangeNicknameResponse>
-
-    @PUT("api/v1/auth/password")
-    fun changePWLogined(@Header("Authorization") token: String, @Body request: ChangePWLoginedRequest): Call<ChangePWLoginedResponse>
-
-    @HTTP(method = "DELETE", path = "api/v1/auth/withdrawal", hasBody = true)
-    fun withdrawUser(
-        @Header("Authorization") token: String,
-        @Body request: WithdrawalRequest
-    ): Call<Void>
 }

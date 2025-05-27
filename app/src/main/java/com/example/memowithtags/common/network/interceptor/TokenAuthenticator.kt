@@ -2,6 +2,7 @@ package com.example.memowithtags.common.network.interceptor
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.memowithtags.common.network.api.AuthApi
 import com.example.memowithtags.common.network.api.RefreshTokenRequest
@@ -21,6 +22,8 @@ class TokenAuthenticator @Inject constructor(
 ) : Authenticator {
 
     override fun authenticate(route: Route?, response: Response): Request? {
+        if (responseCount(response) >= 2) return null
+
         val refreshToken = tokenProvider.getRefreshToken() ?: return null
 
         val refreshCall = authApi.refreshToken(RefreshTokenRequest(refreshToken))
@@ -48,12 +51,20 @@ class TokenAuthenticator @Inject constructor(
         }
     }
 
-    private fun navigateToLogout() {
-        val currentActivity = context as? AppCompatActivity
-        if (currentActivity != null && currentActivity !is LoginActivity) {
-            val intent = Intent(context, LoginActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            context.startActivity(intent)
+    private fun responseCount(response: Response): Int {
+        var count = 1
+        var prior = response.priorResponse
+        while (prior != null) {
+            count++
+            prior = prior.priorResponse
         }
+        return count
+    }
+
+    private fun navigateToLogout() {
+        val intent = Intent(context, LoginActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        context.startActivity(intent)
     }
 }

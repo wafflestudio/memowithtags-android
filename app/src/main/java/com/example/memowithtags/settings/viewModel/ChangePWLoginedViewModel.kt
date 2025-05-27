@@ -49,13 +49,11 @@ class ChangePWLoginedViewModel @Inject constructor(
     }
 
     fun changePW() {
-        val token = repository.getToken()
-        val authHeader = "Bearer $token"
         val request = ChangePWLoginedRequest(
             originalPassword = _originalPWInput.value!!,
             newPassword = _newPWInput.value!!
         )
-        repository.changePWLogined(authHeader, request).enqueue(object :
+        repository.changePWLogined(request).enqueue(object :
                 Callback<ChangePWLoginedResponse> {
                 override fun onResponse(call: Call<ChangePWLoginedResponse>, response: Response<ChangePWLoginedResponse>) {
                     if (response.isSuccessful) {

@@ -31,18 +31,11 @@ class AccountSettingsViewModel @Inject constructor(
     }
 
     fun withdrawAccount() {
-        val token = repository.getToken()
         val email = repository.getEmail()
 
-        if (token.isNullOrBlank() || email.isNullOrBlank()) {
-            _withdrawalResult.value = Result.failure(Throwable("저장된 로그인 정보가 없습니다."))
-            return
-        }
+        val request = WithdrawalRequest(email!!)
 
-        val request = WithdrawalRequest(email)
-        val authHeader = "Bearer $token"
-
-        repository.withdrawUser(authHeader, request).enqueue(object : Callback<Void> {
+        repository.withdrawUser(request).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     repository.clearAuthData()
@@ -63,9 +56,7 @@ class AccountSettingsViewModel @Inject constructor(
             _fullName.value = "${repository.getNickname()}#${repository.getUserNumber()}"
             return
         }
-        val token = repository.getToken()
-        val authHeader = "Bearer $token"
-        repository.me(authHeader).enqueue(object : Callback<MeResponse> {
+        repository.me().enqueue(object : Callback<MeResponse> {
             override fun onResponse(call: Call<MeResponse>, response: Response<MeResponse>) {
                 if (response.isSuccessful) {
                     val body = response.body()

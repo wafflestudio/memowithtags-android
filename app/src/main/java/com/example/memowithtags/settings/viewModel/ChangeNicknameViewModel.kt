@@ -35,10 +35,8 @@ class ChangeNicknameViewModel @Inject constructor(
     }
 
     fun changeNickname() {
-        val token = repository.getToken()
-        val authHeader = "Bearer $token"
         val request = ChangeNicknameRequest(_nicknameInput.value!!)
-        repository.changeNickname(authHeader, request).enqueue(object :
+        repository.changeNickname(request).enqueue(object :
                 Callback<ChangeNicknameResponse> {
                 override fun onResponse(call: Call<ChangeNicknameResponse>, response: Response<ChangeNicknameResponse>) {
                     if (response.isSuccessful) {

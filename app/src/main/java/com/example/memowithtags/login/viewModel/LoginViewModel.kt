@@ -28,7 +28,8 @@ class LoginViewModel @Inject constructor(
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null) {
-                        repository.saveToken(body.accessToken)
+                        repository.saveAccessToken(body.accessToken)
+                        repository.saveRefreshToken(body.refreshToken)
                         repository.saveEmail(email)
                         _loginResult.value = Result.success(body)
                     } else {
