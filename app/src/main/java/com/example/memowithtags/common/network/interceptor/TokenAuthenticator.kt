@@ -2,8 +2,6 @@ package com.example.memowithtags.common.network.interceptor
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import com.example.memowithtags.common.network.api.AuthApi
 import com.example.memowithtags.common.network.api.RefreshTokenRequest
 import com.example.memowithtags.common.network.token.TokenProvider
