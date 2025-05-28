@@ -8,9 +8,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.memowithtags.R
-import com.example.memowithtags.common.network.ChangePwRequest
+import com.example.memowithtags.common.network.api.AuthApi
+import com.example.memowithtags.common.network.api.ChangePwRequest
 import com.example.memowithtags.databinding.FragmentChangePwBinding
-import com.example.memowithtags.network.ApiClient
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,7 +23,7 @@ class ChangePWFragment : Fragment() {
     private val binding get() = _binding!!
 
     @Inject
-    lateinit var apiClient: ApiClient
+    lateinit var authApi: AuthApi
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,7 +47,7 @@ class ChangePWFragment : Fragment() {
     }
 
     private fun changePw(email: String, password: String) {
-        val call = apiClient.userApi.changePw(ChangePwRequest(email, password))
+        val call = authApi.changePw(ChangePwRequest(email, password))
 
         call.enqueue(object : Callback<Unit> {
             override fun onResponse(call: Call<Unit>, response: Response<Unit>) {

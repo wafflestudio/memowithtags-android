@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.memowithtags.common.model.Memo
-import com.example.memowithtags.common.network.CreateMemoRequest
+import com.example.memowithtags.common.network.api.CreateMemoRequest
 import com.example.memowithtags.mainMemo.repository.MemoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

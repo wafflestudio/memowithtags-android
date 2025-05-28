@@ -1,18 +1,17 @@
 package com.example.memowithtags.mainMemo.repository
 
 import com.example.memowithtags.common.model.Tag
-import com.example.memowithtags.common.network.CreateTagRequest
-import com.example.memowithtags.common.network.TagResponse
-import com.example.memowithtags.network.ApiClient
+import com.example.memowithtags.common.network.api.CreateTagRequest
+import com.example.memowithtags.common.network.api.TagApi
+import com.example.memowithtags.common.network.api.TagResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import javax.inject.Inject
 
 class TagRepository @Inject constructor(
-    private val apiClient: ApiClient
+    private val tagApi: TagApi
 ) {
-    private val tagApi = apiClient.tagApi
 
     fun createTag(
         name: String,

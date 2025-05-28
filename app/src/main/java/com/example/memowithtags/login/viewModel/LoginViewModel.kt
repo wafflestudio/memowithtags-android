@@ -3,8 +3,8 @@ package com.example.memowithtags.login.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.memowithtags.common.network.LoginRequest
-import com.example.memowithtags.common.network.LoginResponse
+import com.example.memowithtags.common.network.api.LoginRequest
+import com.example.memowithtags.common.network.api.LoginResponse
 import com.example.memowithtags.signup.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
@@ -28,7 +28,8 @@ class LoginViewModel @Inject constructor(
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null) {
-                        repository.saveToken(body.accessToken)
+                        repository.saveAccessToken(body.accessToken)
+                        repository.saveRefreshToken(body.refreshToken)
                         repository.saveEmail(email)
                         _loginResult.value = Result.success(body)
                     } else {

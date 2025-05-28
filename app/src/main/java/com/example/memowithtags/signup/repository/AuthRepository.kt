@@ -1,48 +1,55 @@
 package com.example.memowithtags.signup.repository
 
 import android.content.SharedPreferences
-import com.example.memowithtags.common.network.ChangeNicknameRequest
-import com.example.memowithtags.common.network.ChangeNicknameResponse
-import com.example.memowithtags.common.network.ChangePWLoginedRequest
-import com.example.memowithtags.common.network.ChangePWLoginedResponse
-import com.example.memowithtags.common.network.LoginRequest
-import com.example.memowithtags.common.network.LoginResponse
-import com.example.memowithtags.common.network.MeResponse
-import com.example.memowithtags.common.network.SignupRequest
-import com.example.memowithtags.common.network.SignupResponse
-import com.example.memowithtags.common.network.WithdrawalRequest
-import com.example.memowithtags.network.ApiClient
+import com.example.memowithtags.common.network.api.AuthApi
+import com.example.memowithtags.common.network.api.ChangeNicknameRequest
+import com.example.memowithtags.common.network.api.ChangeNicknameResponse
+import com.example.memowithtags.common.network.api.ChangePWLoginedRequest
+import com.example.memowithtags.common.network.api.ChangePWLoginedResponse
+import com.example.memowithtags.common.network.api.LoginRequest
+import com.example.memowithtags.common.network.api.LoginResponse
+import com.example.memowithtags.common.network.api.MeResponse
+import com.example.memowithtags.common.network.api.SignupRequest
+import com.example.memowithtags.common.network.api.SignupResponse
+import com.example.memowithtags.common.network.api.UserApi
+import com.example.memowithtags.common.network.api.WithdrawalRequest
+import com.example.memowithtags.common.network.token.TokenProvider
 import retrofit2.Call
 import javax.inject.Inject
 
 class AuthRepository @Inject constructor(
-    private val apiClient: ApiClient,
-    private val prefs: SharedPreferences
+    private val authApi: AuthApi,
+    private val userApi: UserApi,
+    private val prefs: SharedPreferences,
+    private val tokenProvider: TokenProvider
 ) {
-    private val userApi = apiClient.userApi
 
     fun login(request: LoginRequest): Call<LoginResponse> {
-        return userApi.login(request)
+        return authApi.login(request)
     }
 
     fun signup(request: SignupRequest): Call<SignupResponse> {
-        return userApi.signup(request)
+        return authApi.signup(request)
     }
 
-    fun me(token: String): Call<MeResponse> {
-        return userApi.me(token)
+    fun me(): Call<MeResponse> {
+        return userApi.me()
     }
 
-    fun changeNickname(token: String, request: ChangeNicknameRequest): Call<ChangeNicknameResponse> {
-        return userApi.changeNickname(token, request)
+    fun changeNickname(request: ChangeNicknameRequest): Call<ChangeNicknameResponse> {
+        return userApi.changeNickname(request)
     }
 
-    fun changePWLogined(token: String, request: ChangePWLoginedRequest): Call<ChangePWLoginedResponse> {
-        return userApi.changePWLogined(token, request)
+    fun changePWLogined(request: ChangePWLoginedRequest): Call<ChangePWLoginedResponse> {
+        return userApi.changePWLogined(request)
     }
 
-    fun saveToken(token: String) {
-        prefs.edit().putString("access_token", token).apply()
+    fun saveAccessToken(token: String) {
+        tokenProvider.saveAccessToken(token)
+    }
+
+    fun saveRefreshToken(token: String) {
+        tokenProvider.saveRefreshToken(token)
     }
 
     fun saveEmail(email: String) {
@@ -57,7 +64,7 @@ class AuthRepository @Inject constructor(
         prefs.edit().putString("userNumber", userNumber).apply()
     }
 
-    fun getToken(): String? = prefs.getString("access_token", null)
+    fun getToken(): String? = tokenProvider.getAccessToken()
 
     fun getNickname(): String? = prefs.getString("nickname", null)
 
@@ -71,10 +78,10 @@ class AuthRepository @Inject constructor(
     }
 
     fun clearAuthData() {
-        prefs.edit().clear().apply()
+        tokenProvider.clearTokens()
     }
 
-    fun withdrawUser(token: String, request: WithdrawalRequest): Call<Void> {
-        return userApi.withdrawUser(token, request)
+    fun withdrawUser(request: WithdrawalRequest): Call<Void> {
+        return userApi.withdrawUser(request)
     }
 }

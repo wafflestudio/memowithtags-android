@@ -1,8 +1,15 @@
-package com.example.memowithtags.network
+package com.example.memowithtags.common.network.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.memowithtags.common.network.AuthInterceptor
+import com.example.memowithtags.common.network.api.AuthApi
+import com.example.memowithtags.common.network.api.MemoApi
+import com.example.memowithtags.common.network.api.TagApi
+import com.example.memowithtags.common.network.api.UserApi
+import com.example.memowithtags.common.network.interceptor.AuthInterceptor
+import com.example.memowithtags.common.network.interceptor.TokenAuthenticator
+import com.example.memowithtags.common.network.token.SharedPrefsTokenProvider
+import com.example.memowithtags.common.network.token.TokenProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,9 +38,25 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideTokenInterceptor(prefs: SharedPreferences): AuthInterceptor {
-        val tokenProvider = { prefs.getString("access_token", null) }
+    fun provideTokenInterceptor(tokenProvider: TokenProvider): AuthInterceptor {
         return AuthInterceptor(tokenProvider)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTokenProvider(
+        sharedPreferences: SharedPreferences
+    ): TokenProvider {
+        return SharedPrefsTokenProvider(sharedPreferences)
+    }
+
+    @Provides
+    fun provideTokenAuthenticator(
+        tokenProvider: TokenProvider,
+        authApi: AuthApi,
+        @ApplicationContext context: Context
+    ): TokenAuthenticator {
+        return TokenAuthenticator(tokenProvider, authApi, context)
     }
 
     @Provides
@@ -50,9 +73,11 @@ object NetworkModule {
     @Named("WithAuth")
     fun provideOkHttpClientWithAuth(
         loggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: AuthInterceptor
+        authInterceptor: AuthInterceptor,
+        tokenAuthenticator: TokenAuthenticator
     ): OkHttpClient {
         return OkHttpClient.Builder()
+            .authenticator(tokenAuthenticator)
             .addInterceptor(loggingInterceptor)
             .addInterceptor(authInterceptor)
             .build()
@@ -80,14 +105,26 @@ object NetworkModule {
             .build()
     }
 
+    // Provides API
     @Provides
     @Singleton
-    fun provideApiClient(
-        @Named("NoAuth") retrofit: Retrofit,
-        @Named("WithAuth") retrofitWithAuth: Retrofit
-    ): ApiClient {
-        return ApiClient(retrofit, retrofitWithAuth)
-    }
+    fun provideAuthApi(@Named("NoAuth") retrofit: Retrofit): AuthApi =
+        retrofit.create(AuthApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideUserApi(@Named("WithAuth") retrofitWithAuth: Retrofit): UserApi =
+        retrofitWithAuth.create(UserApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideMemoApi(@Named("WithAuth") retrofitWithAuth: Retrofit): MemoApi =
+        retrofitWithAuth.create(MemoApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideTagApi(@Named("WithAuth") retrofitWithAuth: Retrofit): TagApi =
+        retrofitWithAuth.create(TagApi::class.java)
 
     @Provides
     @Singleton

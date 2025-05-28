@@ -3,8 +3,8 @@ package com.example.memowithtags.settings.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.memowithtags.common.network.ChangePWLoginedRequest
-import com.example.memowithtags.common.network.ChangePWLoginedResponse
+import com.example.memowithtags.common.network.api.ChangePWLoginedRequest
+import com.example.memowithtags.common.network.api.ChangePWLoginedResponse
 import com.example.memowithtags.signup.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
@@ -49,13 +49,11 @@ class ChangePWLoginedViewModel @Inject constructor(
     }
 
     fun changePW() {
-        val token = repository.getToken()
-        val authHeader = "Bearer $token"
         val request = ChangePWLoginedRequest(
             originalPassword = _originalPWInput.value!!,
             newPassword = _newPWInput.value!!
         )
-        repository.changePWLogined(authHeader, request).enqueue(object :
+        repository.changePWLogined(request).enqueue(object :
                 Callback<ChangePWLoginedResponse> {
                 override fun onResponse(call: Call<ChangePWLoginedResponse>, response: Response<ChangePWLoginedResponse>) {
                     if (response.isSuccessful) {

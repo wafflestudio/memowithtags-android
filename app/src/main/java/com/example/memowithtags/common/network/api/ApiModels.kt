@@ -1,4 +1,4 @@
-package com.example.memowithtags.common.network
+package com.example.memowithtags.common.network.api
 
 import com.example.memowithtags.common.model.Memo
 import java.util.UUID
@@ -50,6 +50,16 @@ data class ChangePWLoginedRequest(
 data class CreateTagRequest(
     val name: String,
     val colorHex: String
+)
+
+data class RefreshTokenRequest(
+    val refreshToken: String
+)
+
+data class RefreshTokenResponse(
+    val accessToken: String,
+    val refreshToken: String,
+    val expiresIn: Int
 )
 
 data class ChangePWLoginedResponse(

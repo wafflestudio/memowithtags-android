@@ -3,8 +3,8 @@ package com.example.memowithtags.settings.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.memowithtags.common.network.MeResponse
-import com.example.memowithtags.common.network.WithdrawalRequest
+import com.example.memowithtags.common.network.api.MeResponse
+import com.example.memowithtags.common.network.api.WithdrawalRequest
 import com.example.memowithtags.signup.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
@@ -31,18 +31,11 @@ class AccountSettingsViewModel @Inject constructor(
     }
 
     fun withdrawAccount() {
-        val token = repository.getToken()
         val email = repository.getEmail()
 
-        if (token.isNullOrBlank() || email.isNullOrBlank()) {
-            _withdrawalResult.value = Result.failure(Throwable("저장된 로그인 정보가 없습니다."))
-            return
-        }
+        val request = WithdrawalRequest(email!!)
 
-        val request = WithdrawalRequest(email)
-        val authHeader = "Bearer $token"
-
-        repository.withdrawUser(authHeader, request).enqueue(object : Callback<Void> {
+        repository.withdrawUser(request).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     repository.clearAuthData()
@@ -63,9 +56,7 @@ class AccountSettingsViewModel @Inject constructor(
             _fullName.value = "${repository.getNickname()}#${repository.getUserNumber()}"
             return
         }
-        val token = repository.getToken()
-        val authHeader = "Bearer $token"
-        repository.me(authHeader).enqueue(object : Callback<MeResponse> {
+        repository.me().enqueue(object : Callback<MeResponse> {
             override fun onResponse(call: Call<MeResponse>, response: Response<MeResponse>) {
                 if (response.isSuccessful) {
                     val body = response.body()

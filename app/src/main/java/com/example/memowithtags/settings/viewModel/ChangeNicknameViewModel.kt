@@ -3,8 +3,8 @@ package com.example.memowithtags.settings.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.memowithtags.common.network.ChangeNicknameRequest
-import com.example.memowithtags.common.network.ChangeNicknameResponse
+import com.example.memowithtags.common.network.api.ChangeNicknameRequest
+import com.example.memowithtags.common.network.api.ChangeNicknameResponse
 import com.example.memowithtags.signup.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
@@ -35,10 +35,8 @@ class ChangeNicknameViewModel @Inject constructor(
     }
 
     fun changeNickname() {
-        val token = repository.getToken()
-        val authHeader = "Bearer $token"
         val request = ChangeNicknameRequest(_nicknameInput.value!!)
-        repository.changeNickname(authHeader, request).enqueue(object :
+        repository.changeNickname(request).enqueue(object :
                 Callback<ChangeNicknameResponse> {
                 override fun onResponse(call: Call<ChangeNicknameResponse>, response: Response<ChangeNicknameResponse>) {
                     if (response.isSuccessful) {
