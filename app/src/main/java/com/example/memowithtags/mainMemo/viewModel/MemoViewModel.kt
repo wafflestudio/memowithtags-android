@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.memowithtags.common.model.Memo
 import com.example.memowithtags.common.network.api.CreateMemoRequest
+import com.example.memowithtags.common.network.api.UpdateMemoRequest
 import com.example.memowithtags.mainMemo.repository.MemoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -17,6 +18,9 @@ class MemoViewModel @Inject constructor(
 
     private val _memoList = MutableLiveData<List<Memo>>(emptyList())
     val memoList: LiveData<List<Memo>> = _memoList
+
+    private val _editingMemo = MutableLiveData<Memo?>()
+    val editingMemo: LiveData<Memo?> get() = _editingMemo
 
     fun getMyMemos() {
         repository.getMyMemos(
@@ -42,5 +46,37 @@ class MemoViewModel @Inject constructor(
                 Log.e("MemoViewModel", "메모 등록 실패", error)
             }
         )
+    }
+
+    fun updateMemo(updatedContent: String, updatedTagIds: List<Int>) {
+        val editingMemo = editingMemo.value ?: return
+
+        val request = UpdateMemoRequest(
+            content = updatedContent,
+            tagIds = updatedTagIds,
+            locked = editingMemo.locked
+        )
+
+        repository.updateMemo(
+            memoId = editingMemo.id,
+            request = request,
+            onSuccess = {
+                clearEditing()
+                getMyMemos()
+            },
+            onError = {
+                Log.e("MemoViewModel", "메모 수정 실패", it)
+            }
+        )
+    }
+
+
+
+    fun startEditing(memo: Memo) {
+        _editingMemo.value = memo
+    }
+
+    fun clearEditing() {
+        _editingMemo.value = null
     }
 }

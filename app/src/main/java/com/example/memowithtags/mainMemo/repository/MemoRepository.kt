@@ -2,6 +2,7 @@ package com.example.memowithtags.mainMemo.repository
 
 import com.example.memowithtags.common.model.Memo
 import com.example.memowithtags.common.network.api.CreateMemoRequest
+import com.example.memowithtags.common.network.api.UpdateMemoRequest
 import com.example.memowithtags.common.network.api.CreateMemoResponse
 import com.example.memowithtags.common.network.api.MemoApi
 import com.example.memowithtags.common.network.api.SearchMemoResponse
@@ -77,4 +78,43 @@ class MemoRepository @Inject constructor(
             }
         })
     }
+
+    fun updateMemo(
+        memoId: Int,
+        request: UpdateMemoRequest,
+        onSuccess: (Memo) -> Unit,
+        onError: (Throwable) -> Unit
+    ) {
+        memoApi.updateMemo(memoId, request)
+            .enqueue(object : Callback<CreateMemoResponse> {
+                override fun onResponse(
+                    call: Call<CreateMemoResponse>,
+                    response: Response<CreateMemoResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val result = response.body()
+                        if (result != null) {
+                            val memo = Memo(
+                                id = result.id,
+                                content = result.content,
+                                createdAt = result.createdAt,
+                                updatedAt = result.updatedAt,
+                                tagIds = result.tagIds,
+                                locked = result.locked
+                            )
+                            onSuccess(memo)
+                        } else {
+                            onError(Throwable("응답은 성공했지만 메모가 없습니다."))
+                        }
+                    } else {
+                        onError(Throwable("서버 오류: ${response.code()}"))
+                    }
+                }
+
+                override fun onFailure(call: Call<CreateMemoResponse>, t: Throwable) {
+                    onError(t)
+                }
+            })
+    }
+
 }

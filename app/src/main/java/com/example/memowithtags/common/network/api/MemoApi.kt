@@ -1,10 +1,7 @@
 package com.example.memowithtags.common.network.api
 
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface MemoApi {
     @POST("api/v1/memo")
@@ -18,4 +15,10 @@ interface MemoApi {
         @Query("endDate") endDate: String?,
         @Query("page") page: Int?
     ): Call<SearchMemoResponse>
+
+    @PUT("api/v1/memo/{id}")
+    fun updateMemo(
+        @Path("id") id: Int,
+        @Body request: UpdateMemoRequest
+    ): Call<CreateMemoResponse>
 }

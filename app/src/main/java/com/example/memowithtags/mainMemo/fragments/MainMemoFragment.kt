@@ -76,7 +76,15 @@ class MainMemoFragment : Fragment() {
             tagViewModel.tagList.value?.find { it.id == id }
         }
 
-        memoAdapter = MemoAdapter(tagResolver)
+        memoAdapter = MemoAdapter(tagResolver) { memoToEdit ->
+            memoViewModel.startEditing(memoToEdit)
+            binding.newMemoText.setText(memoToEdit.content)
+
+            val allTags = tagViewModel.tagList.value ?: return@MemoAdapter
+            val selectedTags = allTags.filter { memoToEdit.tagIds.contains(it.id) }
+            tagViewModel.setSelectedTags(selectedTags)
+        }
+
         binding.memoRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = memoAdapter
@@ -139,9 +147,22 @@ class MainMemoFragment : Fragment() {
         // 메모 쓰기 버튼
         binding.newMemoButton.setOnClickListener {
             val content = binding.newMemoText.text.toString()
-            val tagIds = tagViewModel.selectedTags.value?.takeIf { it.isNotEmpty() }?.map { it.id } ?: listOf(0)
+            val tagIds = tagViewModel.selectedTags.value
+                ?.takeIf { it.isNotEmpty() }
+                ?.map { it.id }
+                ?: listOf(0)
+
             if (content.isNotBlank()) {
-                memoViewModel.postMemo(content, tagIds)
+                val editingMemo = memoViewModel.editingMemo.value
+                if (editingMemo != null) {
+                    // 메모 수정
+                    memoViewModel.updateMemo(content, tagIds)
+                    memoViewModel.clearEditing()
+                } else {
+                    // 새 메모 등록
+                    memoViewModel.postMemo(content, tagIds)
+                }
+
                 binding.newMemoText.text.clear()
                 tagViewModel.clearSelectedTags()
             }

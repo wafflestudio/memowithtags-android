@@ -7,6 +7,7 @@ import android.icu.util.TimeZone
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +19,8 @@ import java.util.Locale
 
 
 class MemoAdapter(
-    private val resolveTag: (Int) -> Tag?
+    private val resolveTag: (Int) -> Tag?,
+    private val onEditClick: (Memo) -> Unit
 ) : RecyclerView.Adapter<MemoAdapter.MemoViewHolder>() {
 
     private var memoList: List<Memo> = emptyList()
@@ -86,6 +88,10 @@ class MemoAdapter(
                 notifyItemChanged(previousExpanded ?: -1)
                 notifyItemChanged(position)
             }
+        }
+
+        holder.itemView.findViewById<Button>(R.id.editButton).setOnClickListener {
+            onEditClick(memo)
         }
     }
 
