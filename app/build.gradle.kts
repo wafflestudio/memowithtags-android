@@ -64,5 +64,4 @@ dependencies {
     implementation(libs.hilt)
     implementation(libs.flexbox)
     kapt(libs.hilt.compiler)
-    implementation(libs.flexbox)
 }
