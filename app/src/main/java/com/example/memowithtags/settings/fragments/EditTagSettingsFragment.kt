@@ -38,10 +38,6 @@ class EditTagSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.leftArrowIcon.setOnClickListener {
-            findNavController().popBackStack()
-        }
-
         // 태그 색상 recycler view 세팅
         colorAdapter = ColorAdapter() { color ->
             tagSettingsViewModel.selectColor(color)
