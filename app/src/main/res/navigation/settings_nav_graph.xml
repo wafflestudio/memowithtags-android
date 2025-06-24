@@ -15,6 +15,32 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_mainSettings_to_tagSettings"
+            app:destination="@id/tagSettingsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/tagSettingsFragment"
+        android:name="com.example.memowithtags.settings.fragments.TagSettingsFragment"
+        tools:layout="@layout/fragment_tag_settings">
+        <action
+            android:id="@+id/action_tagSettingsFragment_to_editTagSettingsFragment"
+            app:destination="@id/editTagSettingsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/editTagSettingsFragment"
+        android:name="com.example.memowithtags.settings.fragments.EditTagSettingsFragment"
+        tools:layout="@layout/fragment_edit_tag_settings">
     </fragment>
 
     <fragment

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/settingsTag"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/tag_background"
+    android:orientation="horizontal"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="3dp"
+    android:layout_marginBottom="3dp"
+    android:paddingTop="2dp"
+    android:paddingLeft="6dp"
+    android:paddingRight="6dp"
+    android:paddingBottom="2dp"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:id="@+id/settingsTagName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="2dp"
+        android:text="태그"
+        android:textColor="@color/colorPrimary"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/settingsTagDelete"
+        android:src="@drawable/tag_edit"/>
+
+</LinearLayout>

@@ -38,6 +38,11 @@ class MainSettingsFragment : Fragment() {
             findNavController().navigate(R.id.action_mainSettings_to_accountSettings)
         }
 
+        binding.MyTagLayout.setOnClickListener {
+            Log.d("MainSettingsFragment", "태그 관리 버튼 클릭됨")
+            findNavController().navigate(R.id.action_mainSettings_to_tagSettings)
+        }
+
         binding.leftArrowIcon.setOnClickListener {
             Log.d("MainSettingsFragment", "뒤로 가기 버튼 클릭됨")
             requireActivity().finish()
@@ -57,6 +62,18 @@ class MainSettingsFragment : Fragment() {
 
         binding.searchSortModifiedLayout.setOnClickListener {
             viewModel.setSearchSortOption("modified")
+        }
+
+        binding.textSizeSmallLayout.setOnClickListener {
+            viewModel.setTextSizeOption("small")
+        }
+
+        binding.textSizeMediumLayout.setOnClickListener {
+            viewModel.setTextSizeOption("medium")
+        }
+
+        binding.textSizeBigLayout.setOnClickListener {
+            viewModel.setTextSizeOption("big")
         }
 
         observeViewModel()
@@ -82,6 +99,23 @@ class MainSettingsFragment : Fragment() {
             } else if (option == "modified") {
                 binding.searchSortCheckCreated.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
                 binding.searchSortCheckModified.imageTintList = resources.getColorStateList(R.color.colorChecked, null)
+            }
+        }
+
+        // 텍스트 사이즈 설정
+        viewModel.textSizeOption.observe(viewLifecycleOwner) { option ->
+            if (option == "small") {
+                binding.textSizeSmallCheck.imageTintList = resources.getColorStateList(R.color.colorChecked, null)
+                binding.textSizeMediumCheck.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
+                binding.textSizeBigCheck.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
+            } else if (option == "medium") {
+                binding.textSizeSmallCheck.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
+                binding.textSizeMediumCheck.imageTintList = resources.getColorStateList(R.color.colorChecked, null)
+                binding.textSizeBigCheck.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
+            } else if (option == "big") {
+                binding.textSizeSmallCheck.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
+                binding.textSizeMediumCheck.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
+                binding.textSizeBigCheck.imageTintList = resources.getColorStateList(R.color.colorChecked, null)
             }
         }
     }

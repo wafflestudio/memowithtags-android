@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- ON 상태 -->
+    <item android:color="#FFBDBD" android:state_checked="true"/>
+    <!-- OFF 상태 -->
+    <item android:color="#BDBDBD"/>
+</selector>

@@ -92,6 +92,44 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/MyTagLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/rounded_background"
+            android:backgroundTint="@color/colorMemoBackground"
+            android:layout_marginBottom="12dp"
+            android:paddingLeft="17dp"
+            android:paddingTop="13dp"
+            android:paddingRight="17dp"
+            android:paddingBottom="13dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="태그 관리"
+                    android:textSize="14sp"
+                    android:layout_weight="1"
+                    android:textColor="@color/colorPrimary"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:tint="@color/colorPrimary"
+                    app:srcCompat="@drawable/right_arrow"/>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -103,10 +141,107 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="17dp"
+                android:paddingRight="17dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="6dp"
+                        android:text="글씨 크기"
+                        android:textSize="12sp"
+                        android:layout_weight="1"
+                        android:textColor="@color/colorSecondary"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/textSizeSmallLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="작게"
+                        android:textSize="14sp"
+                        android:layout_weight="1"
+                        android:textColor="@color/colorPrimary"/>
+
+                    <ImageView
+                        android:id="@+id/textSizeSmallCheck"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/checkmark"
+                        app:tint="@color/colorChecked"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/textSizeMediumLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="적당히"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/textSizeMediumCheck"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/checkmark"
+                        app:tint="@color/colorUnchecked" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/textSizeBigLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="크게"
+                        android:textSize="14sp"
+                        android:layout_weight="1"
+                        android:textColor="@color/colorPrimary"/>
+
+                    <ImageView
+                        android:id="@+id/textSizeBigCheck"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/checkmark"
+                        app:tint="@color/colorUnchecked"/>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:paddingLeft="17dp"
-                android:paddingRight="17dp">
+                android:paddingRight="17dp"
+                android:layout_marginTop="10dp">
 
 
                 <LinearLayout
@@ -244,6 +379,8 @@
                 </LinearLayout>
 
             </LinearLayout>
+
+
 
 
 
