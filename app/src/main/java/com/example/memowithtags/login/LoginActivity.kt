@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.memowithtags.common.model.SocialType
 import com.example.memowithtags.databinding.ActivityLoginBinding
 import com.example.memowithtags.login.viewModel.LoginViewModel
 import com.example.memowithtags.mainMemo.MainActivity
@@ -95,7 +94,7 @@ class LoginActivity : AppCompatActivity() {
     private fun handleAuthRedirect(intent: Intent) {
         val data = intent.data
         if (data != null && data.scheme == "memowithtags") {
-            val provider = data.pathSegments?.getOrNull(0)  // 0번째가 'naver'
+            val provider = data.pathSegments?.getOrNull(0) // 0번째가 'naver'
             val code = data.getQueryParameter("code")
 
             Log.d("OAuth", "provider: $provider, code: $code")
@@ -104,7 +103,5 @@ class LoginActivity : AppCompatActivity() {
                 loginViewModel.socialLogin(provider, code)
             }
         }
-
     }
-
 }

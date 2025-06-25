@@ -16,9 +16,9 @@ import com.example.memowithtags.common.network.api.UserApi
 import com.example.memowithtags.common.network.api.WithdrawalRequest
 import com.example.memowithtags.common.network.token.TokenProvider
 import retrofit2.Call
-import javax.inject.Inject
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
 class AuthRepository @Inject constructor(
     private val authApi: AuthApi,
@@ -73,8 +73,6 @@ class AuthRepository @Inject constructor(
             }
         })
     }
-
-
 
     fun saveAccessToken(token: String) {
         tokenProvider.saveAccessToken(token)

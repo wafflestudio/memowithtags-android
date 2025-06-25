@@ -4,17 +4,16 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.memowithtags.common.model.SocialType
 import com.example.memowithtags.common.network.api.LoginRequest
 import com.example.memowithtags.common.network.api.LoginResponse
+import com.example.memowithtags.common.network.api.SocialLoginResponse
 import com.example.memowithtags.signup.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import javax.inject.Inject
-import com.example.memowithtags.common.network.api.SocialLoginResponse
 import java.util.UUID
+import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -66,7 +65,7 @@ class LoginViewModel @Inject constructor(
         )
     }
 
-    fun getKakaoAuthUrl() : Uri {
+    fun getKakaoAuthUrl(): Uri {
         val kakaoAuthUrl = Uri.Builder()
             .scheme("https")
             .authority("kauth.kakao.com")
@@ -79,7 +78,7 @@ class LoginViewModel @Inject constructor(
         return kakaoAuthUrl
     }
 
-    fun getNaverAuthUrl() : Uri {
+    fun getNaverAuthUrl(): Uri {
         val state = UUID.randomUUID().toString()
         val naverAuthUrl = Uri.Builder()
             .scheme("https")
@@ -94,7 +93,7 @@ class LoginViewModel @Inject constructor(
         return naverAuthUrl
     }
 
-    fun getGoogleAuthUrl() : Uri {
+    fun getGoogleAuthUrl(): Uri {
         val googleAuthUrl = Uri.Builder()
             .scheme("https")
             .authority("accounts.google.com")
