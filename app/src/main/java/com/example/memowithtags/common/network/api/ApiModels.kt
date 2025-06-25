@@ -122,3 +122,9 @@ data class TagResponse(
     val createdAt: String,
     val updatedAt: String
 )
+
+data class SocialLoginResponse(
+    val accessToken: String,
+    val refreshToken: String,
+    val isNewUser: Boolean
+)

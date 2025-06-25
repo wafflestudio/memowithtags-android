@@ -29,7 +29,18 @@
 
         <activity
             android:name=".login.LoginActivity"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:scheme="memowithtags"
+                    android:host="oauth"
+                    android:pathPattern="/.*" />
+            </intent-filter>
         </activity>
 
         <activity

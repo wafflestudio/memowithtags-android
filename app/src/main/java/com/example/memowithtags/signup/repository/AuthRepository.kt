@@ -11,11 +11,14 @@ import com.example.memowithtags.common.network.api.LoginResponse
 import com.example.memowithtags.common.network.api.MeResponse
 import com.example.memowithtags.common.network.api.SignupRequest
 import com.example.memowithtags.common.network.api.SignupResponse
+import com.example.memowithtags.common.network.api.SocialLoginResponse
 import com.example.memowithtags.common.network.api.UserApi
 import com.example.memowithtags.common.network.api.WithdrawalRequest
 import com.example.memowithtags.common.network.token.TokenProvider
 import retrofit2.Call
 import javax.inject.Inject
+import retrofit2.Callback
+import retrofit2.Response
 
 class AuthRepository @Inject constructor(
     private val authApi: AuthApi,
@@ -43,6 +46,35 @@ class AuthRepository @Inject constructor(
     fun changePWLogined(request: ChangePWLoginedRequest): Call<ChangePWLoginedResponse> {
         return userApi.changePWLogined(request)
     }
+
+    fun socialLogin(
+        provider: String,
+        code: String,
+        onSuccess: (Response<SocialLoginResponse>) -> Unit,
+        onError: (Throwable) -> Unit
+    ) {
+        authApi.socialLogin(provider, code).enqueue(object : Callback<SocialLoginResponse> {
+            override fun onResponse(
+                call: Call<SocialLoginResponse>,
+                response: Response<SocialLoginResponse>
+            ) {
+                if (response.isSuccessful && response.body() != null) {
+                    val body = response.body()!!
+                    saveAccessToken(body.accessToken)
+                    saveRefreshToken(body.refreshToken)
+                    onSuccess(response)
+                } else {
+                    onError(Exception("서버 응답 오류: ${response.code()} ${response.message()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<SocialLoginResponse>, t: Throwable) {
+                onError(t)
+            }
+        })
+    }
+
+
 
     fun saveAccessToken(token: String) {
         tokenProvider.saveAccessToken(token)

@@ -1,8 +1,12 @@
 package com.example.memowithtags.common.network.api
 
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface AuthApi {
     @POST("api/v1/auth/register")
@@ -22,4 +26,11 @@ interface AuthApi {
 
     @POST("api/v1/auth/reset-password")
     fun changePw(@Body changePwRequest: ChangePwRequest): Call<Unit>
+
+    @GET("api/v1/auth/login/{provider}")
+    fun socialLogin(
+        @Path("provider") provider: String,
+        @Query("code") code: String
+    ): Call<SocialLoginResponse>
+
 }

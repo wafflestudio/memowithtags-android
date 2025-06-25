@@ -2,8 +2,10 @@ package com.example.memowithtags.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.example.memowithtags.common.model.SocialType
 import com.example.memowithtags.databinding.ActivityLoginBinding
 import com.example.memowithtags.login.viewModel.LoginViewModel
 import com.example.memowithtags.mainMemo.MainActivity
@@ -37,6 +39,26 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // 소셜 로그인
+        binding.kakaoLogin.setOnClickListener {
+            val authUrl = loginViewModel.getKakaoAuthUrl()
+            val intent = Intent(Intent.ACTION_VIEW, authUrl)
+            startActivity(intent)
+        }
+
+        binding.naverLogin.setOnClickListener {
+            val authUrl = loginViewModel.getNaverAuthUrl()
+            val intent = Intent(Intent.ACTION_VIEW, authUrl)
+            startActivity(intent)
+        }
+
+        binding.googleLogin.setOnClickListener {
+            val authUrl = loginViewModel.getGoogleAuthUrl()
+            val intent = Intent(Intent.ACTION_VIEW, authUrl)
+            startActivity(intent)
+        }
+
+        // 자체 로그인
         binding.loginButton.setOnClickListener {
             val email = binding.emailEditText.text.toString()
             val password = binding.passwordEditText.text.toString()
@@ -52,5 +74,37 @@ class LoginActivity : AppCompatActivity() {
             }.onFailure {
             }
         }
+
+        loginViewModel.socialLoginResult.observe(this) { result ->
+            result.onSuccess {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                this.finish()
+            }.onFailure {
+            }
+        }
     }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        val uri = intent?.data
+        Log.d("DeepLink", "intent data: $uri")
+        handleAuthRedirect(intent)
+    }
+
+    private fun handleAuthRedirect(intent: Intent) {
+        val data = intent.data
+        if (data != null && data.scheme == "memowithtags") {
+            val provider = data.pathSegments?.getOrNull(0)  // 0번째가 'naver'
+            val code = data.getQueryParameter("code")
+
+            Log.d("OAuth", "provider: $provider, code: $code")
+
+            if (provider != null && code != null) {
+                loginViewModel.socialLogin(provider, code)
+            }
+        }
+
+    }
+
 }
