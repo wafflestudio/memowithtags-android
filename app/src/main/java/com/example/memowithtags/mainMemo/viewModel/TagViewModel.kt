@@ -79,11 +79,14 @@ class TagViewModel @Inject constructor(
     fun setSelectedTags(tags: List<Tag>) {
         _selectedTags.value = tags
 
-        //visibility 수정하기
+        // visibility 수정하기
         val currentList = _tagList.value ?: return
         val updated = currentList.map { tag ->
-            if (tags.any { it.id == tag.id }) tag.copy(isVisible = false)
-            else tag.copy(isVisible = true)
+            if (tags.any { it.id == tag.id }) {
+                tag.copy(isVisible = false)
+            } else {
+                tag.copy(isVisible = true)
+            }
         }
         _tagList.value = updated
     }

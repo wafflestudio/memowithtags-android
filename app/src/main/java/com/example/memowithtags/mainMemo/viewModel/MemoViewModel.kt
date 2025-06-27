@@ -48,17 +48,15 @@ class MemoViewModel @Inject constructor(
         )
     }
 
-    fun updateMemo(updatedContent: String, updatedTagIds: List<Int>) {
-        val editingMemo = editingMemo.value ?: return
-
+    fun updateMemo(memoId: Int, updatedContent: String, updatedTagIds: List<Int>, locked: Boolean) {
         val request = UpdateMemoRequest(
-            content = updatedContent,
-            tagIds = updatedTagIds,
-            locked = editingMemo.locked
+            updatedContent,
+            updatedTagIds,
+            locked
         )
 
         repository.updateMemo(
-            memoId = editingMemo.id,
+            memoId = memoId,
             request = request,
             onSuccess = {
                 clearEditing()
@@ -69,8 +67,6 @@ class MemoViewModel @Inject constructor(
             }
         )
     }
-
-
 
     fun startEditing(memo: Memo) {
         _editingMemo.value = memo

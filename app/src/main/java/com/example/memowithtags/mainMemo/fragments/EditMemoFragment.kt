@@ -44,6 +44,16 @@ class EditMemoFragment : Fragment() {
         val passedText = arguments?.getString("memoText") ?: ""
         binding.newMemoText.setText(passedText)
 
+        // 수정 모드인지 확인
+        val memoId = arguments?.getInt("memoId", -1) ?: -1
+        val tagIds = arguments?.getIntegerArrayList("tagIds") ?: arrayListOf()
+
+        if (memoId != -1) {
+            val allTags = tagViewModel.tagList.value ?: emptyList()
+            val selectedTags = allTags.filter { tagIds.contains(it.id) }
+            tagViewModel.setSelectedTags(selectedTags)
+        }
+
         // 태그 recycler view 세팅
         tagAdapter = TagAdapter() { tag ->
             tagViewModel.selectTag(tag)
@@ -106,7 +116,19 @@ class EditMemoFragment : Fragment() {
         val tagIds = tagViewModel.selectedTags.value?.takeIf { it.isNotEmpty() }?.map { it.id } ?: listOf(0)
 
         if (content.isNotBlank()) {
-            memoViewModel.postMemo(content, tagIds)
+            val editingMemo = memoViewModel.editingMemo.value
+            if (editingMemo != null) {
+                memoViewModel.updateMemo(
+                    memoId = editingMemo.id,
+                    updatedContent = content,
+                    updatedTagIds = tagIds,
+                    locked = editingMemo.locked
+                )
+                memoViewModel.clearEditing()
+            } else {
+                memoViewModel.postMemo(content, tagIds)
+            }
+
             binding.newMemoText.text.clear()
             tagViewModel.clearSelectedTags()
         }

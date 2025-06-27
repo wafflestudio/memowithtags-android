@@ -17,7 +17,6 @@ import com.example.memowithtags.common.model.Tag
 import com.google.android.flexbox.FlexboxLayout
 import java.util.Locale
 
-
 class MemoAdapter(
     private val resolveTag: (Int) -> Tag?,
     private val onEditClick: (Memo) -> Unit

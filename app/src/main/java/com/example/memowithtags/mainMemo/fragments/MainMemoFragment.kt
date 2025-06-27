@@ -156,7 +156,7 @@ class MainMemoFragment : Fragment() {
                 val editingMemo = memoViewModel.editingMemo.value
                 if (editingMemo != null) {
                     // 메모 수정
-                    memoViewModel.updateMemo(content, tagIds)
+                    memoViewModel.updateMemo(editingMemo.id, content, tagIds, editingMemo.locked)
                     memoViewModel.clearEditing()
                 } else {
                     // 새 메모 등록
@@ -170,9 +170,13 @@ class MainMemoFragment : Fragment() {
 
         // 편집 화면으로 이동 버튼
         binding.zoomButton.setOnClickListener {
-            val currentText = binding.newMemoText.text.toString()
+            val editingMemo = memoViewModel.editingMemo.value
             val bundle = Bundle().apply {
-                putString("memoText", currentText)
+                putString("memoText", binding.newMemoText.text.toString())
+                if (editingMemo != null) {
+                    putInt("memoId", editingMemo.id)
+                    putIntegerArrayList("tagIds", ArrayList(editingMemo.tagIds))
+                }
             }
             findNavController().navigate(R.id.action_mainMemo_to_editMemo, bundle)
         }

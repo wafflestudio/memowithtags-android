@@ -2,10 +2,10 @@ package com.example.memowithtags.mainMemo.repository
 
 import com.example.memowithtags.common.model.Memo
 import com.example.memowithtags.common.network.api.CreateMemoRequest
-import com.example.memowithtags.common.network.api.UpdateMemoRequest
 import com.example.memowithtags.common.network.api.CreateMemoResponse
 import com.example.memowithtags.common.network.api.MemoApi
 import com.example.memowithtags.common.network.api.SearchMemoResponse
+import com.example.memowithtags.common.network.api.UpdateMemoRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -116,5 +116,4 @@ class MemoRepository @Inject constructor(
                 }
             })
     }
-
 }
