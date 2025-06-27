@@ -5,6 +5,8 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
 
 interface TagApi {
     @POST("/api/v1/tag")
@@ -12,4 +14,10 @@ interface TagApi {
 
     @GET("api/v1/tag")
     fun getTags(): Call<List<Tag>>
+
+    @PUT("api/v1/tag/{tagId}")
+    fun updateTag(
+        @Path("tagId") tagId: Int,
+        @Body request: UpdateTagRequest
+    ): Call<TagResponse>
 }

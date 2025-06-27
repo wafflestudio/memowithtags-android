@@ -18,6 +18,9 @@ class MainSettingsViewModel @Inject constructor(
     private val _searchSortOption = MutableLiveData<String>()
     val searchSortOption: LiveData<String> get() = _searchSortOption
 
+    private val _textSizeOption = MutableLiveData<String>()
+    val textSizeOption: LiveData<String> get() = _textSizeOption
+
     init {
         // initialize search filter and sort options
         if (settingsRepository.getSearchFilterOption() == null) {
@@ -29,6 +32,11 @@ class MainSettingsViewModel @Inject constructor(
             settingsRepository.setSearchSortOption("created")
         }
         _searchSortOption.value = settingsRepository.getSearchSortOption()
+
+        if (settingsRepository.getTextSizeOption() == null) {
+            settingsRepository.setTextSizeOption("medium")
+        }
+        _textSizeOption.value = settingsRepository.getTextSizeOption()
     }
 
     fun setSearchFilterOption(option: String) {
@@ -39,5 +47,10 @@ class MainSettingsViewModel @Inject constructor(
     fun setSearchSortOption(option: String) {
         settingsRepository.setSearchSortOption(option)
         _searchSortOption.value = option
+    }
+
+    fun setTextSizeOption(option: String) {
+        settingsRepository.setTextSizeOption(option)
+        _textSizeOption.value = option
     }
 }

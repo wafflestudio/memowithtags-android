@@ -52,6 +52,11 @@ data class CreateTagRequest(
     val colorHex: String
 )
 
+data class UpdateTagRequest(
+    val name: String,
+    val colorHex: String
+)
+
 data class RefreshTokenRequest(
     val refreshToken: String
 )

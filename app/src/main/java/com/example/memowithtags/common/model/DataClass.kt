@@ -6,7 +6,8 @@ data class Tag(
     val colorHex: String,
     val createdAt: String,
     val updatedAt: String,
-    var isVisible: Boolean = true
+    var isVisible: Boolean = true,
+    var isFavorite: Boolean = false
 )
 
 data class Memo(
@@ -20,19 +21,24 @@ data class Memo(
 
 val tagColors = listOf(
     "#FF9C9C",
-    "#FFBDBD",
-    "#FFE3DA",
-    "#FFF0B8",
     "#FFF56F",
-    "#D4FDCB",
+    "#A5F8A1",
+    "#8AEBF6",
+    "#A2B4F2",
+    "#E5A6F0",
+    "#FA9BD1",
+    "#FFBDBD",
+    "#FFF0B8",
     "#DCF794",
-    "#92EDA1",
-    "#CCFFF7",
     "#A6F7EA",
-    "#D2E8FE",
     "#B3D9FF",
-    "#EEDEFE",
     "#DEBDFF",
     "#FFBDDE",
+    "#FFE3DA",
+    "#FEFFB8",
+    "#D4FDCB",
+    "#CCFFF7",
+    "#D2E8FE",
+    "#EEDEFE",
     "#FFD9EC"
 )
