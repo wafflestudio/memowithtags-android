@@ -45,8 +45,32 @@
             android:orientation="horizontal"
             android:alpha="0"
             android:translationY="-8dp"
-            android:gravity="end"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="10dp"
+            android:paddingHorizontal="8dp"
             android:animateLayoutChanges="true">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/memoCreated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0000년 00월 00일"
+                    android:textSize="11sp"
+                    android:textColor="#A0A0A1"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/searchButton"

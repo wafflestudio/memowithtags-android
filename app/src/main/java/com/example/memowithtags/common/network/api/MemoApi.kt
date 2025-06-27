@@ -4,6 +4,8 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MemoApi {
@@ -18,4 +20,10 @@ interface MemoApi {
         @Query("endDate") endDate: String?,
         @Query("page") page: Int?
     ): Call<SearchMemoResponse>
+
+    @PUT("api/v1/memo/{id}")
+    fun updateMemo(
+        @Path("id") id: Int,
+        @Body request: UpdateMemoRequest
+    ): Call<CreateMemoResponse>
 }

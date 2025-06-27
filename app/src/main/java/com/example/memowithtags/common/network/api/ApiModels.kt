@@ -61,6 +61,12 @@ data class RefreshTokenRequest(
     val refreshToken: String
 )
 
+data class UpdateMemoRequest(
+    val content: String,
+    val tagIds: List<Int>,
+    val locked: Boolean
+)
+
 data class RefreshTokenResponse(
     val accessToken: String,
     val refreshToken: String,

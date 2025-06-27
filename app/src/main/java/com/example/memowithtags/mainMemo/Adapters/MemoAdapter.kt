@@ -2,9 +2,12 @@ package com.example.memowithtags.mainMemo.Adapters
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.icu.text.SimpleDateFormat
+import android.icu.util.TimeZone
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -12,9 +15,11 @@ import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Memo
 import com.example.memowithtags.common.model.Tag
 import com.google.android.flexbox.FlexboxLayout
+import java.util.Locale
 
 class MemoAdapter(
-    private val resolveTag: (Int) -> Tag?
+    private val resolveTag: (Int) -> Tag?,
+    private val onEditClick: (Memo) -> Unit
 ) : RecyclerView.Adapter<MemoAdapter.MemoViewHolder>() {
 
     private var memoList: List<Memo> = emptyList()
@@ -23,6 +28,7 @@ class MemoAdapter(
     inner class MemoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val memoContent: TextView = itemView.findViewById(R.id.memoContent)
         val tagContainer: FlexboxLayout = itemView.findViewById(R.id.tagContainer)
+        val memoCreated: TextView = itemView.findViewById(R.id.memoCreated)
         val buttonBar: LinearLayout = itemView.findViewById(R.id.buttonBar)
     }
 
@@ -36,6 +42,7 @@ class MemoAdapter(
     override fun onBindViewHolder(holder: MemoViewHolder, position: Int) {
         val memo = memoList[position]
         holder.memoContent.text = memo.content
+        holder.memoCreated.text = formatDate(memo.createdAt)
 
         holder.tagContainer.removeAllViews()
 
@@ -81,6 +88,20 @@ class MemoAdapter(
                 notifyItemChanged(position)
             }
         }
+
+        holder.itemView.findViewById<Button>(R.id.editButton).setOnClickListener {
+            onEditClick(memo)
+        }
+    }
+
+    fun formatDate(isoDate: String): String {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
+
+        val outputFormat = SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault())
+
+        val date = inputFormat.parse(isoDate)
+        return outputFormat.format(date)
     }
 
     fun updateData(newList: List<Memo>) {
