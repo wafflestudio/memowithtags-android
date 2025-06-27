@@ -63,6 +63,8 @@ class AccountSettingsViewModel @Inject constructor(
                     if (body != null) {
                         repository.saveNickname(body.nickname)
                         repository.saveUserNumber(body.userNumber.toString())
+                        repository.saveEmail(body.email)
+                        _email.value = body.email
                         _fullName.value = "${body.nickname}#${body.userNumber}"
                     }
                 }
