@@ -1,6 +1,7 @@
 package com.example.memowithtags.signup.repository
 
 import android.content.SharedPreferences
+import com.example.memowithtags.common.model.HttpException
 import com.example.memowithtags.common.network.api.AuthApi
 import com.example.memowithtags.common.network.api.ChangeNicknameRequest
 import com.example.memowithtags.common.network.api.ChangeNicknameResponse
@@ -64,7 +65,7 @@ class AuthRepository @Inject constructor(
                     saveRefreshToken(body.refreshToken)
                     onSuccess(response)
                 } else {
-                    onError(Exception("서버 응답 오류: ${response.code()} ${response.message()}"))
+                    onError(HttpException(response.code(), response.message()))
                 }
             }
 
