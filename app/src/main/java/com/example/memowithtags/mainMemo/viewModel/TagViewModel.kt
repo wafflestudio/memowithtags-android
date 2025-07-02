@@ -4,10 +4,15 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.memowithtags.common.model.AlphanumComparator
 import com.example.memowithtags.common.model.Tag
+import com.example.memowithtags.common.model.TagSortType
+import com.example.memowithtags.common.model.tagColors
 import com.example.memowithtags.mainMemo.repository.TagRepository
 import com.example.memowithtags.settings.repository.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.text.Collator
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,6 +29,9 @@ class TagViewModel @Inject constructor(
 
     private var initialized = false
 
+    // 이름 정렬을 위한 collator
+    private val collator = AlphanumComparator()
+
     fun createTag(name: String, colorHex: String) {
         tagRepository.createTag(
             name = name,
@@ -31,6 +39,7 @@ class TagViewModel @Inject constructor(
             onSuccess = { tag ->
                 val updated = _tagList.value.orEmpty().toMutableList().apply { add(tag) }
                 _tagList.postValue(updated)
+                sortTag()
             },
             onError = { error ->
                 Log.e("TagViewModel", "태그 생성 실패", error)
@@ -106,13 +115,13 @@ class TagViewModel @Inject constructor(
         _selectedTagIds.value = emptyList()
     }
 
-    fun setSelectedTags(tags: List<Tag>) {
-        _selectedTagIds.value = tags.map { it.id }
+    fun setSelectedTags(tagIds: List<Int>) {
+        _selectedTagIds.value = tagIds
 
         // visibility 수정하기
         val currentList = _tagList.value ?: return
         val updated = currentList.map { tag ->
-            if (tags.any { it.id == tag.id }) {
+            if (tagIds.any { it == tag.id }) {
                 tag.copy(isVisible = false)
             } else {
                 tag.copy(isVisible = true)
@@ -125,13 +134,15 @@ class TagViewModel @Inject constructor(
     private fun sortTag() {
         val currentList = _tagList.value ?: return
         when (settingsRepository.getTagSortOption()) {
-            "alphabetic" -> {
-                _tagList.value = currentList.sortedBy { it.name }
+            TagSortType.ALPHABETIC -> {
+                _tagList.value = currentList.sortedWith(compareBy(collator) { it.name })
             }
-            "color" -> {
-                _tagList.value = currentList.sortedBy { it.colorHex }
+            TagSortType.COLOR -> {
+                _tagList.value = currentList.sortedBy { tag ->
+                    tagColors.indexOf(tag.colorHex).let { if (it != -1) it else Int.MAX_VALUE }
+                }
             }
-            "created" -> {
+            TagSortType.CREATED -> {
                 _tagList.value = currentList.sortedByDescending { it.createdAt }
             }
         }
@@ -141,19 +152,20 @@ class TagViewModel @Inject constructor(
     // memo의 tagIds를 정렬하는 함수
     fun sortTagIds(tagIds: List<Int>): List<Int> {
         if (settingsRepository.getTagSortInMemoOption()) {
-            var sortedIds = tagIds
-            when (settingsRepository.getTagSortOption()) {
-                "alphabetic" -> {
-                    sortedIds.sortedBy { _tagList.value?.find { tag -> tag.id == it }?.name }
+            return when (settingsRepository.getTagSortOption()) {
+                TagSortType.ALPHABETIC -> {
+                    tagIds.sortedWith(compareBy(collator) { _tagList.value?.find { tag -> tag.id == it }?.name.toString() })
                 }
-                "color" -> {
-                    sortedIds.sortedBy { _tagList.value?.find { tag -> tag.id == it }?.colorHex }
+                TagSortType.COLOR -> {
+                    tagIds.sortedBy { tagId ->
+                        val color = _tagList.value?.find { it.id == tagId }?.colorHex
+                        tagColors.indexOf(color).let { if (it != -1) it else Int.MAX_VALUE }
+                    }
                 }
-                "created" -> {
-                    sortedIds.sortedBy { _tagList.value?.find { tag -> tag.id == it }?.createdAt }
+                TagSortType.CREATED -> {
+                    tagIds.sortedBy { _tagList.value?.find { tag -> tag.id == it }?.createdAt }
                 }
             }
-            return sortedIds
         } else {
             return tagIds
         }

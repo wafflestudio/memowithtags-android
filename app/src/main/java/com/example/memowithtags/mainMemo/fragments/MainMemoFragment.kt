@@ -17,10 +17,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.memowithtags.R
+import com.example.memowithtags.common.model.Memo
 import com.example.memowithtags.common.model.Tag
 import com.example.memowithtags.common.model.tagColors
 import com.example.memowithtags.databinding.FragmentMainMemoBinding
 import com.example.memowithtags.mainMemo.Adapters.MemoAdapter
+import com.example.memowithtags.mainMemo.Adapters.SelectedTagAdapter
 import com.example.memowithtags.mainMemo.Adapters.TagAdapter
 import com.example.memowithtags.mainMemo.viewModel.MemoViewModel
 import com.example.memowithtags.mainMemo.viewModel.TagViewModel
@@ -79,14 +81,13 @@ class MainMemoFragment : Fragment() {
             tagViewModel.tagList.value?.find { it.id == id }
         }
 
-        memoAdapter = MemoAdapter(sortTagIds, tagResolver) { memoToEdit ->
+        val onEditClick: (Memo, List<Int>) -> Unit = onEditClick@{ memoToEdit, tagIds ->
             memoViewModel.startEditing(memoToEdit)
             binding.newMemoText.setText(memoToEdit.content)
-
-            val allTags = tagViewModel.tagList.value ?: return@MemoAdapter
-            val selectedTags = allTags.filter { memoToEdit.tagIds.contains(it.id) }
-            tagViewModel.setSelectedTags(selectedTags)
+            tagViewModel.setSelectedTags(tagIds)
         }
+
+        memoAdapter = MemoAdapter(tagViewModel::sortTagIds, tagViewModel::getTag, onEditClick, memoViewModel::getMemo )
 
         binding.memoRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -94,7 +95,7 @@ class MainMemoFragment : Fragment() {
         }
 
         memoViewModel.memoList.observe(viewLifecycleOwner) { memoList ->
-            memoAdapter.updateData(memoList)
+            memoAdapter.updateData(memoList.map { it.id })
         }
 
         memoViewModel.getMyMemos()
@@ -176,6 +177,7 @@ class MainMemoFragment : Fragment() {
 
         // update tags
         tagViewModel.reloadTags()
+        renderSelectedTags(tagViewModel.selectedTagIds.value ?: emptyList())
 
         // update memos
         memoAdapter.notifyDataSetChanged()

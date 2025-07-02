@@ -20,8 +20,13 @@ class SettingsRepository @Inject constructor(
         return prefs.getString("text_size_option", null)
     }
 
-    fun getTagSortOption(): String? {
-        return prefs.getString("tag_sort_option", TagSortType.CREATED.toString())
+    fun getTagSortOption(): TagSortType {
+        return try {
+            val name = prefs.getString("tag_sort_option", null)
+            TagSortType.valueOf(name ?: return TagSortType.CREATED)
+        } catch (e: IllegalArgumentException) {
+            TagSortType.CREATED
+        }
     }
 
     fun getTagSortInMemoOption(): Boolean {
@@ -40,8 +45,8 @@ class SettingsRepository @Inject constructor(
         prefs.edit() { putString("text_size_option", option) }
     }
 
-    fun setTagSortOption(option: String) {
-        prefs.edit() { putString("tag_sort_option", option) }
+    fun setTagSortOption(option: TagSortType) {
+        prefs.edit() { putString("tag_sort_option", option.toString()) }
     }
 
     fun setTagSortInMemoOption(option: Boolean) {

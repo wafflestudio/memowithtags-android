@@ -7,9 +7,9 @@ enum class TagSortType {
 
     override fun toString(): String {
         return when (this) {
-            ALPHABETIC -> "alphabetic"
-            COLOR -> "color"
-            CREATED -> "created"
+            ALPHABETIC -> "ALPHABETIC"
+            COLOR -> "COLOR"
+            CREATED -> "CREATED"
         }
     }
 }

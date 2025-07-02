@@ -20,10 +20,11 @@ import java.util.Locale
 class MemoAdapter(
     private val sortTagIds: (List<Int>) -> List<Int>,
     private val resolveTag: (Int) -> Tag?,
-    private val onEditClick: (Memo) -> Unit
+    private val onEditClick: (Memo, List<Int>) -> Unit,
+    private val resolveMemo: (Int) -> Memo?
 ) : RecyclerView.Adapter<MemoAdapter.MemoViewHolder>() {
 
-    private var memoList: List<Memo> = emptyList()
+    private var memoList: List<Int> = emptyList()
     private var expandedPosition: Int? = null
 
     inner class MemoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -41,7 +42,8 @@ class MemoAdapter(
     override fun getItemCount(): Int = memoList.size
 
     override fun onBindViewHolder(holder: MemoViewHolder, position: Int) {
-        val memo = memoList[position]
+        val memoId = memoList[position]
+        val memo = resolveMemo(memoId) ?: return
         holder.memoContent.text = memo.content
         holder.memoCreated.text = formatDate(memo.createdAt)
 
@@ -93,7 +95,7 @@ class MemoAdapter(
         }
 
         holder.itemView.findViewById<Button>(R.id.editButton).setOnClickListener {
-            onEditClick(memo)
+            onEditClick(memo, sortedTagIds)
         }
     }
 
@@ -107,7 +109,7 @@ class MemoAdapter(
         return outputFormat.format(date)
     }
 
-    fun updateData(newList: List<Memo>) {
+    fun updateData(newList: List<Int>) {
         this.memoList = newList
         notifyDataSetChanged()
     }

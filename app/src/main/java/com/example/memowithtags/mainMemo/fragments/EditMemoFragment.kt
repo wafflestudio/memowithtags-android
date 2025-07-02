@@ -49,9 +49,7 @@ class EditMemoFragment : Fragment() {
         val tagIds = arguments?.getIntegerArrayList("tagIds") ?: arrayListOf()
 
         if (memoId != -1) {
-            val allTags = tagViewModel.tagList.value ?: emptyList()
-            val selectedTags = allTags.filter { tagIds.contains(it.id) }
-            tagViewModel.setSelectedTags(selectedTags)
+            tagViewModel.setSelectedTags(tagIds)
         }
 
         // 태그 recycler view 세팅
