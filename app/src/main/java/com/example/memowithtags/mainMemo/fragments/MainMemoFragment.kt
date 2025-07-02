@@ -22,7 +22,6 @@ import com.example.memowithtags.common.model.Tag
 import com.example.memowithtags.common.model.tagColors
 import com.example.memowithtags.databinding.FragmentMainMemoBinding
 import com.example.memowithtags.mainMemo.Adapters.MemoAdapter
-import com.example.memowithtags.mainMemo.Adapters.SelectedTagAdapter
 import com.example.memowithtags.mainMemo.Adapters.TagAdapter
 import com.example.memowithtags.mainMemo.viewModel.MemoViewModel
 import com.example.memowithtags.mainMemo.viewModel.TagViewModel
@@ -87,7 +86,7 @@ class MainMemoFragment : Fragment() {
             tagViewModel.setSelectedTags(tagIds)
         }
 
-        memoAdapter = MemoAdapter(tagViewModel::sortTagIds, tagViewModel::getTag, onEditClick, memoViewModel::getMemo )
+        memoAdapter = MemoAdapter(tagViewModel::sortTagIds, tagViewModel::getTag, onEditClick, memoViewModel::getMemo)
 
         binding.memoRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())

@@ -69,7 +69,7 @@ class MemoViewModel @Inject constructor(
         )
     }
 
-    fun getMemo(memoId: Int) : Memo? {
+    fun getMemo(memoId: Int): Memo? {
         return _memoList.value?.find { it.id == memoId }
     }
 

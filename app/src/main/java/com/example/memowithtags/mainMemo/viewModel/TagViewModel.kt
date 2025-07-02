@@ -11,8 +11,6 @@ import com.example.memowithtags.common.model.tagColors
 import com.example.memowithtags.mainMemo.repository.TagRepository
 import com.example.memowithtags.settings.repository.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.text.Collator
-import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
