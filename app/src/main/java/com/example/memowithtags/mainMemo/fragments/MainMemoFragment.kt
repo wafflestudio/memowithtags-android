@@ -166,6 +166,11 @@ class MainMemoFragment : Fragment() {
             val intent = Intent(requireContext(), SettingsActivity::class.java)
             startActivity(intent)
         }
+
+        //검색 버튼
+        binding.iconSearch.setOnClickListener {
+            findNavController().navigate(R.id.action_mainMemo_to_search)
+        }
     }
 
     private val postOrUpdateMemoClickListener = View.OnClickListener {
