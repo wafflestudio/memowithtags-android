@@ -11,10 +11,11 @@ import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Tag
 
 class TagAdapter(
-    private val onTagClick: (Tag) -> Unit
+    private val onTagClick: (Int) -> Unit,
+    private val tagResolver: (Int) -> Tag?
 ) : RecyclerView.Adapter<TagAdapter.TagViewHolder>() {
 
-    private var tagList: List<Tag> = emptyList()
+    private var tagList: List<Int> = emptyList()
 
     inner class TagViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tagName: TextView = itemView.findViewById(R.id.tagText)
@@ -27,11 +28,13 @@ class TagAdapter(
     }
 
     override fun onBindViewHolder(holder: TagViewHolder, position: Int) {
-        val tag = tagList[position]
+        val tagId = tagList[position]
 
         holder.itemView.setOnClickListener {
-            onTagClick(tag)
+            onTagClick(tagId)
         }
+
+        val tag = tagResolver(tagId) ?: return
 
         holder.tagName.text = tag.name
 
@@ -47,7 +50,7 @@ class TagAdapter(
 
     override fun getItemCount(): Int = tagList.size
 
-    fun updateData(newTags: List<Tag>) {
+    fun updateData(newTags: List<Int>) {
         this.tagList = newTags
         notifyDataSetChanged()
     }

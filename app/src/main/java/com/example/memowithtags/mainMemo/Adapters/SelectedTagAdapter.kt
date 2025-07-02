@@ -11,27 +11,29 @@ import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Tag
 
 class SelectedTagAdapter(
-    private val onTagUnselect: (Tag) -> Unit
+    private val onTagUnselect: (Int) -> Unit,
+    private val resolveTag: (Int) -> Tag?
 ) : RecyclerView.Adapter<SelectedTagAdapter.TagViewHolder>() {
 
-    private val tags = mutableListOf<Tag>()
+    private val tagIds = mutableListOf<Int>()
 
-    fun submitList(newTags: List<Tag>) {
-        tags.clear()
-        tags.addAll(newTags)
+    fun submitList(newTags: List<Int>) {
+        tagIds.clear()
+        tagIds.addAll(newTags)
         notifyDataSetChanged()
     }
 
     inner class TagViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val tagText = view.findViewById<TextView>(R.id.tagText)
 
-        fun bind(tag: Tag) {
+        fun bind(tagId: Int) {
+            val tag = resolveTag(tagId) ?: return
             tagText.text = tag.name
             (tagText.background as? GradientDrawable)?.setColor(
                 try { Color.parseColor(tag.colorHex) } catch (e: IllegalArgumentException) { Color.LTGRAY }
             )
 
-            tagText.setOnClickListener { onTagUnselect(tag) }
+            tagText.setOnClickListener { onTagUnselect(tagId) }
         }
     }
 
@@ -42,8 +44,8 @@ class SelectedTagAdapter(
     }
 
     override fun onBindViewHolder(holder: TagViewHolder, position: Int) {
-        holder.bind(tags[position])
+        holder.bind(tagIds[position])
     }
 
-    override fun getItemCount(): Int = tags.size
+    override fun getItemCount(): Int = tagIds.size
 }

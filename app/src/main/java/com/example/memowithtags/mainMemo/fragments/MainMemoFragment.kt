@@ -51,9 +51,8 @@ class MainMemoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // 태그 recycler view 세팅
-        tagAdapter = TagAdapter() { tag ->
-            tagViewModel.selectTag(tag)
-        }
+        tagAdapter = TagAdapter(tagViewModel::selectTag, tagViewModel::getTag)
+
         binding.tagRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = tagAdapter
@@ -61,22 +60,26 @@ class MainMemoFragment : Fragment() {
 
         tagViewModel.tagList.observe(viewLifecycleOwner) { tagList ->
             val visibleTags = tagList.filter { it.isVisible }
-            tagAdapter.updateData(visibleTags)
+            tagAdapter.updateData(visibleTags.map { it.id })
             memoAdapter.notifyDataSetChanged()
         }
 
-        tagViewModel.selectedTags.observe(viewLifecycleOwner) {
+        tagViewModel.selectedTagIds.observe(viewLifecycleOwner) {
             renderSelectedTags(it)
         }
 
         tagViewModel.getMyTags()
 
         // 메모 recycler view 세팅
+        val sortTagIds: (List<Int>) -> List<Int> = { tagIds ->
+            tagViewModel.sortTagIds(tagIds)
+        }
+
         val tagResolver: (Int) -> Tag? = { id ->
             tagViewModel.tagList.value?.find { it.id == id }
         }
 
-        memoAdapter = MemoAdapter(tagResolver) { memoToEdit ->
+        memoAdapter = MemoAdapter(sortTagIds, tagResolver) { memoToEdit ->
             memoViewModel.startEditing(memoToEdit)
             binding.newMemoText.setText(memoToEdit.content)
 
@@ -168,11 +171,20 @@ class MainMemoFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        // update tags
+        tagViewModel.reloadTags()
+
+        // update memos
+        memoAdapter.notifyDataSetChanged()
+    }
+
     private val postOrUpdateMemoClickListener = View.OnClickListener {
         val content = binding.newMemoText.text.toString()
-        val tagIds = tagViewModel.selectedTags.value
+        val tagIds = tagViewModel.selectedTagIds.value
             ?.takeIf { it.isNotEmpty() }
-            ?.map { it.id }
             ?: listOf(0)
 
         if (content.isNotBlank()) {
@@ -191,10 +203,11 @@ class MainMemoFragment : Fragment() {
         }
     }
 
-    private fun renderSelectedTags(tags: List<Tag>) {
+    private fun renderSelectedTags(tagIds: List<Int>) {
         binding.selectedTagContainer.removeAllViews()
 
-        for (tag in tags) {
+        for (tagId in tagIds) {
+            val tag = tagViewModel.getTag(tagId) ?: continue
             val tagView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.item_selected_tag, binding.selectedTagContainer, false)
 
@@ -211,7 +224,7 @@ class MainMemoFragment : Fragment() {
             }
 
             textView.setOnClickListener {
-                tagViewModel.unselectTag(tag)
+                tagViewModel.unselectTag(tagId)
             }
 
             binding.selectedTagContainer.addView(tagView)

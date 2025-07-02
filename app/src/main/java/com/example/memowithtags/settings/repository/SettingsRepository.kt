@@ -2,6 +2,7 @@ package com.example.memowithtags.settings.repository
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import com.example.memowithtags.common.model.TagSortType
 import javax.inject.Inject
 
 class SettingsRepository @Inject constructor(
@@ -20,7 +21,7 @@ class SettingsRepository @Inject constructor(
     }
 
     fun getTagSortOption(): String? {
-        return prefs.getString("tag_sort_option", null)
+        return prefs.getString("tag_sort_option", TagSortType.CREATED.toString())
     }
 
     fun getTagSortInMemoOption(): Boolean {

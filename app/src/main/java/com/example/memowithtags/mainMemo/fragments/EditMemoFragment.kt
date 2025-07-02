@@ -55,9 +55,7 @@ class EditMemoFragment : Fragment() {
         }
 
         // 태그 recycler view 세팅
-        tagAdapter = TagAdapter() { tag ->
-            tagViewModel.selectTag(tag)
-        }
+        tagAdapter = TagAdapter(tagViewModel::selectTag, tagViewModel::getTag)
         binding.tagRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = tagAdapter
@@ -65,15 +63,13 @@ class EditMemoFragment : Fragment() {
 
         tagViewModel.tagList.observe(viewLifecycleOwner) { tagList ->
             val visibleTags = tagList.filter { it.isVisible }
-            tagAdapter.updateData(visibleTags)
+            tagAdapter.updateData(visibleTags.map { it.id })
         }
 
         tagViewModel.getMyTags()
 
         // 선택된 태그 RecyclerView 세팅
-        selectedTagAdapter = SelectedTagAdapter { tag ->
-            tagViewModel.unselectTag(tag)
-        }
+        selectedTagAdapter = SelectedTagAdapter(tagViewModel::unselectTag, tagViewModel::getTag)
 
         binding.selectedTagContainer.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -81,7 +77,7 @@ class EditMemoFragment : Fragment() {
         }
 
         // observe 변경
-        tagViewModel.selectedTags.observe(viewLifecycleOwner) {
+        tagViewModel.selectedTagIds.observe(viewLifecycleOwner) {
             selectedTagAdapter.submitList(it)
         }
 
@@ -113,7 +109,9 @@ class EditMemoFragment : Fragment() {
 
     private fun handleBackPressed() {
         val content = binding.newMemoText.text.toString()
-        val tagIds = tagViewModel.selectedTags.value?.takeIf { it.isNotEmpty() }?.map { it.id } ?: listOf(0)
+        val tagIds = tagViewModel.selectedTagIds.value
+            ?.takeIf { it.isNotEmpty() }
+            ?: listOf(0)
 
         if (content.isNotBlank()) {
             val editingMemo = memoViewModel.editingMemo.value

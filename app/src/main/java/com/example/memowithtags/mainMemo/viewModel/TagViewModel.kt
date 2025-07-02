@@ -6,24 +6,26 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.memowithtags.common.model.Tag
 import com.example.memowithtags.mainMemo.repository.TagRepository
+import com.example.memowithtags.settings.repository.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class TagViewModel @Inject constructor(
-    private val repository: TagRepository
+    private val tagRepository: TagRepository,
+    private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
     private val _tagList = MutableLiveData<List<Tag>>(emptyList())
     val tagList: LiveData<List<Tag>> = _tagList
 
-    private val _selectedTags = MutableLiveData<List<Tag>>()
-    val selectedTags: LiveData<List<Tag>> = _selectedTags
+    private val _selectedTagIds = MutableLiveData<List<Int>>()
+    val selectedTagIds: LiveData<List<Int>> = _selectedTagIds
 
     private var initialized = false
 
     fun createTag(name: String, colorHex: String) {
-        repository.createTag(
+        tagRepository.createTag(
             name = name,
             colorHex = colorHex,
             onSuccess = { tag ->
@@ -36,13 +38,15 @@ class TagViewModel @Inject constructor(
         )
     }
 
+    // tagList를 initialize하는 함수
     fun getMyTags() {
         if (initialized) return
         initialized = true
 
-        repository.getMyTags(
+        tagRepository.getMyTags(
             onSuccess = { tagList ->
                 _tagList.value = tagList.map { it.copy(isVisible = true) }
+                sortTag()
             },
             onError = { error ->
                 Log.e("TAG_FETCH", "태그 불러오기 실패: ${error.localizedMessage}")
@@ -50,34 +54,60 @@ class TagViewModel @Inject constructor(
         )
     }
 
-    fun selectTag(tag: Tag) {
-        val updatedTags = _tagList.value?.map {
-            if (it.id == tag.id) it.copy(isVisible = false) else it
-        } ?: return
-        _tagList.value = updatedTags
-
-        val selected = _selectedTags.value.orEmpty().toMutableList().apply { add(tag) }
-        _selectedTags.value = selected
+    // tagList에 속한 tag를 update하는 함수
+    fun reloadTags() {
+        tagRepository.getMyTags(
+            onSuccess = { tagList ->
+                _tagList.value = tagList.map {
+                    if (_selectedTagIds.value?.contains(it.id) == true) {
+                        it.copy(isVisible = false)
+                    } else {
+                        it.copy(isVisible = true)
+                    }
+                }
+                sortTag()
+            },
+            onError = { error ->
+                Log.e("TAG_FETCH", "태그 불러오기 실패: ${error.localizedMessage}")
+            }
+        )
     }
 
-    fun unselectTag(tag: Tag) {
+    // tagId로 tag를 불러오는 함수
+    fun getTag(id: Int): Tag? {
+        return _tagList.value?.find { it.id == id }
+    }
+
+    fun selectTag(tagId: Int) {
         val updatedTags = _tagList.value?.map {
-            if (it.id == tag.id) it.copy(isVisible = true) else it
+            if (it.id == tagId) it.copy(isVisible = false) else it
         } ?: return
         _tagList.value = updatedTags
 
-        val selected = _selectedTags.value.orEmpty().toMutableList().apply { remove(tag) }
-        _selectedTags.value = selected
+        val selected = _selectedTagIds.value.orEmpty().toMutableList().apply { add(tagId) }
+        _selectedTagIds.value = selected
+        sortTag()
+    }
+
+    fun unselectTag(tagId: Int) {
+        val updatedTags = _tagList.value?.map {
+            if (it.id == tagId) it.copy(isVisible = true) else it
+        } ?: return
+        _tagList.value = updatedTags
+
+        val selected = _selectedTagIds.value.orEmpty().toMutableList().apply { remove(tagId) }
+        _selectedTagIds.value = selected
+        sortTag()
     }
 
     fun clearSelectedTags() {
         val updatedTags = _tagList.value?.map { it.copy(isVisible = true) } ?: return
         _tagList.value = updatedTags
-        _selectedTags.value = emptyList()
+        _selectedTagIds.value = emptyList()
     }
 
     fun setSelectedTags(tags: List<Tag>) {
-        _selectedTags.value = tags
+        _selectedTagIds.value = tags.map { it.id }
 
         // visibility 수정하기
         val currentList = _tagList.value ?: return
@@ -89,5 +119,43 @@ class TagViewModel @Inject constructor(
             }
         }
         _tagList.value = updated
+    }
+
+    // tagList와 selectedTags를 정렬하는 함수
+    private fun sortTag() {
+        val currentList = _tagList.value ?: return
+        when (settingsRepository.getTagSortOption()) {
+            "alphabetic" -> {
+                _tagList.value = currentList.sortedBy { it.name }
+            }
+            "color" -> {
+                _tagList.value = currentList.sortedBy { it.colorHex }
+            }
+            "created" -> {
+                _tagList.value = currentList.sortedByDescending { it.createdAt }
+            }
+        }
+        _selectedTagIds.value = sortTagIds(_selectedTagIds.value.orEmpty())
+    }
+
+    // memo의 tagIds를 정렬하는 함수
+    fun sortTagIds(tagIds: List<Int>): List<Int> {
+        if (settingsRepository.getTagSortInMemoOption()) {
+            var sortedIds = tagIds
+            when (settingsRepository.getTagSortOption()) {
+                "alphabetic" -> {
+                    sortedIds.sortedBy { _tagList.value?.find { tag -> tag.id == it }?.name }
+                }
+                "color" -> {
+                    sortedIds.sortedBy { _tagList.value?.find { tag -> tag.id == it }?.colorHex }
+                }
+                "created" -> {
+                    sortedIds.sortedBy { _tagList.value?.find { tag -> tag.id == it }?.createdAt }
+                }
+            }
+            return sortedIds
+        } else {
+            return tagIds
+        }
     }
 }

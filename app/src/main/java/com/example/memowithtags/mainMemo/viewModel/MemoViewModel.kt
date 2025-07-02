@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MemoViewModel @Inject constructor(
-    private val repository: MemoRepository
+    private val memoRepository: MemoRepository
 ) : ViewModel() {
 
     private val _memoList = MutableLiveData<List<Memo>>(emptyList())
@@ -23,7 +23,7 @@ class MemoViewModel @Inject constructor(
     val editingMemo: LiveData<Memo?> get() = _editingMemo
 
     fun getMyMemos() {
-        repository.getMyMemos(
+        memoRepository.getMyMemos(
             content = null,
             tagIds = null,
             startDate = null,
@@ -37,7 +37,7 @@ class MemoViewModel @Inject constructor(
     fun postMemo(content: String, tagIds: List<Int>) {
         val request = CreateMemoRequest(content, tagIds, false)
 
-        repository.postMemo(
+        memoRepository.postMemo(
             request = request,
             onSuccess = { memo ->
                 getMyMemos()
@@ -55,7 +55,7 @@ class MemoViewModel @Inject constructor(
             locked
         )
 
-        repository.updateMemo(
+        memoRepository.updateMemo(
             memoId = memoId,
             request = request,
             onSuccess = {

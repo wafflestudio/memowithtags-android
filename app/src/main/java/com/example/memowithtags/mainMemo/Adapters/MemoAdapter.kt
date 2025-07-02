@@ -18,6 +18,7 @@ import com.google.android.flexbox.FlexboxLayout
 import java.util.Locale
 
 class MemoAdapter(
+    private val sortTagIds: (List<Int>) -> List<Int>,
     private val resolveTag: (Int) -> Tag?,
     private val onEditClick: (Memo) -> Unit
 ) : RecyclerView.Adapter<MemoAdapter.MemoViewHolder>() {
@@ -46,7 +47,9 @@ class MemoAdapter(
 
         holder.tagContainer.removeAllViews()
 
-        for (tagId in memo.tagIds) {
+        val sortedTagIds = sortTagIds(memo.tagIds)
+
+        for (tagId in sortedTagIds) {
             val tag = resolveTag(tagId) ?: continue
 
             val tagView = LayoutInflater.from(holder.itemView.context)
