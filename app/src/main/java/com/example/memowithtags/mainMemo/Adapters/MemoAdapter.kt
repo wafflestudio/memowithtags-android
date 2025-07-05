@@ -97,7 +97,7 @@ class MemoAdapter(
         }
 
         holder.itemView.findViewById<Button>(R.id.editButton).setOnClickListener {
-            onEditClick(memo, sortedTagIds)
+            onEditClick?.let { it1 -> it1(memo, sortedTagIds) }
         }
     }
 
