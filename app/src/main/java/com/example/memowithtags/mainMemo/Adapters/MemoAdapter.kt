@@ -19,7 +19,7 @@ import java.util.Locale
 
 class MemoAdapter(
     private val resolveTag: (Int) -> Tag?,
-    private val onEditClick: (Memo) -> Unit
+    private val onEditClick: ((Memo) -> Unit)? = null
 ) : RecyclerView.Adapter<MemoAdapter.MemoViewHolder>() {
 
     private var memoList: List<Memo> = emptyList()
@@ -90,7 +90,7 @@ class MemoAdapter(
         }
 
         holder.itemView.findViewById<Button>(R.id.editButton).setOnClickListener {
-            onEditClick(memo)
+            onEditClick?.let { it1 -> it1(memo) }
         }
     }
 

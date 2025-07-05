@@ -67,6 +67,14 @@ data class UpdateMemoRequest(
     val locked: Boolean
 )
 
+data class SearchMemoRequest(
+    val content: String,
+    val tagIds: List<Int>,
+    val startDate: String?,
+    val endDate: String?,
+    val page: Int
+)
+
 data class RefreshTokenResponse(
     val accessToken: String,
     val refreshToken: String,
@@ -139,3 +147,4 @@ data class SocialLoginResponse(
     val refreshToken: String,
     val isNewUser: Boolean
 )
+
