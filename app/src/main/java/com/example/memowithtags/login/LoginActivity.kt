@@ -3,8 +3,10 @@ package com.example.memowithtags.login
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.example.memowithtags.common.model.HttpException
 import com.example.memowithtags.databinding.ActivityLoginBinding
 import com.example.memowithtags.login.viewModel.LoginViewModel
 import com.example.memowithtags.mainMemo.MainActivity
@@ -80,6 +82,11 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(intent)
                 this.finish()
             }.onFailure {
+                if (it is HttpException && it.statusCode == 409) {
+                    Toast.makeText(this, "이미 가입된 계정입니다.", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "로그인 실패", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

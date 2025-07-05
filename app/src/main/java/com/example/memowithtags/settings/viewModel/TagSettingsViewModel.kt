@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.memowithtags.common.model.Tag
+import com.example.memowithtags.common.model.TagSortType
 import com.example.memowithtags.common.network.api.TagResponse
 import com.example.memowithtags.mainMemo.repository.TagRepository
 import com.example.memowithtags.settings.repository.SettingsRepository
@@ -21,8 +22,8 @@ class TagSettingsViewModel @Inject constructor(
     private val _tagList = MutableLiveData<List<Tag>>(emptyList())
     val tagList: LiveData<List<Tag>> = _tagList
 
-    private val _tagSortOption = MutableLiveData<String>()
-    val tagSortOption: LiveData<String> get() = _tagSortOption
+    private val _tagSortOption = MutableLiveData<TagSortType>()
+    val tagSortOption: LiveData<TagSortType> get() = _tagSortOption
 
     private val _tagSortInMemoOption = MutableLiveData<Boolean>()
     val tagSortInMemoOption: LiveData<Boolean> get() = _tagSortInMemoOption
@@ -54,15 +55,12 @@ class TagSettingsViewModel @Inject constructor(
         )
 
         // initialize tag sort option
-        if (settingsRepository.getTagSortOption() == null) {
-            settingsRepository.setTagSortOption("created")
-        }
         _tagSortOption.value = settingsRepository.getTagSortOption()
 
         _tagSortInMemoOption.value = settingsRepository.getTagSortInMemoOption()
     }
 
-    fun setTagSortOption(option: String) {
+    fun setTagSortOption(option: TagSortType) {
         settingsRepository.setTagSortOption(option)
         _tagSortOption.value = option
     }

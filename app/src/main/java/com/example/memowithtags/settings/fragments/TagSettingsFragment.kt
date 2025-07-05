@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.memowithtags.R
+import com.example.memowithtags.common.model.TagSortType
 import com.example.memowithtags.databinding.FragmentTagSettingsBinding
 import com.example.memowithtags.settings.adapters.TagAdapter
 import com.example.memowithtags.settings.viewModel.TagSettingsViewModel
@@ -52,15 +53,15 @@ class TagSettingsFragment : Fragment() {
 
         // 태그 정렬 세팅
         binding.tagSortAlphabeticLayout.setOnClickListener {
-            tagSettingsViewModel.setTagSortOption("alphabetic")
+            tagSettingsViewModel.setTagSortOption(TagSortType.ALPHABETIC)
         }
 
         binding.tagSortColorLayout.setOnClickListener {
-            tagSettingsViewModel.setTagSortOption("color")
+            tagSettingsViewModel.setTagSortOption(TagSortType.COLOR)
         }
 
         binding.tagSortCreatedLayout.setOnClickListener {
-            tagSettingsViewModel.setTagSortOption("created")
+            tagSettingsViewModel.setTagSortOption(TagSortType.CREATED)
         }
 
         // 메모 내 태그 정렬 옵션
@@ -80,15 +81,15 @@ class TagSettingsFragment : Fragment() {
     private fun observeViewModel() {
         // 태그 정렬 세팅
         tagSettingsViewModel.tagSortOption.observe(viewLifecycleOwner) { option ->
-            if (option == "alphabetic") {
+            if (option == TagSortType.ALPHABETIC) {
                 binding.tagSortCheckAlphabetic.imageTintList = resources.getColorStateList(R.color.colorChecked, null)
                 binding.tagSortCheckColor.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
                 binding.tagSortCheckCreated.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
-            } else if (option == "color") {
+            } else if (option == TagSortType.COLOR) {
                 binding.tagSortCheckAlphabetic.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
                 binding.tagSortCheckColor.imageTintList = resources.getColorStateList(R.color.colorChecked, null)
                 binding.tagSortCheckCreated.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
-            } else if (option == "created") {
+            } else if (option == TagSortType.CREATED) {
                 binding.tagSortCheckAlphabetic.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
                 binding.tagSortCheckColor.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
                 binding.tagSortCheckCreated.imageTintList = resources.getColorStateList(R.color.colorChecked, null)
