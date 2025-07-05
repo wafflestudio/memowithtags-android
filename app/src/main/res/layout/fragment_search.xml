@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F1F1F3">
+
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:background="#F1F1F3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/leftArrowIcon"
+            android:layout_width="14dp"
+            android:layout_height="23dp"
+            app:srcCompat="@drawable/left_arrow" />
+
+        <LinearLayout
+            android:id="@+id/searchTextLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:scrollbars="horizontal"
+            android:paddingVertical="8dp"
+            android:paddingHorizontal="4dp"
+            android:background="@drawable/search_edittext">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/querytagRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:visibility="gone"
+                tools:listitem="@layout/item_tag"
+                app:layout_constraintTop_toBottomOf="@id/tagTitleText"/>
+
+            <EditText
+                android:id="@+id/searchText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:layout_marginStart="12dp"
+                android:textColor="#000000"
+                android:paddingHorizontal="4dp"
+                android:background="@drawable/search_edittext"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tagTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Tags"
+        android:textSize="14sp"
+        android:textColor="#A0A0A1"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchtagRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:scrollbars="horizontal"
+        android:visibility="gone"
+        tools:listitem="@layout/item_tag"
+        app:layout_constraintTop_toBottomOf="@id/tagTitleText"/>
+
+    <TextView
+        android:id="@+id/memoTitleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Memos"
+        android:textSize="14sp"
+        android:textColor="#A0A0A1"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/searchtagRecyclerView"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchmemoRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="72dp"
+        android:visibility="gone"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_marginTop="6dp"
+        app:layout_constraintTop_toBottomOf="@id/memoTitleText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="#F1F1F3"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

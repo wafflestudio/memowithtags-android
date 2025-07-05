@@ -4,6 +4,7 @@ import com.example.memowithtags.common.model.Memo
 import com.example.memowithtags.common.network.api.CreateMemoRequest
 import com.example.memowithtags.common.network.api.CreateMemoResponse
 import com.example.memowithtags.common.network.api.MemoApi
+import com.example.memowithtags.common.network.api.SearchMemoRequest
 import com.example.memowithtags.common.network.api.SearchMemoResponse
 import com.example.memowithtags.common.network.api.UpdateMemoRequest
 import retrofit2.Call
@@ -116,4 +117,34 @@ class MemoRepository @Inject constructor(
                 }
             })
     }
+
+    fun searchMemo(
+        content: String,
+        tagIds: List<Int>,
+        startDate: String?,
+        endDate: String?,
+        page: Int,
+        callback: (List<Memo>) -> Unit,
+        onError: (Throwable) -> Unit
+    ) {
+        memoApi.searchMemo(content, tagIds, startDate, endDate, page)
+            .enqueue(object : Callback<SearchMemoResponse> {
+            override fun onResponse(
+                call: Call<SearchMemoResponse>,
+                response: Response<SearchMemoResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    callback(body?.results ?: emptyList())
+                } else {
+                    onError(Exception("Response not successful: ${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<SearchMemoResponse>, t: Throwable) {
+                onError(t)
+            }
+        })
+    }
+
 }
