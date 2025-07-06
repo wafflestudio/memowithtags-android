@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.icu.text.SimpleDateFormat
 import android.icu.util.TimeZone
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,7 +46,15 @@ class MemoAdapter(
 
     override fun onBindViewHolder(holder: MemoViewHolder, position: Int) {
         val memoId = memoList[position]
-        val memo = resolveMemo(memoId) ?: return
+        Log.d("MemoAdapter", "memoId[$position] = $memoId")
+
+        val memo = resolveMemo(memoId)
+        if (memo == null) {
+            Log.d("MemoAdapter", "resolveMemo($memoId) → null")
+            return
+        } else {
+            Log.d("MemoAdapter", "resolveMemo($memoId) → content = ${memo.content}, tagIds = ${memo.tagIds}, createdAt = ${memo.createdAt}")
+        }
         holder.memoContent.text = memo.content
         holder.memoCreated.text = formatDate(memo.createdAt)
 

@@ -22,6 +22,8 @@ class MemoViewModel @Inject constructor(
     private val _editingMemo = MutableLiveData<Memo?>()
     val editingMemo: LiveData<Memo?> get() = _editingMemo
 
+    private val memoMap = mutableMapOf<Int, Memo>()
+
     fun getMyMemos() {
         memoRepository.getMyMemos(
             content = null,
@@ -70,7 +72,20 @@ class MemoViewModel @Inject constructor(
     }
 
     fun getMemo(memoId: Int): Memo? {
-        return _memoList.value?.find { it.id == memoId }
+        val memo = memoMap[memoId] ?: _memoList.value?.find { it.id == memoId }
+        if (memo != null) {
+            Log.d("MemoViewModel", "getMemo($memoId) → ${memo.content}")
+        } else {
+            Log.d("MemoViewModel", "getMemo($memoId) → null")
+        }
+        return memo
+    }
+
+    fun cacheSearchResult(memos: List<Memo>) {
+        for (memo in memos) {
+            Log.d("MemoViewModel", "캐싱됨: id=${memo.id}, content=${memo.content}")
+            memoMap[memo.id] = memo
+        }
     }
 
     fun startEditing(memo: Memo) {

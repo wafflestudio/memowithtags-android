@@ -45,7 +45,7 @@ class SearchViewModel @Inject constructor(
             tagIds = emptyList(),
             startDate = null,
             endDate = null,
-            page = 0,
+            page = 1,
             callback = { result ->
                 _memoSearchResult.postValue(result)
             },
