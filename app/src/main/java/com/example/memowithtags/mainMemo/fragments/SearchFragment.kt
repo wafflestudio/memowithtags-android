@@ -39,7 +39,7 @@ class SearchFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?){
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         tagViewModel.getMyTags()
@@ -68,12 +68,11 @@ class SearchFragment : Fragment() {
         // ViewModel에서 결과 수신
         searchViewModel.memoSearchResult.observe(viewLifecycleOwner) { memoList ->
             Log.d("SearchFragment", "검색 결과 memoList.size = ${memoList.size}")
-            memoViewModel.cacheSearchResult(memoList)
-
-            memoAdapter.updateData(memoList.map { it.id })
+            memoViewModel.cacheSearchResultFromIds(memoList)
+            memoAdapter.updateData(memoList)
         }
 
-        binding.leftArrowIcon.setOnClickListener{
+        binding.leftArrowIcon.setOnClickListener {
             findNavController().navigate(R.id.action_search_to_mainMemo)
         }
     }

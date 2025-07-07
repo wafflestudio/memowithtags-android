@@ -147,4 +147,3 @@ data class SocialLoginResponse(
     val refreshToken: String,
     val isNewUser: Boolean
 )
-

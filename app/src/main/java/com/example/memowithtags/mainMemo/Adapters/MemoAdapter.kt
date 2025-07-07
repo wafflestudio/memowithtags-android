@@ -22,7 +22,7 @@ class MemoAdapter(
     private val sortTagIds: (List<Int>) -> List<Int>,
     private val resolveTag: (Int) -> Tag?,
 
-    private val onEditClick: ((Memo, List<Int>) -> Unit) ?= null,
+    private val onEditClick: ((Memo, List<Int>) -> Unit) ? = null,
     private val resolveMemo: (Int) -> Memo?
 
 ) : RecyclerView.Adapter<MemoAdapter.MemoViewHolder>() {

@@ -81,10 +81,12 @@ class MemoViewModel @Inject constructor(
         return memo
     }
 
-    fun cacheSearchResult(memos: List<Memo>) {
-        for (memo in memos) {
-            Log.d("MemoViewModel", "캐싱됨: id=${memo.id}, content=${memo.content}")
-            memoMap[memo.id] = memo
+    fun cacheSearchResultFromIds(memoIds: List<Int>) {
+        val allMemos = _memoList.value ?: return
+        val filtered = allMemos.filter { it.id in memoIds }
+        memoMap.putAll(filtered.associateBy { it.id })
+        filtered.forEach {
+            Log.d("MemoViewModel", "검색 캐싱됨: id=${it.id}, content=${it.content}")
         }
     }
 

@@ -1,10 +1,10 @@
 package com.example.memowithtags.mainMemo.viewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.memowithtags.common.model.Memo
 import com.example.memowithtags.mainMemo.repository.MemoRepository
 import com.example.memowithtags.mainMemo.repository.TagRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,8 +25,8 @@ class SearchViewModel @Inject constructor(
         _query.value = newQuery
     }
 
-    private val _memoSearchResult = MutableLiveData<List<Memo>>()
-    val memoSearchResult: LiveData<List<Memo>> = _memoSearchResult
+    private val _memoSearchResult = MutableLiveData<List<Int>>()
+    val memoSearchResult: LiveData<List<Int>> = _memoSearchResult
 
     init {
         viewModelScope.launch {
@@ -34,12 +34,18 @@ class SearchViewModel @Inject constructor(
                 .debounce(300)
                 .distinctUntilChanged()
                 .collectLatest { query ->
+                    Log.d("SearchViewModel", "검색 쿼리: $query")
                     performSearch(query)
                 }
         }
     }
 
     private fun performSearch(query: String) {
+        if (query.isBlank()) {
+            _memoSearchResult.postValue(emptyList())
+            return
+        }
+
         memo_repository.searchMemo(
             content = query,
             tagIds = emptyList(),
@@ -47,7 +53,7 @@ class SearchViewModel @Inject constructor(
             endDate = null,
             page = 1,
             callback = { result ->
-                _memoSearchResult.postValue(result)
+                _memoSearchResult.postValue(result.map { it.id })
             },
             onError = {
                 _memoSearchResult.postValue(emptyList()) // 실패 시 빈 리스트 처리
