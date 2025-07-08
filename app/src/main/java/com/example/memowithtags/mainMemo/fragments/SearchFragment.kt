@@ -8,12 +8,15 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.memowithtags.R
+import com.example.memowithtags.common.model.Memo
 import com.example.memowithtags.common.model.Tag
 import com.example.memowithtags.databinding.FragmentSearchBinding
 import com.example.memowithtags.mainMemo.Adapters.MemoAdapter
+import com.example.memowithtags.mainMemo.Adapters.TagAdapter
 import com.example.memowithtags.mainMemo.viewModel.MemoViewModel
 import com.example.memowithtags.mainMemo.viewModel.SearchViewModel
 import com.example.memowithtags.mainMemo.viewModel.TagViewModel
@@ -24,11 +27,12 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
-    private val searchViewModel: SearchViewModel by activityViewModels()
+    private val searchViewModel: SearchViewModel by viewModels()
     private val tagViewModel: TagViewModel by activityViewModels()
     private val memoViewModel: MemoViewModel by activityViewModels()
 
     private lateinit var memoAdapter: MemoAdapter
+    private lateinit var searchTagAdapter: TagAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,38 +46,52 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tagViewModel.getMyTags()
+        tagViewModel.setIsSearching(true)
 
-        // 메모 recycler view 세팅
-        val sortTagIds: (List<Int>) -> List<Int> = { tagIds ->
-            tagViewModel.sortTagIds(tagIds)
+        // Tag RecyclerView 연결
+        searchTagAdapter = TagAdapter(tagViewModel::selectTag, tagViewModel::getTag)
+
+        binding.searchtagRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = searchTagAdapter
         }
 
-        // RecyclerView 연결
-        val tagResolver: (Int) -> Tag? = { id ->
-            tagViewModel.tagList.value?.find { it.id == id }
+        tagViewModel.tagSearchResult.observe(viewLifecycleOwner) { tagList ->
+            searchTagAdapter.updateData(tagList)
         }
 
-        memoAdapter = MemoAdapter(tagViewModel::sortTagIds, tagViewModel::getTag, null, memoViewModel::getMemo)
-        binding.searchmemoRecyclerView.adapter = memoAdapter
-        binding.searchmemoRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        // Memo RecyclerView 연결
+        memoAdapter = MemoAdapter(
+            tagViewModel::sortTagIds,
+            tagViewModel::getTag,
+            null,
+            memoViewModel::getMemo
+        )
 
-        memoViewModel.getMyMemos()
+        binding.searchmemoRecyclerView.apply {
+            adapter = memoAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
 
         // 검색어 입력 감지
         binding.searchText.addTextChangedListener {
             searchViewModel.updateQuery(it.toString())
+            tagViewModel.updateQuery(it.toString())
         }
 
         // ViewModel에서 결과 수신
         searchViewModel.memoSearchResult.observe(viewLifecycleOwner) { memoList ->
             Log.d("SearchFragment", "검색 결과 memoList.size = ${memoList.size}")
-            memoViewModel.cacheSearchResultFromIds(memoList)
             memoAdapter.updateData(memoList)
         }
 
         binding.leftArrowIcon.setOnClickListener {
-            findNavController().navigate(R.id.action_search_to_mainMemo)
+            findNavController().popBackStack()
         }
+    }
+
+    override fun onDestroy() {
+        tagViewModel.clearSearch()
+        super.onDestroy()
     }
 }

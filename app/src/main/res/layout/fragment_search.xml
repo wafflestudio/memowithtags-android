@@ -70,7 +70,6 @@
         android:textSize="14sp"
         android:textColor="#A0A0A1"
         android:layout_margin="10dp"
-        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/topBar"
         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -80,7 +79,6 @@
         android:layout_height="wrap_content"
         android:overScrollMode="never"
         android:scrollbars="horizontal"
-        android:visibility="gone"
         tools:listitem="@layout/item_tag"
         app:layout_constraintTop_toBottomOf="@id/tagTitleText"/>
 

@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.memowithtags.mainMemo.repository.MemoRepository
-import com.example.memowithtags.mainMemo.repository.TagRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -17,8 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val memo_repository: MemoRepository,
-    private val tag_repository: TagRepository
+    private val memoRepository: MemoRepository,
 ) : ViewModel() {
     private val _query = MutableStateFlow("")
     fun updateQuery(newQuery: String) {
@@ -27,6 +25,9 @@ class SearchViewModel @Inject constructor(
 
     private val _memoSearchResult = MutableLiveData<List<Int>>()
     val memoSearchResult: LiveData<List<Int>> = _memoSearchResult
+
+    private val _tagSearchResult = MutableLiveData<List<Int>>()
+    val tagSearchResult: LiveData<List<Int>> = _tagSearchResult
 
     init {
         viewModelScope.launch {
@@ -46,7 +47,7 @@ class SearchViewModel @Inject constructor(
             return
         }
 
-        memo_repository.searchMemo(
+        memoRepository.searchMemo(
             content = query,
             tagIds = emptyList(),
             startDate = null,

@@ -10,19 +10,21 @@ import com.example.memowithtags.common.network.api.UpdateMemoRequest
 import com.example.memowithtags.mainMemo.repository.MemoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @HiltViewModel
 class MemoViewModel @Inject constructor(
     private val memoRepository: MemoRepository
 ) : ViewModel() {
 
+    // Memo 정보를 저장하는 List
     private val _memoList = MutableLiveData<List<Memo>>(emptyList())
     val memoList: LiveData<List<Memo>> = _memoList
 
+    // 현재 수정 중인 Memo
     private val _editingMemo = MutableLiveData<Memo?>()
     val editingMemo: LiveData<Memo?> get() = _editingMemo
 
-    private val memoMap = mutableMapOf<Int, Memo>()
 
     fun getMyMemos() {
         memoRepository.getMyMemos(
@@ -72,7 +74,7 @@ class MemoViewModel @Inject constructor(
     }
 
     fun getMemo(memoId: Int): Memo? {
-        val memo = memoMap[memoId] ?: _memoList.value?.find { it.id == memoId }
+        val memo = _memoList.value?.find { it.id == memoId }
         if (memo != null) {
             Log.d("MemoViewModel", "getMemo($memoId) → ${memo.content}")
         } else {
@@ -81,14 +83,6 @@ class MemoViewModel @Inject constructor(
         return memo
     }
 
-    fun cacheSearchResultFromIds(memoIds: List<Int>) {
-        val allMemos = _memoList.value ?: return
-        val filtered = allMemos.filter { it.id in memoIds }
-        memoMap.putAll(filtered.associateBy { it.id })
-        filtered.forEach {
-            Log.d("MemoViewModel", "검색 캐싱됨: id=${it.id}, content=${it.content}")
-        }
-    }
 
     fun startEditing(memo: Memo) {
         _editingMemo.value = memo

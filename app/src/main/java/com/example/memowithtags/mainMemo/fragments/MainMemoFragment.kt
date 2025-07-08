@@ -72,14 +72,6 @@ class MainMemoFragment : Fragment() {
         tagViewModel.getMyTags()
 
         // 메모 recycler view 세팅
-        val sortTagIds: (List<Int>) -> List<Int> = { tagIds ->
-            tagViewModel.sortTagIds(tagIds)
-        }
-
-        val tagResolver: (Int) -> Tag? = { id ->
-            tagViewModel.tagList.value?.find { it.id == id }
-        }
-
         val onEditClick: (Memo, List<Int>) -> Unit = onEditClick@{ memoToEdit, tagIds ->
             memoViewModel.startEditing(memoToEdit)
             binding.newMemoText.setText(memoToEdit.content)

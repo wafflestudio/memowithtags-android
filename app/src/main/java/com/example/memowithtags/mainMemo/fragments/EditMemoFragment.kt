@@ -129,6 +129,6 @@ class EditMemoFragment : Fragment() {
             tagViewModel.clearSelectedTags()
         }
 
-        findNavController().navigate(R.id.action_editMemo_to_mainMemo)
+        findNavController().popBackStack()
     }
 }

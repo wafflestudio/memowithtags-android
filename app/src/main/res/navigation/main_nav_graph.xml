@@ -10,28 +10,36 @@
         tools:layout="@layout/fragment_main_memo">
         <action
             android:id="@+id/action_mainMemo_to_editMemo"
-            app:destination="@id/editMemoFragment" />
+            app:destination="@id/editMemoFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_mainMemo_to_search"
-            app:destination="@id/searchFragment" />
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
         android:id="@+id/editMemoFragment"
         android:name="com.example.memowithtags.mainMemo.fragments.EditMemoFragment"
-        tools:layout="@layout/fragment_edit_memo">
-        <action
-            android:id="@+id/action_editMemo_to_mainMemo"
-            app:destination="@id/mainMemoFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_edit_memo"/>
 
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.memowithtags.mainMemo.fragments.SearchFragment"
         tools:layout="@layout/fragment_search">
         <action
-            android:id="@+id/action_search_to_mainMemo"
-            app:destination="@id/mainMemoFragment" />
+            android:id="@+id/action_searchFragment_to_editMemoFragment"
+            app:destination="@id/editMemoFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
 </navigation>
