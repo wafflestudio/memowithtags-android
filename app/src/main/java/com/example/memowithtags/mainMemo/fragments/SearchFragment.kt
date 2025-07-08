@@ -48,6 +48,14 @@ class SearchFragment : Fragment() {
 
         tagViewModel.setIsSearching(true)
 
+        // 메모 검색을 통해 진입 시
+        val content = arguments?.getString("memoContent")
+        if (content != null) {
+            binding.searchText.setText(content)
+            searchViewModel.updateQuery(content)
+            tagViewModel.updateQuery(content)
+        }
+
         // Tag RecyclerView 연결
         searchTagAdapter = TagAdapter(tagViewModel::selectTag, tagViewModel::getTag)
 
@@ -61,9 +69,16 @@ class SearchFragment : Fragment() {
         }
 
         // Memo RecyclerView 연결
+        val onSearchClick: (Memo) -> Unit = { memo ->
+            binding.searchText.setText(memo.content)
+            searchViewModel.updateQuery(memo.content)
+            tagViewModel.updateQuery(memo.content)
+        }
+
         memoAdapter = MemoAdapter(
             tagViewModel::sortTagIds,
             tagViewModel::getTag,
+            onSearchClick,
             null,
             memoViewModel::getMemo
         )

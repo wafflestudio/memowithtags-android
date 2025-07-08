@@ -22,6 +22,7 @@ class MemoAdapter(
     private val sortTagIds: (List<Int>) -> List<Int>,
     private val resolveTag: (Int) -> Tag?,
 
+    private val onSearchClick: ((Memo) -> Unit) ? = null,
     private val onEditClick: ((Memo, List<Int>) -> Unit) ? = null,
     private val resolveMemo: (Int) -> Memo?
 
@@ -103,6 +104,10 @@ class MemoAdapter(
                 notifyItemChanged(previousExpanded ?: -1)
                 notifyItemChanged(position)
             }
+        }
+
+        holder.itemView.findViewById<Button>(R.id.searchButton).setOnClickListener {
+            onSearchClick?.let { it1 -> it1(memo) }
         }
 
         holder.itemView.findViewById<Button>(R.id.editButton).setOnClickListener {
