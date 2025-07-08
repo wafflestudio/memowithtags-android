@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.memowithtags.common.model.AlphanumComparator
 import com.example.memowithtags.common.model.Tag
 import com.example.memowithtags.common.model.TagSortType
@@ -11,6 +12,11 @@ import com.example.memowithtags.common.model.tagColors
 import com.example.memowithtags.mainMemo.repository.TagRepository
 import com.example.memowithtags.settings.repository.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,16 +25,73 @@ class TagViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
+    private var initialized = false
+
+    // Tag 정보를 저장하는 List
     private val _tagList = MutableLiveData<List<Tag>>(emptyList())
     val tagList: LiveData<List<Tag>> = _tagList
 
+    // 선택된 Tag의 id를 저장하는 List
     private val _selectedTagIds = MutableLiveData<List<Int>>()
     val selectedTagIds: LiveData<List<Int>> = _selectedTagIds
 
-    private var initialized = false
-
     // 이름 정렬을 위한 collator
     private val collator = AlphanumComparator()
+
+    // 검색 중인지 여부를 저장하는 변수
+    private val _isSearching = MutableStateFlow(false)
+
+    // 검색된 Tag의 id를 저장하는 List
+    private val _searchTagIds = MutableLiveData<List<Int>>()
+    val searchTagIds: LiveData<List<Int>> = _searchTagIds
+
+    // 검색어를 저장하는 변수
+    private val _query = MutableStateFlow("")
+
+    // 검색된 Tag의 id를 저장하는 List
+    private val _tagSearchResult = MutableLiveData<List<Int>>()
+    val tagSearchResult: LiveData<List<Int>> = _tagSearchResult
+
+    fun updateQuery(newQuery: String) {
+        _query.value = newQuery
+    }
+
+    init {
+        viewModelScope.launch {
+            _query
+                .debounce(300)
+                .distinctUntilChanged()
+                .collectLatest { query ->
+                    performTagSearch(query)
+                }
+        }
+    }
+
+    fun setIsSearching(isSearching: Boolean) {
+        _isSearching.value = isSearching
+    }
+
+    private fun performTagSearch(query: String) {
+        if (!_isSearching.value) return
+
+        if (query.isBlank()) {
+            _tagSearchResult.postValue(emptyList())
+            return
+        }
+
+        val result = _tagList.value
+            ?.filter { it.name.contains(query, ignoreCase = true) }
+            ?.map { it.id }
+            ?: emptyList()
+
+        _tagSearchResult.postValue(result)
+    }
+
+    fun clearSearch() {
+        _tagSearchResult.postValue(emptyList())
+        _query.value = ""
+        _isSearching.value = false
+    }
 
     fun createTag(name: String, colorHex: String) {
         tagRepository.createTag(

@@ -18,7 +18,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Memo
-import com.example.memowithtags.common.model.Tag
 import com.example.memowithtags.common.model.tagColors
 import com.example.memowithtags.databinding.FragmentMainMemoBinding
 import com.example.memowithtags.mainMemo.Adapters.MemoAdapter
@@ -72,12 +71,11 @@ class MainMemoFragment : Fragment() {
         tagViewModel.getMyTags()
 
         // 메모 recycler view 세팅
-        val sortTagIds: (List<Int>) -> List<Int> = { tagIds ->
-            tagViewModel.sortTagIds(tagIds)
-        }
-
-        val tagResolver: (Int) -> Tag? = { id ->
-            tagViewModel.tagList.value?.find { it.id == id }
+        val onSearchClick: (Memo) -> Unit = { memo ->
+            val bundle = Bundle().apply {
+                putString("memoContent", memo.content)
+            }
+            findNavController().navigate(R.id.action_mainMemo_to_search, bundle)
         }
 
         val onEditClick: (Memo, List<Int>) -> Unit = onEditClick@{ memoToEdit, tagIds ->
@@ -86,7 +84,13 @@ class MainMemoFragment : Fragment() {
             tagViewModel.setSelectedTags(tagIds)
         }
 
-        memoAdapter = MemoAdapter(tagViewModel::sortTagIds, tagViewModel::getTag, onEditClick, memoViewModel::getMemo)
+        memoAdapter = MemoAdapter(
+            tagViewModel::sortTagIds,
+            tagViewModel::getTag,
+            onSearchClick,
+            onEditClick,
+            memoViewModel::getMemo
+        )
 
         binding.memoRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -161,6 +165,8 @@ class MainMemoFragment : Fragment() {
                     putIntegerArrayList("tagIds", ArrayList(editingMemo.tagIds))
                 }
             }
+            binding.tagInputEditText.text.clear()
+            binding.newMemoText.text.clear()
             findNavController().navigate(R.id.action_mainMemo_to_editMemo, bundle)
         }
 
@@ -170,7 +176,7 @@ class MainMemoFragment : Fragment() {
             startActivity(intent)
         }
 
-        //검색 버튼
+        // 검색 버튼
         binding.iconSearch.setOnClickListener {
             findNavController().navigate(R.id.action_mainMemo_to_search)
         }

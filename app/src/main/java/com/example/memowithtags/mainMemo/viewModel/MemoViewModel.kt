@@ -16,9 +16,11 @@ class MemoViewModel @Inject constructor(
     private val memoRepository: MemoRepository
 ) : ViewModel() {
 
+    // Memo 정보를 저장하는 List
     private val _memoList = MutableLiveData<List<Memo>>(emptyList())
     val memoList: LiveData<List<Memo>> = _memoList
 
+    // 현재 수정 중인 Memo
     private val _editingMemo = MutableLiveData<Memo?>()
     val editingMemo: LiveData<Memo?> get() = _editingMemo
 
@@ -70,7 +72,13 @@ class MemoViewModel @Inject constructor(
     }
 
     fun getMemo(memoId: Int): Memo? {
-        return _memoList.value?.find { it.id == memoId }
+        val memo = _memoList.value?.find { it.id == memoId }
+        if (memo != null) {
+            Log.d("MemoViewModel", "getMemo($memoId) → ${memo.content}")
+        } else {
+            Log.d("MemoViewModel", "getMemo($memoId) → null")
+        }
+        return memo
     }
 
     fun startEditing(memo: Memo) {
