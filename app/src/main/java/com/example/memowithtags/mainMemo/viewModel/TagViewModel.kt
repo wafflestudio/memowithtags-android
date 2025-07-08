@@ -12,15 +12,12 @@ import com.example.memowithtags.common.model.tagColors
 import com.example.memowithtags.mainMemo.repository.TagRepository
 import com.example.memowithtags.settings.repository.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class TagViewModel @Inject constructor(
@@ -95,7 +92,6 @@ class TagViewModel @Inject constructor(
         _query.value = ""
         _isSearching.value = false
     }
-
 
     fun createTag(name: String, colorHex: String) {
         tagRepository.createTag(

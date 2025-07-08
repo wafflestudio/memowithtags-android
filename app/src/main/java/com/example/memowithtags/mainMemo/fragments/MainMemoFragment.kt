@@ -18,7 +18,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Memo
-import com.example.memowithtags.common.model.Tag
 import com.example.memowithtags.common.model.tagColors
 import com.example.memowithtags.databinding.FragmentMainMemoBinding
 import com.example.memowithtags.mainMemo.Adapters.MemoAdapter

@@ -10,7 +10,6 @@ import com.example.memowithtags.common.network.api.UpdateMemoRequest
 import com.example.memowithtags.mainMemo.repository.MemoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.flow.MutableStateFlow
 
 @HiltViewModel
 class MemoViewModel @Inject constructor(
@@ -24,7 +23,6 @@ class MemoViewModel @Inject constructor(
     // 현재 수정 중인 Memo
     private val _editingMemo = MutableLiveData<Memo?>()
     val editingMemo: LiveData<Memo?> get() = _editingMemo
-
 
     fun getMyMemos() {
         memoRepository.getMyMemos(
@@ -82,7 +80,6 @@ class MemoViewModel @Inject constructor(
         }
         return memo
     }
-
 
     fun startEditing(memo: Memo) {
         _editingMemo.value = memo

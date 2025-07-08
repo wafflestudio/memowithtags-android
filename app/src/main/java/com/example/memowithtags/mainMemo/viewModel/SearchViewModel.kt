@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val memoRepository: MemoRepository,
+    private val memoRepository: MemoRepository
 ) : ViewModel() {
     private val _query = MutableStateFlow("")
     fun updateQuery(newQuery: String) {

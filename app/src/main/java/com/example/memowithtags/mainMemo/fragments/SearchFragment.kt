@@ -11,9 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Memo
-import com.example.memowithtags.common.model.Tag
 import com.example.memowithtags.databinding.FragmentSearchBinding
 import com.example.memowithtags.mainMemo.Adapters.MemoAdapter
 import com.example.memowithtags.mainMemo.Adapters.TagAdapter
