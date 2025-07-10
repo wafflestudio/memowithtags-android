@@ -32,6 +32,9 @@ class SearchFragment : Fragment() {
     private lateinit var memoAdapter: MemoAdapter
     private lateinit var searchTagAdapter: TagAdapter
 
+    private val selectedQueryTags = mutableListOf<Int>() // querytagRecyclerView에 표시할 태그 ID 리스트
+    private lateinit var queryTagAdapter: TagAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -55,7 +58,14 @@ class SearchFragment : Fragment() {
         }
 
         // Tag RecyclerView 연결
-        searchTagAdapter = TagAdapter(tagViewModel::selectTag, tagViewModel::getTag)
+        searchTagAdapter = TagAdapter(onTagClick = { tagId ->
+            if (!selectedQueryTags.contains(tagId)) {
+                selectedQueryTags.add(tagId)
+                queryTagAdapter.updateData(selectedQueryTags.toList())
+                binding.querytagRecyclerView.visibility = View.VISIBLE
+                searchViewModel.addSelectedTagId(tagId)
+            }
+        }, tagViewModel::getTag)
 
         binding.searchtagRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -63,7 +73,32 @@ class SearchFragment : Fragment() {
         }
 
         tagViewModel.tagSearchResult.observe(viewLifecycleOwner) { tagList ->
+
+            if (tagList.isNotEmpty()) {
+                binding.tagTitleText.visibility = View.VISIBLE
+            } else {
+                binding.tagTitleText.visibility = View.GONE
+            }
+
             searchTagAdapter.updateData(tagList)
+        }
+
+        // 검색창의 tag recyclerview 연결
+        queryTagAdapter = TagAdapter(
+            onTagClick = { tagId ->
+                selectedQueryTags.remove(tagId)
+                queryTagAdapter.updateData(selectedQueryTags.toList())
+                if (selectedQueryTags.isEmpty()) {
+                    binding.querytagRecyclerView.visibility = View.GONE
+                }
+                searchViewModel.removeSelectedTagId(tagId)
+            },
+            tagResolver = { tagViewModel.getTag(it) }
+        )
+        binding.querytagRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = queryTagAdapter
+            visibility = View.GONE
         }
 
         // Memo RecyclerView 연결
@@ -95,6 +130,13 @@ class SearchFragment : Fragment() {
         // ViewModel에서 결과 수신
         searchViewModel.memoSearchResult.observe(viewLifecycleOwner) { memoList ->
             Log.d("SearchFragment", "검색 결과 memoList.size = ${memoList.size}")
+
+            if (memoList.isNotEmpty()) {
+                binding.memoTitleText.visibility = View.VISIBLE
+            } else {
+                binding.memoTitleText.visibility = View.GONE
+            }
+
             memoAdapter.updateData(memoList)
         }
 
@@ -103,8 +145,8 @@ class SearchFragment : Fragment() {
         }
     }
 
-    override fun onDestroy() {
+    override fun onDestroyView() {
         tagViewModel.clearSearch()
-        super.onDestroy()
+        super.onDestroyView()
     }
 }
