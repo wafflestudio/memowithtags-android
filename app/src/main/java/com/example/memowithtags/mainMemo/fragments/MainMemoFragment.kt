@@ -51,18 +51,7 @@ class MainMemoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // 태그 recycler view 세팅
-        tagAdapter = TagAdapter(tagViewModel::selectTag, tagViewModel::getTag)
-
-        binding.tagRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = tagAdapter
-        }
-
-        tagViewModel.tagList.observe(viewLifecycleOwner) { tagList ->
-            val visibleTags = tagList.filter { it.isVisible }
-            tagAdapter.updateData(visibleTags.map { it.id })
-            memoAdapter.notifyDataSetChanged()
-        }
+        setupTagRecyclerView()
 
         tagViewModel.selectedTagIds.observe(viewLifecycleOwner) {
             renderSelectedTags(it)
@@ -93,12 +82,18 @@ class MainMemoFragment : Fragment() {
         )
 
         binding.memoRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager = LinearLayoutManager(requireContext()).apply {
+                reverseLayout = true
+                stackFromEnd = true
+            }
             adapter = memoAdapter
         }
 
         memoViewModel.memoList.observe(viewLifecycleOwner) { memoList ->
             memoAdapter.updateData(memoList.map { it.id })
+            if (memoList.isNotEmpty()) {
+                binding.memoRecyclerView.scrollToPosition(0)
+            }
         }
 
         memoViewModel.getMyMemos()
@@ -125,6 +120,7 @@ class MainMemoFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val text = s?.toString()?.trim()
+
                 if (!text.isNullOrEmpty()) {
                     binding.inputTagButton.text = text
                     binding.inputTagButton.visibility = View.VISIBLE
@@ -182,15 +178,65 @@ class MainMemoFragment : Fragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
+    private fun setupTagRecyclerView() {
+        tagAdapter = TagAdapter(
+            onTagClick = tagViewModel::selectTag,
+            tagResolver = tagViewModel::getTag
+        )
 
-        // update tags
-        tagViewModel.reloadTags()
-        renderSelectedTags(tagViewModel.selectedTagIds.value ?: emptyList())
+        binding.tagRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = tagAdapter
+        }
 
-        // update memos
-        memoAdapter.notifyDataSetChanged()
+        // 전체 태그가 변경될 때도 반영
+        tagViewModel.tagList.observe(viewLifecycleOwner) {
+            updateTagAdapterData()
+        }
+
+        // 검색 결과가 변경될 때도 반영
+        tagViewModel.tagSearchResult.observe(viewLifecycleOwner) {
+            updateTagAdapterData()
+        }
+
+        // 입력 텍스트 변경 시 쿼리 전달 + 태그 목록 갱신
+        binding.tagInputEditText.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                tagViewModel.setIsSearching(true)
+                tagViewModel.updateQuery(s?.toString()?.trim() ?: "")
+                updateTagAdapterData()
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        // 포커스 잃으면 전체 태그 복귀
+        binding.tagInputEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus || binding.tagInputEditText.text.isNullOrEmpty()) {
+                tagViewModel.clearSearch()
+                updateTagAdapterData()
+            }
+        }
+    }
+
+    private fun updateTagAdapterData() {
+        val query = binding.tagInputEditText.text?.toString()?.trim().orEmpty()
+        if (query.isNotEmpty()) {
+            // 검색어가 있을 때 → 검색 결과만 표시
+            val searchResults = tagViewModel.tagSearchResult.value ?: emptyList()
+            val visibleSearchResults = searchResults.filter { tagId ->
+                tagViewModel.getTag(tagId)?.isVisible == true
+            }
+            tagAdapter.updateData(visibleSearchResults)
+        } else {
+            // 검색어가 없을 때 → 전체 visible 태그 표시
+            tagAdapter.updateData(
+                tagViewModel.tagList.value
+                    ?.filter { it.isVisible }
+                    ?.map { it.id }
+                    ?: emptyList()
+            )
+        }
     }
 
     private val postOrUpdateMemoClickListener = View.OnClickListener {
@@ -241,5 +287,20 @@ class MainMemoFragment : Fragment() {
 
             binding.selectedTagContainer.addView(tagView)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // update tags
+        tagViewModel.reloadTags()
+        renderSelectedTags(tagViewModel.selectedTagIds.value ?: emptyList())
+
+        // update memos
+        memoAdapter.notifyDataSetChanged()
+    }
+
+    override fun onDestroyView() {
+        binding.tagInputEditText.setText("")
+        super.onDestroyView()
     }
 }

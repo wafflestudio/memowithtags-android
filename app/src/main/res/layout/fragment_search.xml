@@ -14,8 +14,9 @@
         android:layout_height="56dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="8dp"
         android:background="#F1F1F3"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,15 +37,15 @@
             android:layout_marginStart="12dp"
             android:scrollbars="horizontal"
             android:paddingVertical="8dp"
-            android:paddingHorizontal="4dp"
+            android:paddingHorizontal="8dp"
             android:background="@drawable/search_edittext">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/querytagRecyclerView"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:overScrollMode="never"
-                android:visibility="gone"
+                android:layout_marginStart="4dp"
                 tools:listitem="@layout/item_tag"
                 app:layout_constraintTop_toBottomOf="@id/tagTitleText"/>
 
@@ -54,7 +55,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="14sp"
-                android:layout_marginStart="12dp"
                 android:textColor="#000000"
                 android:paddingHorizontal="4dp"
                 android:background="@drawable/search_edittext"/>
@@ -67,6 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="Tags"
+        android:visibility="gone"
         android:textSize="14sp"
         android:textColor="#A0A0A1"
         android:layout_margin="10dp"
@@ -79,6 +80,9 @@
         android:layout_height="wrap_content"
         android:overScrollMode="never"
         android:scrollbars="horizontal"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="6dp"
         tools:listitem="@layout/item_tag"
         app:layout_constraintTop_toBottomOf="@id/tagTitleText"/>
 
@@ -88,6 +92,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="Memos"
+        android:visibility="gone"
         android:textSize="14sp"
         android:textColor="#A0A0A1"
         android:layout_margin="10dp"

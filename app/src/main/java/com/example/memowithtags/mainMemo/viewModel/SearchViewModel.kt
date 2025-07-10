@@ -29,6 +29,9 @@ class SearchViewModel @Inject constructor(
     private val _tagSearchResult = MutableLiveData<List<Int>>()
     val tagSearchResult: LiveData<List<Int>> = _tagSearchResult
 
+    private val _selectedTagIds = MutableLiveData<List<Int>>(emptyList())
+    val selectedTagIds: LiveData<List<Int>> = _selectedTagIds
+
     init {
         viewModelScope.launch {
             _query
@@ -41,15 +44,31 @@ class SearchViewModel @Inject constructor(
         }
     }
 
+    fun addSelectedTagId(tagId: Int) {
+        val updated = _selectedTagIds.value.orEmpty().toMutableList().apply {
+            if (!contains(tagId)) add(tagId)
+        }
+        _selectedTagIds.value = updated
+        performSearch(_query.value)
+    }
+
+    fun removeSelectedTagId(tagId: Int) {
+        val updated = _selectedTagIds.value.orEmpty().toMutableList().apply {
+            remove(tagId)
+        }
+        _selectedTagIds.value = updated
+        performSearch(_query.value)
+    }
+
     private fun performSearch(query: String) {
-        if (query.isBlank()) {
+        if (query.isBlank() && _selectedTagIds.value.isNullOrEmpty()) {
             _memoSearchResult.postValue(emptyList())
             return
         }
 
         memoRepository.searchMemo(
             content = query,
-            tagIds = emptyList(),
+            tagIds = _selectedTagIds.value ?: emptyList(),
             startDate = null,
             endDate = null,
             page = 1,
