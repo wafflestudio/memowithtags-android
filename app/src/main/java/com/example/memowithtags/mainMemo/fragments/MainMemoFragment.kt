@@ -167,9 +167,33 @@ class MainMemoFragment : Fragment() {
         }
 
         // 설정 버튼
-        binding.iconSettings.setOnClickListener {
-            val intent = Intent(requireContext(), SettingsActivity::class.java)
-            startActivity(intent)
+        binding.iconSettings.setOnClickListener { view ->
+
+            val inflater = LayoutInflater.from(view.context)
+            val popupView = inflater.inflate(R.layout.settings_context_menu, null)
+            val widthInPx = (196 * view.context.resources.displayMetrics.density + 0.5f).toInt()
+            val popupWindow = android.widget.PopupWindow(
+                popupView,
+                widthInPx,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                true
+            )
+            popupWindow.elevation = 16f
+
+            // 메모 수정 버튼 클릭 시
+            popupView.findViewById<android.widget.LinearLayout>(R.id.select).setOnClickListener {
+                popupWindow.dismiss()
+            }
+
+            // 메모 검색 버튼 클릭 시
+            popupView.findViewById<android.widget.LinearLayout>(R.id.settings).setOnClickListener {
+                val intent = Intent(requireContext(), SettingsActivity::class.java)
+                startActivity(intent)
+                popupWindow.dismiss()
+            }
+
+            popupWindow.showAsDropDown(view)
+            true
         }
 
         // 검색 버튼

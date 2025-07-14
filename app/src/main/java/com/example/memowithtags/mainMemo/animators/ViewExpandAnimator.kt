@@ -32,7 +32,7 @@ object ViewExpandAnimator {
             container.layoutParams.height = value
             container.requestLayout()
         }
-        heightAnimator.duration = 250
+        heightAnimator.duration = 200
 
         // 5. 높이 애니메이션 끝나면 buttonBar fade-in
         heightAnimator.addListener(object : AnimatorListenerAdapter() {
@@ -63,7 +63,7 @@ object ViewExpandAnimator {
                     container.layoutParams.height = value
                     container.requestLayout()
                 }
-                heightAnimator.duration = 250
+                heightAnimator.duration = 200
                 heightAnimator.addListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
                         container.visibility = View.GONE

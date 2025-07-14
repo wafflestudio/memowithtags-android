@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
@@ -94,6 +95,40 @@ class MemoAdapter(
                 expandedPosition.add(position)
                 notifyItemChanged(position, "EXPAND")
             }
+        }
+
+        holder.itemView.setOnLongClickListener { view ->
+
+            val inflater = LayoutInflater.from(view.context)
+            val popupView = inflater.inflate(R.layout.memo_context_menu, null)
+            val widthInPx = (196 * view.context.resources.displayMetrics.density + 0.5f).toInt()
+            val popupWindow = PopupWindow(
+                popupView,
+                widthInPx,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                true
+            )
+            popupWindow.elevation = 16f
+
+            // 메모 수정 버튼 클릭 시
+            popupView.findViewById<LinearLayout>(R.id.memoEdit).setOnClickListener {
+                onEditClick?.let { it1 -> it1(memo, sortedTagIds) }
+                popupWindow.dismiss()
+            }
+
+            // 메모 검색 버튼 클릭 시
+            popupView.findViewById<LinearLayout>(R.id.memoSearch).setOnClickListener {
+                onSearchClick?.let { it1 -> it1(memo) }
+                popupWindow.dismiss()
+            }
+
+            // 메모 삭제 버튼 클릭 시
+            popupView.findViewById<LinearLayout>(R.id.memoDelete).setOnClickListener {
+                popupWindow.dismiss()
+            }
+
+            popupWindow.showAsDropDown(view)
+            true
         }
 
         holder.itemView.findViewById<Button>(R.id.searchButton).setOnClickListener {
