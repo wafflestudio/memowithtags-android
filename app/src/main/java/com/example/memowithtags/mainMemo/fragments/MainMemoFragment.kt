@@ -8,6 +8,7 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Memo
 import com.example.memowithtags.common.model.tagColors
@@ -37,6 +39,9 @@ class MainMemoFragment : Fragment() {
 
     private val memoViewModel: MemoViewModel by activityViewModels()
     private val tagViewModel: TagViewModel by activityViewModels()
+
+    var isPaging = false
+    var isInitialLoad = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -86,17 +91,43 @@ class MainMemoFragment : Fragment() {
                 reverseLayout = true
                 stackFromEnd = true
             }
+
             adapter = memoAdapter
+            //페이지네이션
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    if (!recyclerView.canScrollVertically(-1)) {
+                        isPaging = true
+                        memoViewModel.loadNextPage()
+                    }
+                }
+            })
         }
 
         memoViewModel.memoList.observe(viewLifecycleOwner) { memoList ->
-            memoAdapter.updateData(memoList.map { it.id })
-            if (memoList.isNotEmpty()) {
-                binding.memoRecyclerView.scrollToPosition(0)
+            val layoutManager = binding.memoRecyclerView.layoutManager as LinearLayoutManager
+
+            if (isPaging) {
+                //페이지네이션 시 화면 밑으로 이동하는 것 방지
+                val lastVisible = layoutManager.findLastVisibleItemPosition()
+                val lastView = layoutManager.findViewByPosition(lastVisible)
+                val offset = lastView?.top ?: 0
+
+                memoAdapter.updateData(memoList.map { it.id })
+
+                layoutManager.scrollToPositionWithOffset(lastVisible, offset)
+
+                isPaging = false
+            } else {
+                memoAdapter.updateData(memoList.map { it.id })
+                if (memoList.isNotEmpty()) {
+                    binding.memoRecyclerView.scrollToPosition(0)
+                }
+                isInitialLoad = false
             }
         }
 
-        memoViewModel.getMyMemos()
+        memoViewModel.resetAndLoadFirstPage()
 
         // 키보드 활성화 -> 태그 생성창 보이기, 메모 수정 아이콘 바 보이기
         view.viewTreeObserver.addOnGlobalLayoutListener {

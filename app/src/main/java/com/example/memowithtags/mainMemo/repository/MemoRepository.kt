@@ -21,7 +21,7 @@ class MemoRepository @Inject constructor(
         startDate: String?,
         endDate: String?,
         page: Int?,
-        onResult: (List<Memo>) -> Unit,
+        onResult: (List<Memo>,Int) -> Unit,
         onError: (Throwable) -> Unit
     ) {
         memoApi.searchMemo(content, tagIds, startDate, endDate, page)
@@ -31,7 +31,10 @@ class MemoRepository @Inject constructor(
                     response: Response<SearchMemoResponse>
                 ) {
                     if (response.isSuccessful) {
-                        onResult(response.body()?.results ?: emptyList())
+                        val body = response.body()
+                        val memos = body?.results ?: emptyList()
+                        val totalPages = body?.totalPages ?: 1  // 기본 1페이지
+                        onResult(memos, totalPages)
                     } else {
                         onError(Throwable("서버 응답 실패: ${response.code()}"))
                     }
