@@ -9,12 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Memo
 import com.example.memowithtags.common.model.Tag
+import com.example.memowithtags.mainMemo.animators.ViewExpandAnimator
 import com.google.android.flexbox.FlexboxLayout
 import java.util.Locale
 
@@ -29,12 +31,13 @@ class MemoAdapter(
 ) : RecyclerView.Adapter<MemoAdapter.MemoViewHolder>() {
 
     private var memoList: List<Int> = emptyList()
-    private var expandedPosition: Int? = null
+    private var expandedPosition: MutableList<Int> = mutableListOf()
 
     inner class MemoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val memoContent: TextView = itemView.findViewById(R.id.memoContent)
         val tagContainer: FlexboxLayout = itemView.findViewById(R.id.tagContainer)
         val memoCreated: TextView = itemView.findViewById(R.id.memoCreated)
+        val buttonBarContainer: FrameLayout = itemView.findViewById(R.id.buttonBarContainer)
         val buttonBar: LinearLayout = itemView.findViewById(R.id.buttonBar)
     }
 
@@ -83,26 +86,13 @@ class MemoAdapter(
             holder.tagContainer.addView(tagView)
         }
 
-        val isExpanded = expandedPosition == position
-        if (isExpanded) {
-            holder.buttonBar.visibility = View.VISIBLE
-            holder.buttonBar.animate().alpha(1f).translationY(0f).setDuration(300).start()
-        } else {
-            holder.buttonBar.animate()
-                .alpha(0f).translationY(-20f).setDuration(300)
-                .withEndAction { holder.buttonBar.visibility = View.GONE }
-                .start()
-        }
-
         holder.itemView.setOnClickListener {
-            val previousExpanded = expandedPosition
-            if (isExpanded) {
-                expandedPosition = null
-                notifyItemChanged(position)
+            if (position in expandedPosition) {
+                expandedPosition.remove(position)
+                notifyItemChanged(position, "COLLAPSE")
             } else {
-                expandedPosition = position
-                notifyItemChanged(previousExpanded ?: -1)
-                notifyItemChanged(position)
+                expandedPosition.add(position)
+                notifyItemChanged(position, "EXPAND")
             }
         }
 
@@ -112,6 +102,26 @@ class MemoAdapter(
 
         holder.itemView.findViewById<Button>(R.id.editButton).setOnClickListener {
             onEditClick?.let { it1 -> it1(memo, sortedTagIds) }
+        }
+    }
+
+    override fun onBindViewHolder(
+        holder: MemoViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        if (payloads.isNotEmpty()) {
+            val isExpanded = position in expandedPosition
+
+            holder.buttonBar.animate().cancel() // 기존 애니메이션 정지
+
+            if (isExpanded) {
+                ViewExpandAnimator.expandView(holder.buttonBarContainer, holder.buttonBar)
+            } else {
+                ViewExpandAnimator.collapseView(holder.buttonBarContainer, holder.buttonBar)
+            }
+        } else {
+            onBindViewHolder(holder, position)
         }
     }
 

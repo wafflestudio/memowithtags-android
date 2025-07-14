@@ -37,71 +37,77 @@
             app:justifyContent="flex_start"
             app:flexDirection="row" />
 
-        <LinearLayout
-            android:id="@+id/buttonBar"
+        <FrameLayout
+            android:id="@+id/buttonBarContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:orientation="horizontal"
-            android:alpha="0"
-            android:translationY="-8dp"
-            android:layout_gravity="bottom"
-            android:layout_marginTop="10dp"
-            android:paddingHorizontal="8dp"
-            android:animateLayoutChanges="true">
+            android:layout_height="wrap_content">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:id="@+id/buttonBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_gravity="bottom"
+                android:paddingTop="10dp"
+                android:alpha="0"
+                android:orientation="horizontal"
+                android:paddingHorizontal="8dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/memoCreated"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0000년 00월 00일"
+                        android:textColor="#A0A0A1"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:id="@+id/memoCreated"
+                    android:layout_weight="1" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/searchButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0000년 00월 00일"
-                    android:textSize="11sp"
-                    android:textColor="#A0A0A1"/>
+                    android:layout_marginEnd="4dp"
+                    android:background="@drawable/rounded_edittext"
+                    android:drawableEnd="@drawable/memoitem_search_icon"
+                    android:drawablePadding="4dp"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="6dp"
+                    android:stateListAnimator="@null"
+                    android:text="관련 검색"
+                    android:textSize="12sp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/editButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_edittext"
+                    android:drawableEnd="@drawable/memoitem_edit_icon"
+                    android:drawablePadding="4dp"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="6dp"
+                    android:stateListAnimator="@null"
+                    android:text="간편 수정"
+                    android:textSize="12sp" />
             </LinearLayout>
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/searchButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_edittext"
-                android:textSize="12sp"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:stateListAnimator="@null"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="6dp"
-                android:layout_marginEnd="4dp"
-                android:text="관련 검색"
-                android:drawablePadding="4dp"
-                android:drawableEnd="@drawable/memoitem_search_icon"/>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/editButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_edittext"
-                android:textSize="12sp"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:stateListAnimator="@null"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="6dp"
-                android:text="간편 수정"
-                android:drawablePadding="4dp"
-                android:drawableEnd="@drawable/memoitem_edit_icon"/>
-        </LinearLayout>
+        </FrameLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
