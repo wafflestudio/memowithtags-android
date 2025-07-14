@@ -24,15 +24,42 @@ class MemoViewModel @Inject constructor(
     private val _editingMemo = MutableLiveData<Memo?>()
     val editingMemo: LiveData<Memo?> get() = _editingMemo
 
-    fun getMyMemos() {
+    private var currentPage = 1
+    private var isLastPage = false
+    private var isLoading = false
+
+    fun resetAndLoadFirstPage() {
+        currentPage = 1
+        isLastPage = false
+        _memoList.value = emptyList()
+        loadNextPage()
+    }
+
+    fun loadNextPage() {
+        if (isLoading || isLastPage) return
+
+        Log.d("Paging", "loadNextPage 호출됨. 현재 페이지: $currentPage")
+
+        isLoading = true
+
         memoRepository.getMyMemos(
             content = null,
             tagIds = null,
             startDate = null,
             endDate = null,
-            page = 1,
-            onResult = { memos -> _memoList.postValue(memos) },
-            onError = { error -> Log.e("MemoViewModel", "메모 불러오기 실패", error) }
+            page = currentPage,
+            onResult = { memos, totalPages ->
+                val currentList = _memoList.value.orEmpty()
+                _memoList.postValue(currentList + memos)
+
+                currentPage++
+                isLastPage = currentPage >= totalPages + 1
+                isLoading = false
+            },
+            onError = { error ->
+                Log.e("MemoViewModel", "페이지 불러오기 실패", error)
+                isLoading = false
+            }
         )
     }
 
@@ -43,7 +70,7 @@ class MemoViewModel @Inject constructor(
             request = request,
             onSuccess = { memo ->
                 Log.d("MemoViewModel", "메모 등록 성공: $memo")
-                getMyMemos()
+                resetAndLoadFirstPage()
             },
             onError = { error ->
                 Log.e("MemoViewModel", "메모 등록 실패", error)
@@ -63,7 +90,7 @@ class MemoViewModel @Inject constructor(
             request = request,
             onSuccess = {
                 clearEditing()
-                getMyMemos()
+                resetAndLoadFirstPage()
             },
             onError = {
                 Log.e("MemoViewModel", "메모 수정 실패", it)
