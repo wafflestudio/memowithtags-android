@@ -27,6 +27,7 @@ class MemoAdapter(
 
     private val onSearchClick: ((Memo) -> Unit) ? = null,
     private val onEditClick: ((Memo, List<Int>) -> Unit) ? = null,
+    private val onEasyEditClick: ((Memo, List<Int>) -> Unit) ? = null,
     private val resolveMemo: (Int) -> Memo?
 
 ) : RecyclerView.Adapter<MemoAdapter.MemoViewHolder>() {
@@ -136,7 +137,7 @@ class MemoAdapter(
         }
 
         holder.itemView.findViewById<Button>(R.id.editButton).setOnClickListener {
-            onEditClick?.let { it1 -> it1(memo, sortedTagIds) }
+            onEasyEditClick?.let { it1 -> it1(memo, sortedTagIds) }
         }
     }
 

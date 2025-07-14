@@ -60,6 +60,18 @@ class MainMemoFragment : Fragment() {
         tagViewModel.getMyTags()
 
         // 메모 recycler view 세팅
+        val onEditClick: (Memo, List<Int>) -> Unit = { memo, tagIds ->
+            val bundle = Bundle().apply {
+                putString("memoText", memo.content)
+                if (memo != null) {
+                    putInt("memoId", memo.id)
+                    putIntegerArrayList("tagIds", ArrayList(memo.tagIds))
+                }
+            }
+            memoViewModel.startEditing(memo)
+            findNavController().navigate(R.id.action_mainMemo_to_editMemo, bundle)
+        }
+
         val onSearchClick: (Memo) -> Unit = { memo ->
             val bundle = Bundle().apply {
                 putString("memoContent", memo.content)
@@ -67,7 +79,7 @@ class MainMemoFragment : Fragment() {
             findNavController().navigate(R.id.action_mainMemo_to_search, bundle)
         }
 
-        val onEditClick: (Memo, List<Int>) -> Unit = onEditClick@{ memoToEdit, tagIds ->
+        val onEasyEditClick: (Memo, List<Int>) -> Unit = onEditClick@{ memoToEdit, tagIds ->
             memoViewModel.startEditing(memoToEdit)
             binding.newMemoText.setText(memoToEdit.content)
             tagViewModel.setSelectedTags(tagIds)
@@ -78,6 +90,7 @@ class MainMemoFragment : Fragment() {
             tagViewModel::getTag,
             onSearchClick,
             onEditClick,
+            onEasyEditClick,
             memoViewModel::getMemo
         )
 
