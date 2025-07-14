@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Memo
 import com.example.memowithtags.databinding.FragmentSearchBinding
 import com.example.memowithtags.mainMemo.Adapters.MemoAdapter
@@ -108,10 +109,23 @@ class SearchFragment : Fragment() {
             tagViewModel.updateQuery(memo.content)
         }
 
+        val onEditClick: (Memo, List<Int>) -> Unit = { memo, tagIds ->
+            val bundle = Bundle().apply {
+                putString("memoText", memo.content)
+                if (memo != null) {
+                    putInt("memoId", memo.id)
+                    putIntegerArrayList("tagIds", ArrayList(memo.tagIds))
+                }
+            }
+            memoViewModel.startEditing(memo)
+            findNavController().navigate(R.id.action_searchFragment_to_editMemoFragment, bundle)
+        }
+
         memoAdapter = MemoAdapter(
             tagViewModel::sortTagIds,
             tagViewModel::getTag,
             onSearchClick,
+            onEditClick,
             null,
             memoViewModel::getMemo
         )

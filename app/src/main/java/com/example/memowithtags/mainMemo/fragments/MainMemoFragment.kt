@@ -64,6 +64,18 @@ class MainMemoFragment : Fragment() {
         tagViewModel.getMyTags()
 
         // 메모 recycler view 세팅
+        val onEditClick: (Memo, List<Int>) -> Unit = { memo, tagIds ->
+            val bundle = Bundle().apply {
+                putString("memoText", memo.content)
+                if (memo != null) {
+                    putInt("memoId", memo.id)
+                    putIntegerArrayList("tagIds", ArrayList(memo.tagIds))
+                }
+            }
+            memoViewModel.startEditing(memo)
+            findNavController().navigate(R.id.action_mainMemo_to_editMemo, bundle)
+        }
+
         val onSearchClick: (Memo) -> Unit = { memo ->
             val bundle = Bundle().apply {
                 putString("memoContent", memo.content)
@@ -71,7 +83,7 @@ class MainMemoFragment : Fragment() {
             findNavController().navigate(R.id.action_mainMemo_to_search, bundle)
         }
 
-        val onEditClick: (Memo, List<Int>) -> Unit = onEditClick@{ memoToEdit, tagIds ->
+        val onEasyEditClick: (Memo, List<Int>) -> Unit = onEditClick@{ memoToEdit, tagIds ->
             memoViewModel.startEditing(memoToEdit)
             binding.newMemoText.setText(memoToEdit.content)
             tagViewModel.setSelectedTags(tagIds)
@@ -82,6 +94,7 @@ class MainMemoFragment : Fragment() {
             tagViewModel::getTag,
             onSearchClick,
             onEditClick,
+            onEasyEditClick,
             memoViewModel::getMemo
         )
 
@@ -197,9 +210,33 @@ class MainMemoFragment : Fragment() {
         }
 
         // 설정 버튼
-        binding.iconSettings.setOnClickListener {
-            val intent = Intent(requireContext(), SettingsActivity::class.java)
-            startActivity(intent)
+        binding.iconSettings.setOnClickListener { view ->
+
+            val inflater = LayoutInflater.from(view.context)
+            val popupView = inflater.inflate(R.layout.settings_context_menu, null)
+            val widthInPx = (196 * view.context.resources.displayMetrics.density + 0.5f).toInt()
+            val popupWindow = android.widget.PopupWindow(
+                popupView,
+                widthInPx,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                true
+            )
+            popupWindow.elevation = 16f
+
+            // 메모 수정 버튼 클릭 시
+            popupView.findViewById<android.widget.LinearLayout>(R.id.select).setOnClickListener {
+                popupWindow.dismiss()
+            }
+
+            // 메모 검색 버튼 클릭 시
+            popupView.findViewById<android.widget.LinearLayout>(R.id.settings).setOnClickListener {
+                val intent = Intent(requireContext(), SettingsActivity::class.java)
+                startActivity(intent)
+                popupWindow.dismiss()
+            }
+
+            popupWindow.showAsDropDown(view)
+            true
         }
 
         // 검색 버튼
