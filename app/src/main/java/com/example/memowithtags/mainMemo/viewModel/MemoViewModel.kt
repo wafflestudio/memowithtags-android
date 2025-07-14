@@ -63,7 +63,6 @@ class MemoViewModel @Inject constructor(
         )
     }
 
-
     fun postMemo(content: String, tagIds: List<Int>) {
         val request = CreateMemoRequest(content, tagIds, false)
 

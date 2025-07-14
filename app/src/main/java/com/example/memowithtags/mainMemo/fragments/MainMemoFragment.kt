@@ -8,7 +8,6 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -93,7 +92,7 @@ class MainMemoFragment : Fragment() {
             }
 
             adapter = memoAdapter
-            //페이지네이션
+            // 페이지네이션
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     if (!recyclerView.canScrollVertically(-1)) {
@@ -108,7 +107,7 @@ class MainMemoFragment : Fragment() {
             val layoutManager = binding.memoRecyclerView.layoutManager as LinearLayoutManager
 
             if (isPaging) {
-                //페이지네이션 시 화면 밑으로 이동하는 것 방지
+                // 페이지네이션 시 화면 밑으로 이동하는 것 방지
                 val lastVisible = layoutManager.findLastVisibleItemPosition()
                 val lastView = layoutManager.findViewByPosition(lastVisible)
                 val offset = lastView?.top ?: 0
