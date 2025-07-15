@@ -39,9 +39,6 @@ class MainMemoFragment : Fragment() {
     private val memoViewModel: MemoViewModel by activityViewModels()
     private val tagViewModel: TagViewModel by activityViewModels()
 
-    var isPaging = false
-    var isInitialLoad = true
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -108,8 +105,10 @@ class MainMemoFragment : Fragment() {
             // 페이지네이션
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    if (!recyclerView.canScrollVertically(-1)) {
-                        isPaging = true
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val lastVisiblePosition = layoutManager.findLastVisibleItemPosition()
+
+                    if (lastVisiblePosition >= layoutManager.itemCount - 3) {
                         memoViewModel.loadNextPage()
                     }
                 }
@@ -117,25 +116,16 @@ class MainMemoFragment : Fragment() {
         }
 
         memoViewModel.memoList.observe(viewLifecycleOwner) { memoList ->
-            val layoutManager = binding.memoRecyclerView.layoutManager as LinearLayoutManager
+            memoAdapter.updateData(memoList.map { it.id })
 
-            if (isPaging) {
-                // 페이지네이션 시 화면 밑으로 이동하는 것 방지
-                val lastVisible = layoutManager.findLastVisibleItemPosition()
-                val lastView = layoutManager.findViewByPosition(lastVisible)
-                val offset = lastView?.top ?: 0
-
-                memoAdapter.updateData(memoList.map { it.id })
-
-                layoutManager.scrollToPositionWithOffset(lastVisible, offset)
-
-                isPaging = false
-            } else {
-                memoAdapter.updateData(memoList.map { it.id })
-                if (memoList.isNotEmpty()) {
-                    binding.memoRecyclerView.scrollToPosition(0)
+            if (memoList.isNotEmpty()) {
+                memoViewModel.isPaging.value?.let { isPaging ->
+                    if (!isPaging) {
+                        binding.memoRecyclerView.scrollToPosition(0)
+                    } else {
+                        memoViewModel.stopPaging()
+                    }
                 }
-                isInitialLoad = false
             }
         }
 
