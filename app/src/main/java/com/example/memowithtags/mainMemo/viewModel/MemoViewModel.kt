@@ -27,16 +27,24 @@ class MemoViewModel @Inject constructor(
     private var currentPage = 1
     private var isLastPage = false
     private var isLoading = false
+    var lastLoadedItemCount = 0
+
+    // fragment 참고용
+    private val _isPaging = MutableLiveData(false)
+    val isPaging: LiveData<Boolean> = _isPaging
+    private var isinitialPaging = false
 
     fun resetAndLoadFirstPage() {
         currentPage = 1
         isLastPage = false
         _memoList.value = emptyList()
+        isinitialPaging = true
         loadNextPage()
     }
 
     fun loadNextPage() {
         if (isLoading || isLastPage) return
+        if (!isinitialPaging) _isPaging.postValue(true)
 
         Log.d("Paging", "loadNextPage 호출됨. 현재 페이지: $currentPage")
 
@@ -52,6 +60,8 @@ class MemoViewModel @Inject constructor(
                 val currentList = _memoList.value.orEmpty()
                 _memoList.postValue(currentList + memos)
 
+                lastLoadedItemCount = memos.size
+
                 currentPage++
                 isLastPage = currentPage >= totalPages + 1
                 isLoading = false
@@ -61,6 +71,12 @@ class MemoViewModel @Inject constructor(
                 isLoading = false
             }
         )
+
+        isinitialPaging = false
+    }
+
+    fun stopPaging() {
+        _isPaging.postValue(false)
     }
 
     fun postMemo(content: String, tagIds: List<Int>) {
