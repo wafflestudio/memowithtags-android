@@ -4,14 +4,12 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Rect
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -19,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Memo
+import com.example.memowithtags.common.model.MemoWithTags
 import com.example.memowithtags.common.model.tagColors
 import com.example.memowithtags.databinding.FragmentMainMemoBinding
 import com.example.memowithtags.mainMemo.Adapters.MemoAdapter
@@ -26,6 +25,7 @@ import com.example.memowithtags.mainMemo.Adapters.TagAdapter
 import com.example.memowithtags.mainMemo.viewModel.MemoViewModel
 import com.example.memowithtags.mainMemo.viewModel.TagViewModel
 import com.example.memowithtags.settings.SettingsActivity
+import com.google.android.flexbox.FlexboxLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -35,6 +35,7 @@ class MainMemoFragment : Fragment() {
 
     private lateinit var memoAdapter: MemoAdapter
     private lateinit var tagAdapter: TagAdapter
+    private lateinit var selectedTagAdapter: TagAdapter
 
     private val memoViewModel: MemoViewModel by activityViewModels()
     private val tagViewModel: TagViewModel by activityViewModels()
@@ -54,10 +55,10 @@ class MainMemoFragment : Fragment() {
         // 태그 recycler view 세팅
         setupTagRecyclerView()
 
-        tagViewModel.selectedTagIds.observe(viewLifecycleOwner) {
-            renderSelectedTags(it)
-        }
+        // selected tag recycler view 세팅
+        setupSelectedTagRecyclerView()
 
+        // 태그 불러오기
         tagViewModel.getMyTags()
 
         // 메모 recycler view 세팅
@@ -87,12 +88,9 @@ class MainMemoFragment : Fragment() {
         }
 
         memoAdapter = MemoAdapter(
-            tagViewModel::sortTagIds,
-            tagViewModel::getTag,
             onSearchClick,
             onEditClick,
-            onEasyEditClick,
-            memoViewModel::getMemo
+            onEasyEditClick
         )
 
         binding.memoRecyclerView.apply {
@@ -116,8 +114,13 @@ class MainMemoFragment : Fragment() {
         }
 
         memoViewModel.memoList.observe(viewLifecycleOwner) { memoList ->
-            memoAdapter.updateData(memoList.map { it.id })
-
+            memoAdapter.submitList(
+                memoList.map { memo ->
+                    val sortedTagIds = tagViewModel.sortTagIds(memo.tagIds)
+                    val tags = tagViewModel.tagList.value?.filter { it.id in sortedTagIds } ?: emptyList()
+                    MemoWithTags(memo, tags)
+                }
+            )
             if (memoList.isNotEmpty()) {
                 memoViewModel.isPaging.value?.let { isPaging ->
                     if (!isPaging) {
@@ -237,8 +240,7 @@ class MainMemoFragment : Fragment() {
 
     private fun setupTagRecyclerView() {
         tagAdapter = TagAdapter(
-            onTagClick = tagViewModel::selectTag,
-            tagResolver = tagViewModel::getTag
+            onTagClick = tagViewModel::selectTag
         )
 
         binding.tagRecyclerView.apply {
@@ -249,6 +251,13 @@ class MainMemoFragment : Fragment() {
         // 전체 태그가 변경될 때도 반영
         tagViewModel.tagList.observe(viewLifecycleOwner) {
             updateTagAdapterData()
+            memoAdapter.submitList(
+                memoViewModel.memoList.value?.map { memo ->
+                    val sortedTagIds = tagViewModel.sortTagIds(memo.tagIds)
+                    val tags = tagViewModel.tagList.value?.filter { it.id in sortedTagIds } ?: emptyList()
+                    MemoWithTags(memo, tags)
+                }
+            )
         }
 
         // 검색 결과가 변경될 때도 반영
@@ -284,13 +293,12 @@ class MainMemoFragment : Fragment() {
             val visibleSearchResults = searchResults.filter { tagId ->
                 tagViewModel.getTag(tagId)?.isVisible == true
             }
-            tagAdapter.updateData(visibleSearchResults)
+            tagAdapter.submitList(visibleSearchResults.map { tagViewModel.getTag(it) })
         } else {
             // 검색어가 없을 때 → 전체 visible 태그 표시
-            tagAdapter.updateData(
+            tagAdapter.submitList(
                 tagViewModel.tagList.value
                     ?.filter { it.isVisible }
-                    ?.map { it.id }
                     ?: emptyList()
             )
         }
@@ -318,31 +326,18 @@ class MainMemoFragment : Fragment() {
         }
     }
 
-    private fun renderSelectedTags(tagIds: List<Int>) {
-        binding.selectedTagContainer.removeAllViews()
+    private fun setupSelectedTagRecyclerView() {
+        selectedTagAdapter = TagAdapter(
+            onTagClick = tagViewModel::unselectTag
+        )
 
-        for (tagId in tagIds) {
-            val tag = tagViewModel.getTag(tagId) ?: continue
-            val tagView = LayoutInflater.from(requireContext())
-                .inflate(R.layout.item_selected_tag, binding.selectedTagContainer, false)
+        binding.selectedTagRecyclerView.apply {
+            layoutManager = FlexboxLayoutManager(requireContext())
+            adapter = selectedTagAdapter
+        }
 
-            val textView = tagView.findViewById<TextView>(R.id.tagText)
-            textView.text = tag.name
-
-            val background = textView.background
-            if (background is GradientDrawable) {
-                try {
-                    background.setColor(Color.parseColor(tag.colorHex))
-                } catch (e: IllegalArgumentException) {
-                    background.setColor(Color.LTGRAY)
-                }
-            }
-
-            textView.setOnClickListener {
-                tagViewModel.unselectTag(tagId)
-            }
-
-            binding.selectedTagContainer.addView(tagView)
+        tagViewModel.selectedTagIds.observe(viewLifecycleOwner) {
+            selectedTagAdapter.submitList(tagViewModel.selectedTagIds.value?.map { tagViewModel.getTag(it) })
         }
     }
 
@@ -350,10 +345,7 @@ class MainMemoFragment : Fragment() {
         super.onResume()
         // update tags
         tagViewModel.reloadTags()
-        renderSelectedTags(tagViewModel.selectedTagIds.value ?: emptyList())
-
-        // update memos
-        memoAdapter.notifyDataSetChanged()
+        selectedTagAdapter.submitList(tagViewModel.selectedTagIds.value?.map { tagViewModel.getTag(it) })
     }
 
     override fun onDestroyView() {

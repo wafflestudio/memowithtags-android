@@ -29,6 +29,11 @@
             android:layout_marginBottom="4dp"
             android:textColor="@android:color/black" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tagRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/tagContainer"
             android:layout_width="match_parent"

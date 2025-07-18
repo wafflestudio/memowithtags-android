@@ -8,6 +8,23 @@ import android.view.ViewGroup
 
 object ViewExpandAnimator {
 
+    fun setExpandedState(container: ViewGroup, buttonBar: View) {
+        container.visibility = View.VISIBLE
+        buttonBar.visibility = View.VISIBLE
+        buttonBar.alpha = 1f
+
+        val params = container.layoutParams
+        params.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        container.layoutParams = params
+    }
+
+    fun setCollapsedState(container: ViewGroup, buttonBar: View) {
+        buttonBar.alpha = 0f
+        buttonBar.visibility = View.INVISIBLE
+        container.layoutParams.height = 0
+        container.visibility = View.INVISIBLE
+    }
+
     fun expandView(container: ViewGroup, buttonBar: View) {
         // 1. buttonBar의 실제 높이 측정
         buttonBar.measure(

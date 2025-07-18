@@ -1,10 +1,7 @@
 package com.example.memowithtags.mainMemo.Adapters
 
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.icu.text.SimpleDateFormat
 import android.icu.util.TimeZone
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,34 +10,94 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Memo
-import com.example.memowithtags.common.model.Tag
+import com.example.memowithtags.common.model.MemoWithTags
 import com.example.memowithtags.mainMemo.animators.ViewExpandAnimator
-import com.google.android.flexbox.FlexboxLayout
+import com.google.android.flexbox.FlexboxLayoutManager
 import java.util.Locale
 
 class MemoAdapter(
-    private val sortTagIds: (List<Int>) -> List<Int>,
-    private val resolveTag: (Int) -> Tag?,
-
     private val onSearchClick: ((Memo) -> Unit) ? = null,
     private val onEditClick: ((Memo, List<Int>) -> Unit) ? = null,
-    private val onEasyEditClick: ((Memo, List<Int>) -> Unit) ? = null,
-    private val resolveMemo: (Int) -> Memo?
+    private val onEasyEditClick: ((Memo, List<Int>) -> Unit) ? = null
+) : ListAdapter<MemoWithTags, MemoAdapter.MemoViewHolder>(DiffCallback()) {
 
-) : RecyclerView.Adapter<MemoAdapter.MemoViewHolder>() {
+    private var expandedMemoIds: MutableSet<Int> = mutableSetOf()
 
-    private var memoList: List<Int> = emptyList()
-    private var expandedPosition: MutableList<Int> = mutableListOf()
+    companion object {
+        val TAG_DIFF_CALLBACK = TagAdapter.DiffCallback()
+    }
 
     inner class MemoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val memoContent: TextView = itemView.findViewById(R.id.memoContent)
-        val tagContainer: FlexboxLayout = itemView.findViewById(R.id.tagContainer)
-        val memoCreated: TextView = itemView.findViewById(R.id.memoCreated)
+
+        // initialize tag recycler view
+        private val tagAdapter: TagAdapter = TagAdapter()
+
+        init {
+            itemView.findViewById<RecyclerView>(R.id.tagRecyclerView).apply {
+                layoutManager = FlexboxLayoutManager(itemView.context)
+                adapter = tagAdapter
+            }
+        }
+
         val buttonBarContainer: FrameLayout = itemView.findViewById(R.id.buttonBarContainer)
         val buttonBar: LinearLayout = itemView.findViewById(R.id.buttonBar)
+
+        fun bind(memoWithTags: MemoWithTags) {
+            val memoContent: TextView = itemView.findViewById(R.id.memoContent)
+            val memoCreated: TextView = itemView.findViewById(R.id.memoCreated)
+
+            memoContent.text = memoWithTags.memo.content
+            memoCreated.text = formatDate(memoWithTags.memo.createdAt)
+
+            tagAdapter.submitList(memoWithTags.tags)
+
+            itemView.setOnLongClickListener { view ->
+
+                val inflater = LayoutInflater.from(view.context)
+                val popupView = inflater.inflate(R.layout.memo_context_menu, null)
+                val widthInPx = (196 * view.context.resources.displayMetrics.density + 0.5f).toInt()
+                val popupWindow = PopupWindow(
+                    popupView,
+                    widthInPx,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    true
+                )
+                popupWindow.elevation = 16f
+
+                // 메모 수정 버튼 클릭 시
+                popupView.findViewById<LinearLayout>(R.id.memoEdit).setOnClickListener {
+                    onEditClick?.let { it1 -> it1(memoWithTags.memo, memoWithTags.memo.tagIds) }
+                    popupWindow.dismiss()
+                }
+
+                // 메모 검색 버튼 클릭 시
+                popupView.findViewById<LinearLayout>(R.id.memoSearch).setOnClickListener {
+                    onSearchClick?.let { it1 -> it1(memoWithTags.memo) }
+                    popupWindow.dismiss()
+                }
+
+                // 메모 삭제 버튼 클릭 시
+                popupView.findViewById<LinearLayout>(R.id.memoDelete).setOnClickListener {
+                    popupWindow.dismiss()
+                }
+
+                popupWindow.showAsDropDown(view)
+                true
+            }
+
+            itemView.findViewById<Button>(R.id.searchButton).setOnClickListener {
+                onSearchClick?.let { it1 -> it1(memoWithTags.memo) }
+            }
+
+            itemView.findViewById<Button>(R.id.editButton).setOnClickListener {
+                onEasyEditClick?.let { it1 -> it1(memoWithTags.memo, memoWithTags.memo.tagIds) }
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemoViewHolder {
@@ -48,120 +105,33 @@ class MemoAdapter(
         return MemoViewHolder(view)
     }
 
-    override fun getItemCount(): Int = memoList.size
-
     override fun onBindViewHolder(holder: MemoViewHolder, position: Int) {
-        val memoId = memoList[position]
-        Log.d("MemoAdapter", "memoId[$position] = $memoId")
+        val memoWithTags = getItem(position) ?: return
 
-        val memo = resolveMemo(memoId)
-        if (memo == null) {
-            Log.d("MemoAdapter", "resolveMemo($memoId) → null")
-            return
+        holder.bind(memoWithTags)
+
+        if (memoWithTags.memo.id in expandedMemoIds) {
+            ViewExpandAnimator.setExpandedState(holder.buttonBarContainer, holder.buttonBar)
         } else {
-            Log.d("MemoAdapter", "resolveMemo($memoId) → content = ${memo.content}, tagIds = ${memo.tagIds}, createdAt = ${memo.createdAt}")
-        }
-        holder.memoContent.text = memo.content
-        holder.memoCreated.text = formatDate(memo.createdAt)
-
-        holder.tagContainer.removeAllViews()
-
-        val sortedTagIds = sortTagIds(memo.tagIds)
-
-        for (tagId in sortedTagIds) {
-            val tag = resolveTag(tagId) ?: continue
-
-            val tagView = LayoutInflater.from(holder.itemView.context)
-                .inflate(R.layout.item_tag, holder.tagContainer, false) as TextView
-
-            tagView.text = tag.name
-
-            val background = tagView.background
-            if (background is GradientDrawable) {
-                try {
-                    background.setColor(Color.parseColor(tag.colorHex))
-                } catch (e: IllegalArgumentException) {
-                    background.setColor(Color.LTGRAY)
-                }
-            }
-
-            holder.tagContainer.addView(tagView)
+            ViewExpandAnimator.setCollapsedState(holder.buttonBarContainer, holder.buttonBar)
         }
 
         holder.itemView.setOnClickListener {
-            if (position in expandedPosition) {
-                expandedPosition.remove(position)
-                notifyItemChanged(position, "COLLAPSE")
-            } else {
-                expandedPosition.add(position)
-                notifyItemChanged(position, "EXPAND")
-            }
-        }
+            val isExpanded = memoWithTags.memo.id in expandedMemoIds
 
-        holder.itemView.setOnLongClickListener { view ->
-
-            val inflater = LayoutInflater.from(view.context)
-            val popupView = inflater.inflate(R.layout.memo_context_menu, null)
-            val widthInPx = (196 * view.context.resources.displayMetrics.density + 0.5f).toInt()
-            val popupWindow = PopupWindow(
-                popupView,
-                widthInPx,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                true
-            )
-            popupWindow.elevation = 16f
-
-            // 메모 수정 버튼 클릭 시
-            popupView.findViewById<LinearLayout>(R.id.memoEdit).setOnClickListener {
-                onEditClick?.let { it1 -> it1(memo, sortedTagIds) }
-                popupWindow.dismiss()
-            }
-
-            // 메모 검색 버튼 클릭 시
-            popupView.findViewById<LinearLayout>(R.id.memoSearch).setOnClickListener {
-                onSearchClick?.let { it1 -> it1(memo) }
-                popupWindow.dismiss()
-            }
-
-            // 메모 삭제 버튼 클릭 시
-            popupView.findViewById<LinearLayout>(R.id.memoDelete).setOnClickListener {
-                popupWindow.dismiss()
-            }
-
-            popupWindow.showAsDropDown(view)
-            true
-        }
-
-        holder.itemView.findViewById<Button>(R.id.searchButton).setOnClickListener {
-            onSearchClick?.let { it1 -> it1(memo) }
-        }
-
-        holder.itemView.findViewById<Button>(R.id.editButton).setOnClickListener {
-            onEasyEditClick?.let { it1 -> it1(memo, sortedTagIds) }
-        }
-    }
-
-    override fun onBindViewHolder(
-        holder: MemoViewHolder,
-        position: Int,
-        payloads: MutableList<Any>
-    ) {
-        if (payloads.isNotEmpty()) {
-            val isExpanded = position in expandedPosition
-
-            holder.buttonBar.animate().cancel() // 기존 애니메이션 정지
+            holder.buttonBar.animate().cancel()
 
             if (isExpanded) {
-                ViewExpandAnimator.expandView(holder.buttonBarContainer, holder.buttonBar)
-            } else {
+                expandedMemoIds.remove(memoWithTags.memo.id)
                 ViewExpandAnimator.collapseView(holder.buttonBarContainer, holder.buttonBar)
+            } else {
+                expandedMemoIds.add(memoWithTags.memo.id)
+                ViewExpandAnimator.expandView(holder.buttonBarContainer, holder.buttonBar)
             }
-        } else {
-            onBindViewHolder(holder, position)
         }
     }
 
-    fun formatDate(isoDate: String): String {
+    private fun formatDate(isoDate: String): String {
         val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
         inputFormat.timeZone = TimeZone.getTimeZone("UTC")
 
@@ -171,8 +141,19 @@ class MemoAdapter(
         return outputFormat.format(date)
     }
 
-    fun updateData(newList: List<Int>) {
-        this.memoList = newList
-        notifyDataSetChanged()
+    class DiffCallback : DiffUtil.ItemCallback<MemoWithTags>() {
+        override fun areItemsTheSame(oldItem: MemoWithTags, newItem: MemoWithTags): Boolean {
+            return oldItem.memo.id == newItem.memo.id
+        }
+
+        override fun areContentsTheSame(oldItem: MemoWithTags, newItem: MemoWithTags): Boolean {
+            val isMemoContentsSame = oldItem.memo.content == newItem.memo.content
+
+            if (oldItem.tags.size != newItem.tags.size) return false
+            for (i in oldItem.tags.indices) {
+                if (!Companion.TAG_DIFF_CALLBACK.areContentsTheSame(oldItem.tags[i], newItem.tags[i])) return false
+            }
+            return isMemoContentsSame
+        }
     }
 }

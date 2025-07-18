@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Memo
+import com.example.memowithtags.common.model.MemoWithTags
 import com.example.memowithtags.databinding.FragmentSearchBinding
 import com.example.memowithtags.mainMemo.Adapters.MemoAdapter
 import com.example.memowithtags.mainMemo.Adapters.TagAdapter
@@ -62,11 +63,11 @@ class SearchFragment : Fragment() {
         searchTagAdapter = TagAdapter(onTagClick = { tagId ->
             if (!selectedQueryTags.contains(tagId)) {
                 selectedQueryTags.add(tagId)
-                queryTagAdapter.updateData(selectedQueryTags.toList())
+                queryTagAdapter.submitList(selectedQueryTags.toList().map { tagViewModel.getTag(it) })
                 binding.querytagRecyclerView.visibility = View.VISIBLE
                 searchViewModel.addSelectedTagId(tagId)
             }
-        }, tagViewModel::getTag)
+        })
 
         binding.searchtagRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -81,20 +82,19 @@ class SearchFragment : Fragment() {
                 binding.tagTitleText.visibility = View.GONE
             }
 
-            searchTagAdapter.updateData(tagList)
+            searchTagAdapter.submitList(tagList.map { tagViewModel.getTag(it) })
         }
 
         // 검색창의 tag recyclerview 연결
         queryTagAdapter = TagAdapter(
             onTagClick = { tagId ->
                 selectedQueryTags.remove(tagId)
-                queryTagAdapter.updateData(selectedQueryTags.toList())
+                queryTagAdapter.submitList(selectedQueryTags.toList().map { tagViewModel.getTag(it) })
                 if (selectedQueryTags.isEmpty()) {
                     binding.querytagRecyclerView.visibility = View.GONE
                 }
                 searchViewModel.removeSelectedTagId(tagId)
-            },
-            tagResolver = { tagViewModel.getTag(it) }
+            }
         )
         binding.querytagRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -122,12 +122,9 @@ class SearchFragment : Fragment() {
         }
 
         memoAdapter = MemoAdapter(
-            tagViewModel::sortTagIds,
-            tagViewModel::getTag,
             onSearchClick,
             onEditClick,
-            null,
-            memoViewModel::getMemo
+            null
         )
 
         binding.searchmemoRecyclerView.apply {
@@ -151,7 +148,14 @@ class SearchFragment : Fragment() {
                 binding.memoTitleText.visibility = View.GONE
             }
 
-            memoAdapter.updateData(memoList)
+            memoAdapter.submitList(
+                memoList.map { memoId ->
+                    val memo = memoViewModel.getMemo(memoId) ?: return@map null
+                    val sortedTagIds = tagViewModel.sortTagIds(memo.tagIds)
+                    val tags = tagViewModel.tagList.value?.filter { it.id in sortedTagIds } ?: emptyList()
+                    MemoWithTags(memo, tags)
+                }
+            )
         }
 
         binding.leftArrowIcon.setOnClickListener {

@@ -6,16 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Tag
 
 class TagAdapter(
-    private val onTagClick: (Int) -> Unit,
-    private val tagResolver: (Int) -> Tag?
-) : RecyclerView.Adapter<TagAdapter.TagViewHolder>() {
-
-    private var tagList: List<Int> = emptyList()
+    private val onTagClick: (Int) -> Unit = {},
+    private val onTagLongClick: (Int) -> Unit = {}
+) : ListAdapter<Tag, TagAdapter.TagViewHolder>(DiffCallback()) {
 
     inner class TagViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tagName: TextView = itemView.findViewById(R.id.tagText)
@@ -28,13 +28,11 @@ class TagAdapter(
     }
 
     override fun onBindViewHolder(holder: TagViewHolder, position: Int) {
-        val tagId = tagList[position]
+        val tag = getItem(position)
 
         holder.itemView.setOnClickListener {
-            onTagClick(tagId)
+            onTagClick(tag.id)
         }
-
-        val tag = tagResolver(tagId) ?: return
 
         holder.tagName.text = tag.name
 
@@ -48,10 +46,13 @@ class TagAdapter(
         }
     }
 
-    override fun getItemCount(): Int = tagList.size
+    class DiffCallback : DiffUtil.ItemCallback<Tag>() {
+        override fun areItemsTheSame(oldItem: Tag, newItem: Tag): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-    fun updateData(newTags: List<Int>) {
-        this.tagList = newTags
-        notifyDataSetChanged()
+        override fun areContentsTheSame(oldItem: Tag, newItem: Tag): Boolean {
+            return (oldItem.name == newItem.name) && (oldItem.colorHex == newItem.colorHex)
+        }
     }
 }
