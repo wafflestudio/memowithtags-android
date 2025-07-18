@@ -34,14 +34,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <com.google.android.flexbox.FlexboxLayout
-            android:id="@+id/tagContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:flexWrap="wrap"
-            app:justifyContent="flex_start"
-            app:flexDirection="row" />
-
         <FrameLayout
             android:id="@+id/buttonBarContainer"
             android:layout_width="match_parent"
