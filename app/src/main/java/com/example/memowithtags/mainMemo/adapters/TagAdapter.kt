@@ -18,7 +18,25 @@ class TagAdapter(
 ) : ListAdapter<Tag, TagAdapter.TagViewHolder>(DiffCallback()) {
 
     inner class TagViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tagName: TextView = itemView.findViewById(R.id.tagText)
+        private val tagName: TextView = itemView.findViewById(R.id.tagText)
+
+        fun bind(tag: Tag) {
+            // Set tag name and color
+            tagName.text = tag.name
+
+            val background = tagName.background
+            if (background is GradientDrawable) {
+                try {
+                    background.setColor(Color.parseColor(tag.colorHex))
+                } catch (e: IllegalArgumentException) {
+                    background.setColor(Color.LTGRAY)
+                }
+            }
+
+            itemView.setOnClickListener {
+                onTagClick(tag.id)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TagViewHolder {
@@ -29,21 +47,7 @@ class TagAdapter(
 
     override fun onBindViewHolder(holder: TagViewHolder, position: Int) {
         val tag = getItem(position)
-
-        holder.itemView.setOnClickListener {
-            onTagClick(tag.id)
-        }
-
-        holder.tagName.text = tag.name
-
-        val background = holder.tagName.background
-        if (background is GradientDrawable) {
-            try {
-                background.setColor(Color.parseColor(tag.colorHex))
-            } catch (e: IllegalArgumentException) {
-                background.setColor(Color.LTGRAY)
-            }
-        }
+        return holder.bind(tag)
     }
 
     class DiffCallback : DiffUtil.ItemCallback<Tag>() {
