@@ -28,7 +28,8 @@ class MemoAdapter(
     private val onSearchClick: ((Memo) -> Unit) ? = null,
     private val onEditClick: ((Memo, List<Int>) -> Unit) ? = null,
     private val onEasyEditClick: ((Memo, List<Int>) -> Unit) ? = null,
-    private val resolveMemo: (Int) -> Memo?
+    private val resolveMemo: (Int) -> Memo?,
+    private val onDeleteClick: ((Memo) -> Unit)? = null
 
 ) : RecyclerView.Adapter<MemoAdapter.MemoViewHolder>() {
 
@@ -125,6 +126,7 @@ class MemoAdapter(
 
             // 메모 삭제 버튼 클릭 시
             popupView.findViewById<LinearLayout>(R.id.memoDelete).setOnClickListener {
+                onDeleteClick?.invoke(memo)
                 popupWindow.dismiss()
             }
 
@@ -158,6 +160,14 @@ class MemoAdapter(
             }
         } else {
             onBindViewHolder(holder, position)
+        }
+    }
+
+    fun removeItem(memoId: Int) {
+        val index = memoList.indexOf(memoId)
+        if (index != -1) {
+            memoList = memoList.toMutableList().apply { removeAt(index) }
+            notifyItemRemoved(index)
         }
     }
 

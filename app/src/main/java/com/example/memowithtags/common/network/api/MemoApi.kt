@@ -2,6 +2,7 @@ package com.example.memowithtags.common.network.api
 
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -26,4 +27,9 @@ interface MemoApi {
         @Path("id") id: Int,
         @Body request: UpdateMemoRequest
     ): Call<CreateMemoResponse>
+
+    @DELETE("api/v1/memo/{id}")
+    fun deleteMemo(
+        @Path("id") id: Int
+    ): Call<Void>
 }

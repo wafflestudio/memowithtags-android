@@ -33,6 +33,7 @@
             android:id="@+id/tagContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             app:flexWrap="wrap"
             app:justifyContent="flex_start"
             app:flexDirection="row" />

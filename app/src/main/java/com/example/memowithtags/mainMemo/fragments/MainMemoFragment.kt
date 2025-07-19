@@ -86,13 +86,19 @@ class MainMemoFragment : Fragment() {
             tagViewModel.setSelectedTags(tagIds)
         }
 
+        val onDeleteClick: (Memo) -> Unit = { memo ->
+            memoViewModel.deleteMemo(memo.id)
+            memoAdapter.removeItem(memo.id)
+        }
+
         memoAdapter = MemoAdapter(
             tagViewModel::sortTagIds,
             tagViewModel::getTag,
             onSearchClick,
             onEditClick,
             onEasyEditClick,
-            memoViewModel::getMemo
+            memoViewModel::getMemo,
+            onDeleteClick
         )
 
         binding.memoRecyclerView.apply {
