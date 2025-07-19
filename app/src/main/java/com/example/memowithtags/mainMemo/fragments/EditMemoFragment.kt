@@ -13,8 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.memowithtags.databinding.FragmentEditMemoBinding
-import com.example.memowithtags.mainMemo.Adapters.SelectedTagAdapter
-import com.example.memowithtags.mainMemo.Adapters.TagAdapter
+import com.example.memowithtags.mainMemo.adapters.TagAdapter
 import com.example.memowithtags.mainMemo.viewModel.MemoViewModel
 import com.example.memowithtags.mainMemo.viewModel.TagViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +24,7 @@ class EditMemoFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var tagAdapter: TagAdapter
-    private lateinit var selectedTagAdapter: SelectedTagAdapter
+    private lateinit var selectedTagAdapter: TagAdapter
 
     private val memoViewModel: MemoViewModel by activityViewModels()
     private val tagViewModel: TagViewModel by activityViewModels()
@@ -58,13 +57,13 @@ class EditMemoFragment : Fragment() {
 
         tagViewModel.tagList.observe(viewLifecycleOwner) { tagList ->
             val visibleTags = tagList.filter { it.isVisible }
-            tagAdapter.updateData(visibleTags.map { it.id })
+            tagAdapter.submitList(visibleTags)
         }
 
         tagViewModel.getMyTags()
 
         // 선택된 태그 RecyclerView 세팅
-        selectedTagAdapter = SelectedTagAdapter(tagViewModel::unselectTag, tagViewModel::getTag)
+        selectedTagAdapter = TagAdapter(tagViewModel::unselectTag)
 
         binding.selectedTagContainer.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -72,8 +71,8 @@ class EditMemoFragment : Fragment() {
         }
 
         // observe 변경
-        tagViewModel.selectedTagIds.observe(viewLifecycleOwner) {
-            selectedTagAdapter.submitList(it)
+        tagViewModel.selectedTagIds.observe(viewLifecycleOwner) { it ->
+            selectedTagAdapter.submitList(it.map { tagViewModel.getTag(it) })
         }
 
         // 키보드 활성화 -> 태그 생성창 보이기
@@ -104,8 +103,7 @@ class EditMemoFragment : Fragment() {
 
     private fun setupTagRecyclerView() {
         tagAdapter = TagAdapter(
-            onTagClick = tagViewModel::selectTag,
-            tagResolver = tagViewModel::getTag
+            onTagClick = tagViewModel::selectTag
         )
 
         binding.tagRecyclerView.apply {
@@ -151,13 +149,12 @@ class EditMemoFragment : Fragment() {
             val visibleSearchResults = searchResults.filter { tagId ->
                 tagViewModel.getTag(tagId)?.isVisible == true
             }
-            tagAdapter.updateData(visibleSearchResults)
+            tagAdapter.submitList(visibleSearchResults.map { tagViewModel.getTag(it) })
         } else {
             // 검색어가 없을 때 → 전체 visible 태그 표시
-            tagAdapter.updateData(
+            tagAdapter.submitList(
                 tagViewModel.tagList.value
                     ?.filter { it.isVisible }
-                    ?.map { it.id }
                     ?: emptyList()
             )
         }

@@ -19,6 +19,11 @@ data class Memo(
     val tagIds: List<Int>
 )
 
+data class MemoWithTags(
+    val memo: Memo,
+    val tags: List<Tag>
+)
+
 val tagColors = listOf(
     "#FF9C9C",
     "#FFF56F",

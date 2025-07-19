@@ -29,13 +29,10 @@
             android:layout_marginBottom="4dp"
             android:textColor="@android:color/black" />
 
-        <com.google.android.flexbox.FlexboxLayout
-            android:id="@+id/tagContainer"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/tagRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:flexWrap="wrap"
-            app:justifyContent="flex_start"
-            app:flexDirection="row" />
+            android:layout_height="wrap_content"/>
 
         <FrameLayout
             android:id="@+id/buttonBarContainer"

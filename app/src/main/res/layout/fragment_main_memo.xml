@@ -122,14 +122,11 @@
                     android:src="@drawable/newmemo_icon" />
             </LinearLayout>
 
-            <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/selectedTagContainer"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/selectedTagRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                app:flexWrap="wrap"
-                app:justifyContent="flex_start"
-                app:flexDirection="row" />
+                android:layout_marginTop="6dp"/>
 
             <LinearLayout
                 android:id="@+id/newMemoIconBar"
