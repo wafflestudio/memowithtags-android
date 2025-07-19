@@ -34,7 +34,6 @@ class MemoAdapter(
 
     inner class MemoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        // initialize tag recycler view
         private val tagAdapter: TagAdapter = TagAdapter()
 
         init {
@@ -44,10 +43,12 @@ class MemoAdapter(
             }
         }
 
-        val buttonBarContainer: FrameLayout = itemView.findViewById(R.id.buttonBarContainer)
-        val buttonBar: LinearLayout = itemView.findViewById(R.id.buttonBar)
+        private val buttonBarContainer: FrameLayout = itemView.findViewById(R.id.buttonBarContainer)
+        private val buttonBar: LinearLayout = itemView.findViewById(R.id.buttonBar)
 
         fun bind(memoWithTags: MemoWithTags) {
+
+            // set memo content & created date
             val memoContent: TextView = itemView.findViewById(R.id.memoContent)
             val memoCreated: TextView = itemView.findViewById(R.id.memoCreated)
 
@@ -56,6 +57,28 @@ class MemoAdapter(
 
             tagAdapter.submitList(memoWithTags.tags)
 
+            // expand & collapse memo
+            if (memoWithTags.memo.id in expandedMemoIds) {
+                ViewExpandAnimator.setExpandedState(buttonBarContainer, buttonBar)
+            } else {
+                ViewExpandAnimator.setCollapsedState(buttonBarContainer, buttonBar)
+            }
+
+            itemView.setOnClickListener {
+                val isExpanded = memoWithTags.memo.id in expandedMemoIds
+
+                buttonBar.animate().cancel()
+
+                if (isExpanded) {
+                    expandedMemoIds.remove(memoWithTags.memo.id)
+                    ViewExpandAnimator.collapseView(buttonBarContainer, buttonBar)
+                } else {
+                    expandedMemoIds.add(memoWithTags.memo.id)
+                    ViewExpandAnimator.expandView(buttonBarContainer, buttonBar)
+                }
+            }
+
+            // show context menu
             itemView.setOnLongClickListener { view ->
 
                 val inflater = LayoutInflater.from(view.context)
@@ -69,19 +92,19 @@ class MemoAdapter(
                 )
                 popupWindow.elevation = 16f
 
-                // 메모 수정 버튼 클릭 시
+                // memo edit
                 popupView.findViewById<LinearLayout>(R.id.memoEdit).setOnClickListener {
                     onEditClick?.let { it1 -> it1(memoWithTags.memo, memoWithTags.memo.tagIds) }
                     popupWindow.dismiss()
                 }
 
-                // 메모 검색 버튼 클릭 시
+                // memo search
                 popupView.findViewById<LinearLayout>(R.id.memoSearch).setOnClickListener {
                     onSearchClick?.let { it1 -> it1(memoWithTags.memo) }
                     popupWindow.dismiss()
                 }
 
-                // 메모 삭제 버튼 클릭 시
+                // memo delete
                 popupView.findViewById<LinearLayout>(R.id.memoDelete).setOnClickListener {
                     popupWindow.dismiss()
                 }
@@ -90,6 +113,7 @@ class MemoAdapter(
                 true
             }
 
+            // buttonbar click listener
             itemView.findViewById<Button>(R.id.searchButton).setOnClickListener {
                 onSearchClick?.let { it1 -> it1(memoWithTags.memo) }
             }
@@ -107,28 +131,7 @@ class MemoAdapter(
 
     override fun onBindViewHolder(holder: MemoViewHolder, position: Int) {
         val memoWithTags = getItem(position) ?: return
-
         holder.bind(memoWithTags)
-
-        if (memoWithTags.memo.id in expandedMemoIds) {
-            ViewExpandAnimator.setExpandedState(holder.buttonBarContainer, holder.buttonBar)
-        } else {
-            ViewExpandAnimator.setCollapsedState(holder.buttonBarContainer, holder.buttonBar)
-        }
-
-        holder.itemView.setOnClickListener {
-            val isExpanded = memoWithTags.memo.id in expandedMemoIds
-
-            holder.buttonBar.animate().cancel()
-
-            if (isExpanded) {
-                expandedMemoIds.remove(memoWithTags.memo.id)
-                ViewExpandAnimator.collapseView(holder.buttonBarContainer, holder.buttonBar)
-            } else {
-                expandedMemoIds.add(memoWithTags.memo.id)
-                ViewExpandAnimator.expandView(holder.buttonBarContainer, holder.buttonBar)
-            }
-        }
     }
 
     private fun formatDate(isoDate: String): String {
