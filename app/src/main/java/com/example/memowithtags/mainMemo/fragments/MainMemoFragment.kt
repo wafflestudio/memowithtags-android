@@ -130,7 +130,7 @@ class MainMemoFragment : Fragment() {
                     memoViewModel.isPaging.value?.let { isPaging ->
                         if (!isPaging) {
                             binding.memoRecyclerView.post {
-                                //binding.memoRecyclerView.scrollToPosition(0)
+                                // binding.memoRecyclerView.scrollToPosition(0)
                             }
                         } else {
                             memoViewModel.stopPaging()
