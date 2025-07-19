@@ -125,13 +125,16 @@ class MainMemoFragment : Fragment() {
                     val tags = tagViewModel.tagList.value?.filter { it.id in sortedTagIds } ?: emptyList()
                     MemoWithTags(memo, tags)
                 }
-            )
-            if (memoList.isNotEmpty()) {
-                memoViewModel.isPaging.value?.let { isPaging ->
-                    if (!isPaging) {
-                        // binding.memoRecyclerView.scrollToPosition(0)
-                    } else {
-                        memoViewModel.stopPaging()
+            ) {
+                if (memoList.isNotEmpty()) {
+                    memoViewModel.isPaging.value?.let { isPaging ->
+                        if (!isPaging) {
+                            binding.memoRecyclerView.post {
+                                //binding.memoRecyclerView.scrollToPosition(0)
+                            }
+                        } else {
+                            memoViewModel.stopPaging()
+                        }
                     }
                 }
             }

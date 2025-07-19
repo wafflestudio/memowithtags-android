@@ -34,6 +34,8 @@ class MemoViewModel @Inject constructor(
     val isPaging: LiveData<Boolean> = _isPaging
     private var isinitialPaging = false
 
+    private var lastDeletedMemoId: Int? = null
+
     val PAGE_SIZE = 15
 
     fun resetAndLoadFirstPage() {
@@ -127,7 +129,7 @@ class MemoViewModel @Inject constructor(
     }
 
     fun deleteMemo(memoId: Int) {
-        removeMemoFromListAndFill(memoId)
+        lastDeletedMemoId = memoId
 
         memoRepository.deleteMemo(
             memoId,
@@ -137,6 +139,8 @@ class MemoViewModel @Inject constructor(
                 Log.e("MemoViewModel", "메모 삭제 실패", it)
             }
         )
+
+        removeMemoFromListAndFill(memoId)
     }
 
     fun removeMemoFromListAndFill(memoId: Int) {
@@ -170,6 +174,10 @@ class MemoViewModel @Inject constructor(
             page = page,
             onResult = { result, totalPages ->
                 result.getOrNull(PAGE_SIZE - 1)?.let { newItem ->
+                    if (newItem.id == lastDeletedMemoId) {
+                        return@let
+                    }
+
                     val current = _memoList.value.orEmpty().toMutableList()
                     if (current.none { it.id == newItem.id }) {
                         val insertIndex = (page * PAGE_SIZE - 1).coerceAtMost(current.size)
