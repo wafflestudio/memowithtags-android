@@ -23,7 +23,8 @@ import java.util.Locale
 class MemoAdapter(
     private val onSearchClick: ((Memo) -> Unit) ? = null,
     private val onEditClick: ((Memo, List<Int>) -> Unit) ? = null,
-    private val onEasyEditClick: ((Memo, List<Int>) -> Unit) ? = null
+    private val onEasyEditClick: ((Memo, List<Int>) -> Unit) ? = null,
+    private val onDeleteClick: ((Memo) -> Unit)? = null
 ) : ListAdapter<MemoWithTags, MemoAdapter.MemoViewHolder>(DiffCallback()) {
 
     private var expandedMemoIds: MutableSet<Int> = mutableSetOf()
@@ -105,6 +106,7 @@ class MemoAdapter(
 
                 // memo delete
                 popupView.findViewById<LinearLayout>(R.id.memoDelete).setOnClickListener {
+                    onDeleteClick?.invoke(memoWithTags.memo)
                     popupWindow.dismiss()
                 }
 
@@ -131,6 +133,16 @@ class MemoAdapter(
     override fun onBindViewHolder(holder: MemoViewHolder, position: Int) {
         val memoWithTags = getItem(position) ?: return
         holder.bind(memoWithTags)
+    }
+
+    fun removeItem(memoId: Int) {
+        val currentList = currentList.toMutableList()
+        val index = currentList.indexOfFirst { it.memo.id == memoId }
+
+        if (index != -1) {
+            currentList.removeAt(index)
+            submitList(currentList)
+        }
     }
 
     private fun formatDate(isoDate: String): String {
