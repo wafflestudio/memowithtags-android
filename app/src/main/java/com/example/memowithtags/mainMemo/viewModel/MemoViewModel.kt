@@ -151,13 +151,13 @@ class MemoViewModel @Inject constructor(
         val updated = oldList.toMutableList().apply {
             removeIf { it.id == memoId }
         }
-        //메모 삭제해서 아이템 수가 줄어들면 페이지네이션이 안 되는 오류 방지
+        // 메모 삭제해서 아이템 수가 줄어들면 페이지네이션이 안 되는 오류 방지
         if (isLastPage && updated.size < currentPage * PAGE_SIZE) {
             isLastPage = false
         }
 
         _memoList.postValue(updated)
-        //아이템을 삭제하면 현재 페이지의 마지막 아이템 받아와서 채우기
+        // 아이템을 삭제하면 현재 페이지의 마지막 아이템 받아와서 채우기
         fetchOneItemAtEndOfPage(page)
     }
 
@@ -182,7 +182,6 @@ class MemoViewModel @Inject constructor(
             }
         )
     }
-
 
     fun startEditing(memo: Memo) {
         _editingMemo.value = memo

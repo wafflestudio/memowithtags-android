@@ -108,5 +108,4 @@ class SearchViewModel @Inject constructor(
     fun loadNextPage() {
         performSearch(_query.value)
     }
-
 }

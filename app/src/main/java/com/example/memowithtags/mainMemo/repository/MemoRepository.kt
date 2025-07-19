@@ -141,7 +141,6 @@ class MemoRepository @Inject constructor(
         })
     }
 
-
     fun searchMemo(
         content: String,
         tagIds: List<Int>,
