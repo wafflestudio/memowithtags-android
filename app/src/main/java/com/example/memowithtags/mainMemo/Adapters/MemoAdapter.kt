@@ -47,7 +47,6 @@ class MemoAdapter(
         private val buttonBar: LinearLayout = itemView.findViewById(R.id.buttonBar)
 
         fun bind(memoWithTags: MemoWithTags) {
-
             // set memo content & created date
             val memoContent: TextView = itemView.findViewById(R.id.memoContent)
             val memoCreated: TextView = itemView.findViewById(R.id.memoCreated)
