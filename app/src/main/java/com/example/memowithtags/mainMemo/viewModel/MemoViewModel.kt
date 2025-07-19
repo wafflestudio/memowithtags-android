@@ -34,6 +34,8 @@ class MemoViewModel @Inject constructor(
     val isPaging: LiveData<Boolean> = _isPaging
     private var isinitialPaging = false
 
+    val PAGE_SIZE = 15
+
     fun resetAndLoadFirstPage() {
         currentPage = 1
         isLastPage = false
@@ -123,6 +125,64 @@ class MemoViewModel @Inject constructor(
         }
         return memo
     }
+
+    fun deleteMemo(memoId: Int) {
+        removeMemoFromListAndFill(memoId)
+
+        memoRepository.deleteMemo(
+            memoId,
+            onSuccess = {
+            },
+            onError = {
+                Log.e("MemoViewModel", "메모 삭제 실패", it)
+            }
+        )
+    }
+
+    fun removeMemoFromListAndFill(memoId: Int) {
+        val oldList = _memoList.value.orEmpty()
+        val pageSize = 15
+
+        val index = oldList.indexOfFirst { it.id == memoId }
+        if (index == -1) return // 없는 메모
+
+        val page = index / pageSize + 1
+
+        val updated = oldList.toMutableList().apply {
+            removeIf { it.id == memoId }
+        }
+        //메모 삭제해서 아이템 수가 줄어들면 페이지네이션이 안 되는 오류 방지
+        if (isLastPage && updated.size < currentPage * PAGE_SIZE) {
+            isLastPage = false
+        }
+
+        _memoList.postValue(updated)
+        //아이템을 삭제하면 현재 페이지의 마지막 아이템 받아와서 채우기
+        fetchOneItemAtEndOfPage(page)
+    }
+
+    private fun fetchOneItemAtEndOfPage(page: Int) {
+        memoRepository.getMyMemos(
+            content = null,
+            tagIds = null,
+            startDate = null,
+            endDate = null,
+            page = page,
+            onResult = { result, totalPages ->
+                result.getOrNull(PAGE_SIZE - 1)?.let { newItem ->
+                    val current = _memoList.value.orEmpty().toMutableList()
+                    if (current.none { it.id == newItem.id }) {
+                        val insertIndex = (page * PAGE_SIZE - 1).coerceAtMost(current.size)
+                        current.add(insertIndex, newItem)
+                        _memoList.postValue(current)
+                    }
+                }
+            },
+            onError = {
+            }
+        )
+    }
+
 
     fun startEditing(memo: Memo) {
         _editingMemo.value = memo

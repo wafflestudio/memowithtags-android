@@ -8,6 +8,7 @@ import com.example.memowithtags.common.network.api.SearchMemoResponse
 import com.example.memowithtags.common.network.api.UpdateMemoRequest
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -119,6 +120,27 @@ class MemoRepository @Inject constructor(
                 }
             })
     }
+
+    fun deleteMemo(
+        memoId: Int,
+        onSuccess: () -> Unit,
+        onError: (Throwable) -> Unit
+    ) {
+        memoApi.deleteMemo(memoId).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    onSuccess()
+                } else {
+                    onError(HttpException(response))
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                onError(t)
+            }
+        })
+    }
+
 
     fun searchMemo(
         content: String,

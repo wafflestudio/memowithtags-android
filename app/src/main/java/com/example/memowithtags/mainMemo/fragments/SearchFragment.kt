@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Memo
 import com.example.memowithtags.common.model.MemoWithTags
@@ -121,15 +122,35 @@ class SearchFragment : Fragment() {
             findNavController().navigate(R.id.action_searchFragment_to_editMemoFragment, bundle)
         }
 
+        val onDeleteClick: (Memo) -> Unit = { memo ->
+            memoViewModel.deleteMemo(memo.id)
+            memoAdapter.removeItem(memo.id)
+        }
+
         memoAdapter = MemoAdapter(
             onSearchClick,
             onEditClick,
-            null
+            null,
+            onDeleteClick
         )
 
         binding.searchmemoRecyclerView.apply {
             adapter = memoAdapter
             layoutManager = LinearLayoutManager(requireContext())
+
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                    val totalItemCount = layoutManager.itemCount
+
+                    if (lastVisibleItemPosition >= totalItemCount - 1 && dy > 0) {
+                        searchViewModel.loadNextPage()
+                    }
+                }
+            })
         }
 
         // 검색어 입력 감지

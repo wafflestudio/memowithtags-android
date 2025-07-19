@@ -21,6 +21,7 @@ class SearchViewModel @Inject constructor(
     private val _query = MutableStateFlow("")
     fun updateQuery(newQuery: String) {
         _query.value = newQuery
+        resetSearchState()
     }
 
     private val _memoSearchResult = MutableLiveData<List<Int>>()
@@ -32,6 +33,11 @@ class SearchViewModel @Inject constructor(
     private val _selectedTagIds = MutableLiveData<List<Int>>(emptyList())
     val selectedTagIds: LiveData<List<Int>> = _selectedTagIds
 
+    private val memoIdList = mutableListOf<Int>()
+    private var currentPage = 1
+    private var isLastPage = false
+    private var isLoading = false
+
     init {
         viewModelScope.launch {
             _query
@@ -39,6 +45,7 @@ class SearchViewModel @Inject constructor(
                 .distinctUntilChanged()
                 .collectLatest { query ->
                     Log.d("SearchViewModel", "검색 쿼리: $query")
+                    resetSearchState()
                     performSearch(query)
                 }
         }
@@ -49,6 +56,7 @@ class SearchViewModel @Inject constructor(
             if (!contains(tagId)) add(tagId)
         }
         _selectedTagIds.value = updated
+        resetSearchState()
         performSearch(_query.value)
     }
 
@@ -57,27 +65,48 @@ class SearchViewModel @Inject constructor(
             remove(tagId)
         }
         _selectedTagIds.value = updated
+        resetSearchState()
         performSearch(_query.value)
     }
 
+    private fun resetSearchState() {
+        currentPage = 1
+        isLastPage = false
+        memoIdList.clear()
+    }
+
     private fun performSearch(query: String) {
-        if (query.isBlank() && _selectedTagIds.value.isNullOrEmpty()) {
-            _memoSearchResult.postValue(emptyList())
+        if ((query.isBlank() && _selectedTagIds.value.isNullOrEmpty()) || isLoading || isLastPage) {
             return
         }
+
+        isLoading = true
 
         memoRepository.searchMemo(
             content = query,
             tagIds = _selectedTagIds.value ?: emptyList(),
             startDate = null,
             endDate = null,
-            page = 1,
+            page = currentPage,
             callback = { result ->
-                _memoSearchResult.postValue(result.map { it.id })
+                isLoading = false
+                if (result.isEmpty()) {
+                    isLastPage = true
+                } else {
+                    val ids = result.map { it.id }
+                    memoIdList.addAll(ids)
+                    _memoSearchResult.postValue(memoIdList.toList())
+                    currentPage++
+                }
             },
             onError = {
-                _memoSearchResult.postValue(emptyList()) // 실패 시 빈 리스트 처리
+                isLoading = false
             }
         )
     }
+
+    fun loadNextPage() {
+        performSearch(_query.value)
+    }
+
 }
