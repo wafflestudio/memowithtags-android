@@ -174,6 +174,7 @@ class MemoViewModel @Inject constructor(
                     if (current.none { it.id == newItem.id }) {
                         val insertIndex = (page * PAGE_SIZE - 1).coerceAtMost(current.size)
                         current.add(insertIndex, newItem)
+                        Log.d("MemoViewModel", "fetchOneItemAtEndOfPage: $newItem")
                         _memoList.postValue(current)
                     }
                 }

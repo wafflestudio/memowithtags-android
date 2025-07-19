@@ -89,7 +89,6 @@ class MainMemoFragment : Fragment() {
 
         val onDeleteClick: (Memo) -> Unit = { memo ->
             memoViewModel.deleteMemo(memo.id)
-            memoAdapter.removeItem(memo.id)
         }
 
         memoAdapter = MemoAdapter(
@@ -130,7 +129,7 @@ class MainMemoFragment : Fragment() {
             if (memoList.isNotEmpty()) {
                 memoViewModel.isPaging.value?.let { isPaging ->
                     if (!isPaging) {
-                        binding.memoRecyclerView.scrollToPosition(0)
+                        // binding.memoRecyclerView.scrollToPosition(0)
                     } else {
                         memoViewModel.stopPaging()
                     }

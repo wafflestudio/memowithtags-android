@@ -144,7 +144,6 @@ class MemoAdapter(
             submitList(currentList)
         }
     }
-
     private fun formatDate(isoDate: String): String {
         val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
         inputFormat.timeZone = TimeZone.getTimeZone("UTC")
