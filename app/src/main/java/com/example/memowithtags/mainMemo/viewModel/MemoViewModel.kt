@@ -134,13 +134,12 @@ class MemoViewModel @Inject constructor(
         memoRepository.deleteMemo(
             memoId,
             onSuccess = {
+                removeMemoFromListAndFill(memoId)
             },
             onError = {
                 Log.e("MemoViewModel", "메모 삭제 실패", it)
             }
         )
-
-        removeMemoFromListAndFill(memoId)
     }
 
     fun removeMemoFromListAndFill(memoId: Int) {
