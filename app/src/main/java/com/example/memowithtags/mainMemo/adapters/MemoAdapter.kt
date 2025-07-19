@@ -1,4 +1,4 @@
-package com.example.memowithtags.mainMemo.Adapters
+package com.example.memowithtags.mainMemo.adapters
 
 import android.icu.text.SimpleDateFormat
 import android.icu.util.TimeZone

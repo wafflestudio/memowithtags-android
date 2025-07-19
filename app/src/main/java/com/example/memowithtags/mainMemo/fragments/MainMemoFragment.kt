@@ -20,8 +20,8 @@ import com.example.memowithtags.common.model.Memo
 import com.example.memowithtags.common.model.MemoWithTags
 import com.example.memowithtags.common.model.tagColors
 import com.example.memowithtags.databinding.FragmentMainMemoBinding
-import com.example.memowithtags.mainMemo.Adapters.MemoAdapter
-import com.example.memowithtags.mainMemo.Adapters.TagAdapter
+import com.example.memowithtags.mainMemo.adapters.MemoAdapter
+import com.example.memowithtags.mainMemo.adapters.TagAdapter
 import com.example.memowithtags.mainMemo.viewModel.MemoViewModel
 import com.example.memowithtags.mainMemo.viewModel.TagViewModel
 import com.example.memowithtags.settings.SettingsActivity

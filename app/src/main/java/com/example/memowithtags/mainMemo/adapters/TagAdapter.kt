@@ -1,4 +1,4 @@
-package com.example.memowithtags.mainMemo.Adapters
+package com.example.memowithtags.mainMemo.adapters
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
