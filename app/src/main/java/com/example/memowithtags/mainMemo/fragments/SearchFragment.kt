@@ -18,6 +18,8 @@ import com.example.memowithtags.common.model.MemoWithTags
 import com.example.memowithtags.databinding.FragmentSearchBinding
 import com.example.memowithtags.mainMemo.adapters.MemoAdapter
 import com.example.memowithtags.mainMemo.adapters.TagAdapter
+import com.example.memowithtags.mainMemo.adapters.callbacks.MemoAdapterCallback
+import com.example.memowithtags.mainMemo.adapters.callbacks.TagAdapterCallback
 import com.example.memowithtags.mainMemo.viewModel.MemoViewModel
 import com.example.memowithtags.mainMemo.viewModel.SearchViewModel
 import com.example.memowithtags.mainMemo.viewModel.TagViewModel
@@ -61,14 +63,18 @@ class SearchFragment : Fragment() {
         }
 
         // Tag RecyclerView 연결
-        searchTagAdapter = TagAdapter(onTagClick = { tagId ->
-            if (!selectedQueryTags.contains(tagId)) {
-                selectedQueryTags.add(tagId)
-                queryTagAdapter.submitList(selectedQueryTags.toList().map { tagViewModel.getTag(it) })
-                binding.querytagRecyclerView.visibility = View.VISIBLE
-                searchViewModel.addSelectedTagId(tagId)
+        val tagAdapterCallback = object : TagAdapterCallback {
+            override fun onTagClick(tagId: Int) {
+                if (!selectedQueryTags.contains(tagId)) {
+                    selectedQueryTags.add(tagId)
+                    queryTagAdapter.submitList(selectedQueryTags.toList().map { tagViewModel.getTag(it) })
+                    binding.querytagRecyclerView.visibility = View.VISIBLE
+                    searchViewModel.addSelectedTagId(tagId)
+                }
             }
-        })
+        }
+
+        searchTagAdapter = TagAdapter(tagAdapterCallback)
 
         binding.searchtagRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -87,8 +93,8 @@ class SearchFragment : Fragment() {
         }
 
         // 검색창의 tag recyclerview 연결
-        queryTagAdapter = TagAdapter(
-            onTagClick = { tagId ->
+        val queryTagAdapterCallback = object : TagAdapterCallback {
+            override fun onTagClick(tagId: Int) {
                 selectedQueryTags.remove(tagId)
                 queryTagAdapter.submitList(selectedQueryTags.toList().map { tagViewModel.getTag(it) })
                 if (selectedQueryTags.isEmpty()) {
@@ -96,7 +102,10 @@ class SearchFragment : Fragment() {
                 }
                 searchViewModel.removeSelectedTagId(tagId)
             }
-        )
+        }
+
+        queryTagAdapter = TagAdapter(queryTagAdapterCallback)
+
         binding.querytagRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = queryTagAdapter
@@ -104,35 +113,34 @@ class SearchFragment : Fragment() {
         }
 
         // Memo RecyclerView 연결
-        val onSearchClick: (Memo) -> Unit = { memo ->
-            binding.searchText.setText(memo.content)
-            searchViewModel.updateQuery(memo.content)
-            tagViewModel.updateQuery(memo.content)
-        }
-
-        val onEditClick: (Memo, List<Int>) -> Unit = { memo, tagIds ->
-            val bundle = Bundle().apply {
-                putString("memoText", memo.content)
-                if (memo != null) {
-                    putInt("memoId", memo.id)
-                    putIntegerArrayList("tagIds", ArrayList(memo.tagIds))
-                }
+        val memoAdapterCallback = object : MemoAdapterCallback {
+            override fun onSearchClick(memo: Memo) {
+                binding.searchText.setText(memo.content)
+                searchViewModel.updateQuery(memo.content)
+                tagViewModel.updateQuery(memo.content)
             }
-            memoViewModel.startEditing(memo)
-            findNavController().navigate(R.id.action_searchFragment_to_editMemoFragment, bundle)
+
+            override fun onEditClick(memo: Memo, tagIds: List<Int>) {
+                val bundle = Bundle().apply {
+                    putString("memoText", memo.content)
+                    if (memo != null) {
+                        putInt("memoId", memo.id)
+                        putIntegerArrayList("tagIds", ArrayList(memo.tagIds))
+                    }
+                }
+                memoViewModel.startEditing(memo)
+                findNavController().navigate(R.id.action_searchFragment_to_editMemoFragment, bundle)
+            }
+
+            override fun onDeleteClick(memo: Memo) {
+                memoViewModel.deleteMemo(memo.id)
+                memoAdapter.removeItem(memo.id)
+            }
         }
 
-        val onDeleteClick: (Memo) -> Unit = { memo ->
-            memoViewModel.deleteMemo(memo.id)
-            memoAdapter.removeItem(memo.id)
-        }
+        val tagInMemoAdapterCallback = object : TagAdapterCallback {}
 
-        memoAdapter = MemoAdapter(
-            onSearchClick,
-            onEditClick,
-            null,
-            onDeleteClick
-        )
+        memoAdapter = MemoAdapter(memoAdapterCallback, tagInMemoAdapterCallback)
 
         binding.searchmemoRecyclerView.apply {
             adapter = memoAdapter

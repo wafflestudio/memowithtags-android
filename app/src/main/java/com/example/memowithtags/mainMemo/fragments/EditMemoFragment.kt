@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.memowithtags.databinding.FragmentEditMemoBinding
 import com.example.memowithtags.mainMemo.adapters.TagAdapter
+import com.example.memowithtags.mainMemo.adapters.callbacks.TagAdapterCallback
 import com.example.memowithtags.mainMemo.viewModel.MemoViewModel
 import com.example.memowithtags.mainMemo.viewModel.TagViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,7 +64,13 @@ class EditMemoFragment : Fragment() {
         tagViewModel.getMyTags()
 
         // 선택된 태그 RecyclerView 세팅
-        selectedTagAdapter = TagAdapter(tagViewModel::unselectTag)
+        val selectedTagAdapterCallback = object : TagAdapterCallback {
+            override fun onTagClick(tagId: Int) {
+                tagViewModel.unselectTag(tagId)
+            }
+        }
+
+        selectedTagAdapter = TagAdapter(selectedTagAdapterCallback)
 
         binding.selectedTagContainer.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -102,9 +109,13 @@ class EditMemoFragment : Fragment() {
     }
 
     private fun setupTagRecyclerView() {
-        tagAdapter = TagAdapter(
-            onTagClick = tagViewModel::selectTag
-        )
+        val tagAdapterCallback = object : TagAdapterCallback {
+            override fun onTagClick(tagId: Int) {
+                tagViewModel.selectTag(tagId)
+            }
+        }
+
+        tagAdapter = TagAdapter(tagAdapterCallback)
 
         binding.tagRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)

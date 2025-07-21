@@ -22,6 +22,8 @@ import com.example.memowithtags.common.model.tagColors
 import com.example.memowithtags.databinding.FragmentMainMemoBinding
 import com.example.memowithtags.mainMemo.adapters.MemoAdapter
 import com.example.memowithtags.mainMemo.adapters.TagAdapter
+import com.example.memowithtags.mainMemo.adapters.callbacks.MemoAdapterCallback
+import com.example.memowithtags.mainMemo.adapters.callbacks.TagAdapterCallback
 import com.example.memowithtags.mainMemo.viewModel.MemoViewModel
 import com.example.memowithtags.mainMemo.viewModel.TagViewModel
 import com.example.memowithtags.settings.SettingsActivity
@@ -62,41 +64,38 @@ class MainMemoFragment : Fragment() {
         tagViewModel.getMyTags()
 
         // 메모 recycler view 세팅
-        val onEditClick: (Memo, List<Int>) -> Unit = { memo, tagIds ->
-            val bundle = Bundle().apply {
-                putString("memoText", memo.content)
-                if (memo != null) {
+        val memoAdapterCallback = object : MemoAdapterCallback {
+            override fun onEditClick(memo: Memo, tagIds: List<Int>) {
+                val bundle = Bundle().apply {
+                    putString("memoText", memo.content)
                     putInt("memoId", memo.id)
                     putIntegerArrayList("tagIds", ArrayList(memo.tagIds))
                 }
+                memoViewModel.startEditing(memo)
+                findNavController().navigate(R.id.action_mainMemo_to_editMemo, bundle)
             }
-            memoViewModel.startEditing(memo)
-            findNavController().navigate(R.id.action_mainMemo_to_editMemo, bundle)
-        }
 
-        val onSearchClick: (Memo) -> Unit = { memo ->
-            val bundle = Bundle().apply {
-                putString("memoContent", memo.content)
+            override fun onSearchClick(memo: Memo) {
+                val bundle = Bundle().apply {
+                    putString("memoContent", memo.content)
+                }
+                findNavController().navigate(R.id.action_mainMemo_to_search, bundle)
             }
-            findNavController().navigate(R.id.action_mainMemo_to_search, bundle)
+
+            override fun onEasyEditClick(memo: Memo, tagIds: List<Int>) {
+                memoViewModel.startEditing(memo)
+                binding.newMemoText.setText(memo.content)
+                tagViewModel.setSelectedTags(tagIds)
+            }
+
+            override fun onDeleteClick(memo: Memo) {
+                memoViewModel.deleteMemo(memo.id)
+            }
         }
 
-        val onEasyEditClick: (Memo, List<Int>) -> Unit = onEditClick@{ memoToEdit, tagIds ->
-            memoViewModel.startEditing(memoToEdit)
-            binding.newMemoText.setText(memoToEdit.content)
-            tagViewModel.setSelectedTags(tagIds)
-        }
+        val tagInMemoAdapterCallback = object : TagAdapterCallback {}
 
-        val onDeleteClick: (Memo) -> Unit = { memo ->
-            memoViewModel.deleteMemo(memo.id)
-        }
-
-        memoAdapter = MemoAdapter(
-            onSearchClick,
-            onEditClick,
-            onEasyEditClick,
-            onDeleteClick
-        )
+        memoAdapter = MemoAdapter(memoAdapterCallback, tagInMemoAdapterCallback)
 
         binding.memoRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext()).apply {
@@ -237,7 +236,6 @@ class MainMemoFragment : Fragment() {
             }
 
             popupWindow.showAsDropDown(view)
-            true
         }
 
         // 검색 버튼
@@ -247,9 +245,13 @@ class MainMemoFragment : Fragment() {
     }
 
     private fun setupTagRecyclerView() {
-        tagAdapter = TagAdapter(
-            onTagClick = tagViewModel::selectTag
-        )
+        val tagAdapterCallback = object : TagAdapterCallback {
+            override fun onTagClick(tagId: Int) {
+                tagViewModel.selectTag(tagId)
+            }
+        }
+
+        tagAdapter = TagAdapter(tagAdapterCallback)
 
         binding.tagRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -335,9 +337,13 @@ class MainMemoFragment : Fragment() {
     }
 
     private fun setupSelectedTagRecyclerView() {
-        selectedTagAdapter = TagAdapter(
-            onTagClick = tagViewModel::unselectTag
-        )
+        val tagAdapterCallback = object : TagAdapterCallback {
+            override fun onTagClick(tagId: Int) {
+                tagViewModel.unselectTag(tagId)
+            }
+        }
+
+        selectedTagAdapter = TagAdapter(tagAdapterCallback)
 
         binding.selectedTagRecyclerView.apply {
             layoutManager = FlexboxLayoutManager(requireContext())
