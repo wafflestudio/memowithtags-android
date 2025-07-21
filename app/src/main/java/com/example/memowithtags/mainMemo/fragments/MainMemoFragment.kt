@@ -95,6 +95,10 @@ class MainMemoFragment : Fragment() {
 
         val tagInMemoAdapterCallback = object : TagAdapterCallback {
             override fun onEditClick(tagId: Int) {
+                val bundle = Bundle().apply {
+                    putInt("tagId", tagId)
+                }
+                findNavController().navigate(R.id.action_mainMemo_to_editTag, bundle)
             }
 
             override fun onDeleteClick(tagId: Int) {
@@ -265,6 +269,13 @@ class MainMemoFragment : Fragment() {
                     if (onSuccess) memoViewModel.deleteTagFromMemo(tagId)
                 }
             }
+
+            override fun onEditClick(tagId: Int) {
+                val bundle = Bundle().apply {
+                    putInt("tagId", tagId)
+                }
+                findNavController().navigate(R.id.action_mainMemo_to_editTag, bundle)
+            }
         }
 
         tagAdapter = TagAdapter(tagAdapterCallback)
@@ -362,6 +373,13 @@ class MainMemoFragment : Fragment() {
                 tagViewModel.deleteTag(tagId) { onSuccess ->
                     if (onSuccess) memoViewModel.deleteTagFromMemo(tagId)
                 }
+            }
+
+            override fun onEditClick(tagId: Int) {
+                val bundle = Bundle().apply {
+                    putInt("tagId", tagId)
+                }
+                findNavController().navigate(R.id.action_mainMemo_to_editTag, bundle)
             }
         }
 

@@ -78,6 +78,13 @@ class SearchFragment : Fragment() {
                     if (onSuccess) memoViewModel.deleteTagFromMemo(tagId)
                 }
             }
+
+            override fun onEditClick(tagId: Int) {
+                val bundle = Bundle().apply {
+                    putInt("tagId", tagId)
+                }
+                findNavController().navigate(R.id.action_search_to_editTag, bundle)
+            }
         }
 
         searchTagAdapter = TagAdapter(tagAdapterCallback)
@@ -113,6 +120,13 @@ class SearchFragment : Fragment() {
                 tagViewModel.deleteTag(tagId) { onSuccess ->
                     if (onSuccess) memoViewModel.deleteTagFromMemo(tagId)
                 }
+            }
+
+            override fun onEditClick(tagId: Int) {
+                val bundle = Bundle().apply {
+                    putInt("tagId", tagId)
+                }
+                findNavController().navigate(R.id.action_search_to_editTag, bundle)
             }
         }
 
@@ -155,6 +169,13 @@ class SearchFragment : Fragment() {
                 tagViewModel.deleteTag(tagId) { onSuccess ->
                     if (onSuccess) memoViewModel.deleteTagFromMemo(tagId)
                 }
+            }
+
+            override fun onEditClick(tagId: Int) {
+                val bundle = Bundle().apply {
+                    putInt("tagId", tagId)
+                }
+                findNavController().navigate(R.id.action_search_to_editTag, bundle)
             }
         }
 

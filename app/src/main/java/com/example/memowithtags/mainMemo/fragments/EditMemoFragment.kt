@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.memowithtags.R
 import com.example.memowithtags.databinding.FragmentEditMemoBinding
 import com.example.memowithtags.mainMemo.adapters.TagAdapter
 import com.example.memowithtags.mainMemo.adapters.callbacks.TagAdapterCallback
@@ -74,6 +75,13 @@ class EditMemoFragment : Fragment() {
                     if (onSuccess) memoViewModel.deleteTagFromMemo(tagId)
                 }
             }
+
+            override fun onEditClick(tagId: Int) {
+                val bundle = Bundle().apply {
+                    putInt("tagId", tagId)
+                }
+                findNavController().navigate(R.id.action_editMemo_to_editTag, bundle)
+            }
         }
 
         selectedTagAdapter = TagAdapter(selectedTagAdapterCallback)
@@ -124,6 +132,13 @@ class EditMemoFragment : Fragment() {
                 tagViewModel.deleteTag(tagId) { onSuccess ->
                     if (onSuccess) memoViewModel.deleteTagFromMemo(tagId)
                 }
+            }
+
+            override fun onEditClick(tagId: Int) {
+                val bundle = Bundle().apply {
+                    putInt("tagId", tagId)
+                }
+                findNavController().navigate(R.id.action_editMemo_to_editTag, bundle)
             }
         }
 
