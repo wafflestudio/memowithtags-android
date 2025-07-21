@@ -96,6 +96,12 @@ class EditMemoFragment : Fragment() {
             selectedTagAdapter.submitList(it.map { tagViewModel.getTag(it) })
         }
 
+        // 태그 변경 감지
+        tagViewModel.tagList.observe(viewLifecycleOwner) {
+            updateTagAdapterData()
+            selectedTagAdapter.submitList(tagViewModel.selectedTagIds.value?.map { tagViewModel.getTag(it) })
+        }
+
         // 키보드 활성화 -> 태그 생성창 보이기
         view.viewTreeObserver.addOnGlobalLayoutListener {
             val r = Rect()

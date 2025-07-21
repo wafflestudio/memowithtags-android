@@ -226,6 +226,12 @@ class SearchFragment : Fragment() {
             )
         }
 
+        // 태그 변경 감지
+        tagViewModel.tagList.observe(viewLifecycleOwner) { tagList ->
+            searchTagAdapter.submitList(tagViewModel.tagSearchResult.value?.map { tagViewModel.getTag(it) })
+            queryTagAdapter.submitList(selectedQueryTags.toList().map { tagViewModel.getTag(it) })
+        }
+
         binding.leftArrowIcon.setOnClickListener {
             findNavController().popBackStack()
         }

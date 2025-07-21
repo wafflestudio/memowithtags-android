@@ -99,7 +99,7 @@ class EditTagFragment : Fragment() {
 
         tagEditViewModel.editTagResult.observe(viewLifecycleOwner) { result ->
             result?.onSuccess {
-                tagViewModel.getMyTags()
+                tagViewModel.reloadTags()
                 findNavController().popBackStack()
             }?.onFailure {
             }
