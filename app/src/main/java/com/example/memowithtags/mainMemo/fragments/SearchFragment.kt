@@ -72,6 +72,12 @@ class SearchFragment : Fragment() {
                     searchViewModel.addSelectedTagId(tagId)
                 }
             }
+
+            override fun onDeleteClick(tagId: Int) {
+                tagViewModel.deleteTag(tagId) { onSuccess ->
+                    if (onSuccess) memoViewModel.deleteTagFromMemo(tagId)
+                }
+            }
         }
 
         searchTagAdapter = TagAdapter(tagAdapterCallback)
@@ -101,6 +107,12 @@ class SearchFragment : Fragment() {
                     binding.querytagRecyclerView.visibility = View.GONE
                 }
                 searchViewModel.removeSelectedTagId(tagId)
+            }
+
+            override fun onDeleteClick(tagId: Int) {
+                tagViewModel.deleteTag(tagId) { onSuccess ->
+                    if (onSuccess) memoViewModel.deleteTagFromMemo(tagId)
+                }
             }
         }
 
@@ -138,7 +150,13 @@ class SearchFragment : Fragment() {
             }
         }
 
-        val tagInMemoAdapterCallback = object : TagAdapterCallback {}
+        val tagInMemoAdapterCallback = object : TagAdapterCallback {
+            override fun onDeleteClick(tagId: Int) {
+                tagViewModel.deleteTag(tagId) { onSuccess ->
+                    if (onSuccess) memoViewModel.deleteTagFromMemo(tagId)
+                }
+            }
+        }
 
         memoAdapter = MemoAdapter(memoAdapterCallback, tagInMemoAdapterCallback)
 

@@ -68,6 +68,12 @@ class EditMemoFragment : Fragment() {
             override fun onTagClick(tagId: Int) {
                 tagViewModel.unselectTag(tagId)
             }
+
+            override fun onDeleteClick(tagId: Int) {
+                tagViewModel.deleteTag(tagId) { onSuccess ->
+                    if (onSuccess) memoViewModel.deleteTagFromMemo(tagId)
+                }
+            }
         }
 
         selectedTagAdapter = TagAdapter(selectedTagAdapterCallback)
@@ -112,6 +118,12 @@ class EditMemoFragment : Fragment() {
         val tagAdapterCallback = object : TagAdapterCallback {
             override fun onTagClick(tagId: Int) {
                 tagViewModel.selectTag(tagId)
+            }
+
+            override fun onDeleteClick(tagId: Int) {
+                tagViewModel.deleteTag(tagId) { onSuccess ->
+                    if (onSuccess) memoViewModel.deleteTagFromMemo(tagId)
+                }
             }
         }
 

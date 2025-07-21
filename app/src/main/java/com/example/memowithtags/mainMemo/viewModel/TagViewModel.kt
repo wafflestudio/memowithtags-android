@@ -108,6 +108,32 @@ class TagViewModel @Inject constructor(
         )
     }
 
+    fun deleteTag(tagId: Int, onComplete: (Boolean) -> Unit) {
+        tagRepository.deleteTag(
+            tagId = tagId,
+            onSuccess = {
+                val updated = _tagList.value.orEmpty().toMutableList().apply {
+                    removeIf { it.id == tagId }
+                }
+                _tagList.postValue(updated)
+                val selected = _selectedTagIds.value.orEmpty().toMutableList().apply {
+                    removeIf { it == tagId }
+                }
+                _selectedTagIds.postValue(selected)
+                val search = _searchTagIds.value.orEmpty().toMutableList().apply {
+                    removeIf { it == tagId }
+                }
+                _searchTagIds.postValue(search)
+                sortTag()
+                onComplete(true)
+            },
+            onError = { error ->
+                Log.e("TagViewModel", "태그 삭제 실패", error)
+                onComplete(false)
+            }
+        )
+    }
+
     // tagList를 initialize하는 함수
     fun getMyTags() {
         if (initialized) return

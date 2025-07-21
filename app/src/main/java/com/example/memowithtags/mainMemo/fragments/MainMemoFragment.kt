@@ -93,7 +93,16 @@ class MainMemoFragment : Fragment() {
             }
         }
 
-        val tagInMemoAdapterCallback = object : TagAdapterCallback {}
+        val tagInMemoAdapterCallback = object : TagAdapterCallback {
+            override fun onEditClick(tagId: Int) {
+            }
+
+            override fun onDeleteClick(tagId: Int) {
+                tagViewModel.deleteTag(tagId) {
+                    memoViewModel.deleteTagFromMemo(tagId)
+                }
+            }
+        }
 
         memoAdapter = MemoAdapter(memoAdapterCallback, tagInMemoAdapterCallback)
 
@@ -104,6 +113,7 @@ class MainMemoFragment : Fragment() {
             }
 
             adapter = memoAdapter
+            itemAnimator = null
             // 페이지네이션
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -249,6 +259,12 @@ class MainMemoFragment : Fragment() {
             override fun onTagClick(tagId: Int) {
                 tagViewModel.selectTag(tagId)
             }
+
+            override fun onDeleteClick(tagId: Int) {
+                tagViewModel.deleteTag(tagId) { onSuccess ->
+                    if (onSuccess) memoViewModel.deleteTagFromMemo(tagId)
+                }
+            }
         }
 
         tagAdapter = TagAdapter(tagAdapterCallback)
@@ -303,7 +319,7 @@ class MainMemoFragment : Fragment() {
             val visibleSearchResults = searchResults.filter { tagId ->
                 tagViewModel.getTag(tagId)?.isVisible == true
             }
-            tagAdapter.submitList(visibleSearchResults.map { tagViewModel.getTag(it) })
+            tagAdapter.submitList(visibleSearchResults.mapNotNull { tagViewModel.getTag(it) })
         } else {
             // 검색어가 없을 때 → 전체 visible 태그 표시
             tagAdapter.submitList(
@@ -341,6 +357,12 @@ class MainMemoFragment : Fragment() {
             override fun onTagClick(tagId: Int) {
                 tagViewModel.unselectTag(tagId)
             }
+
+            override fun onDeleteClick(tagId: Int) {
+                tagViewModel.deleteTag(tagId) { onSuccess ->
+                    if (onSuccess) memoViewModel.deleteTagFromMemo(tagId)
+                }
+            }
         }
 
         selectedTagAdapter = TagAdapter(tagAdapterCallback)
@@ -351,7 +373,11 @@ class MainMemoFragment : Fragment() {
         }
 
         tagViewModel.selectedTagIds.observe(viewLifecycleOwner) {
-            selectedTagAdapter.submitList(tagViewModel.selectedTagIds.value?.map { tagViewModel.getTag(it) })
+            selectedTagAdapter.submitList(tagViewModel.selectedTagIds.value?.mapNotNull { tagViewModel.getTag(it) })
+        }
+
+        tagViewModel.tagList.observe(viewLifecycleOwner) {
+            selectedTagAdapter.submitList(tagViewModel.selectedTagIds.value?.mapNotNull { tagViewModel.getTag(it) })
         }
     }
 
@@ -359,7 +385,6 @@ class MainMemoFragment : Fragment() {
         super.onResume()
         // update tags
         tagViewModel.reloadTags()
-        selectedTagAdapter.submitList(tagViewModel.selectedTagIds.value?.map { tagViewModel.getTag(it) })
     }
 
     override fun onDestroyView() {

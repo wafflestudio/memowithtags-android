@@ -142,6 +142,14 @@ class MemoViewModel @Inject constructor(
         )
     }
 
+    fun deleteTagFromMemo(tagId: Int) {
+        val updatedMemoList = _memoList.value?.map { memo ->
+            val updatedTagIds = memo.tagIds.filter { it != tagId }
+            memo.copy(tagIds = updatedTagIds)
+        } ?: emptyList()
+        _memoList.postValue(updatedMemoList)
+    }
+
     fun removeMemoFromListAndFill(memoId: Int) {
         val oldList = _memoList.value.orEmpty()
         val pageSize = 15

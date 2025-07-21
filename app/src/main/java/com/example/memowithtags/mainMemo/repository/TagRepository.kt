@@ -49,6 +49,25 @@ class TagRepository @Inject constructor(
         })
     }
 
+    fun deleteTag(
+        tagId: Int,
+        onSuccess: () -> Unit,
+        onError: (Throwable) -> Unit
+    ) {
+        tagApi.deleteTag(tagId).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    onSuccess()
+                } else {
+                    onError(Throwable("서버 응답 실패: ${response.code()}"))
+                }
+            }
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                onError(t)
+            }
+        })
+    }
+
     fun getMyTags(
         onSuccess: (List<Tag>) -> Unit,
         onError: (Throwable) -> Unit

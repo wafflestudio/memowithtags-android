@@ -40,6 +40,7 @@ class MemoAdapter(
             itemView.findViewById<RecyclerView>(R.id.tagRecyclerView).apply {
                 layoutManager = FlexboxLayoutManager(itemView.context)
                 adapter = tagAdapter
+                itemAnimator = null
             }
         }
 
