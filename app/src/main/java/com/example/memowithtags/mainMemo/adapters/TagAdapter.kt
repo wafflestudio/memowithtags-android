@@ -5,16 +5,18 @@ import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Tag
+import com.example.memowithtags.mainMemo.adapters.callbacks.TagAdapterCallback
 
 class TagAdapter(
-    private val onTagClick: (Int) -> Unit = {},
-    private val onTagLongClick: (Int) -> Unit = {}
+    private val callbacks: TagAdapterCallback
 ) : ListAdapter<Tag, TagAdapter.TagViewHolder>(DiffCallback()) {
 
     inner class TagViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -34,7 +36,36 @@ class TagAdapter(
             }
 
             itemView.setOnClickListener {
-                onTagClick(tag.id)
+                callbacks.onTagClick(tag.id)
+            }
+
+            itemView.setOnLongClickListener { view ->
+
+                val inflater = LayoutInflater.from(view.context)
+                val popupView = inflater.inflate(R.layout.tag_context_menu, null)
+                val widthInPx = (196 * view.context.resources.displayMetrics.density + 0.5f).toInt()
+                val popupWindow = PopupWindow(
+                    popupView,
+                    widthInPx,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    true
+                )
+                popupWindow.elevation = 16f
+
+                // tag edit
+                popupView.findViewById<LinearLayout>(R.id.tagEdit).setOnClickListener {
+                    callbacks.onEditClick(tag.id)
+                    popupWindow.dismiss()
+                }
+
+                // tag delete
+                popupView.findViewById<LinearLayout>(R.id.tagDelete).setOnClickListener {
+                    callbacks.onDeleteClick(tag.id)
+                    popupWindow.dismiss()
+                }
+
+                popupWindow.showAsDropDown(view)
+                true
             }
         }
     }

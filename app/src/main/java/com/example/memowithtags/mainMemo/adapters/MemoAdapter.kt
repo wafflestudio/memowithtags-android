@@ -14,17 +14,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
-import com.example.memowithtags.common.model.Memo
 import com.example.memowithtags.common.model.MemoWithTags
+import com.example.memowithtags.mainMemo.adapters.callbacks.MemoAdapterCallback
+import com.example.memowithtags.mainMemo.adapters.callbacks.TagAdapterCallback
 import com.example.memowithtags.mainMemo.animators.ViewExpandAnimator
 import com.google.android.flexbox.FlexboxLayoutManager
 import java.util.Locale
 
 class MemoAdapter(
-    private val onSearchClick: ((Memo) -> Unit) ? = null,
-    private val onEditClick: ((Memo, List<Int>) -> Unit) ? = null,
-    private val onEasyEditClick: ((Memo, List<Int>) -> Unit) ? = null,
-    private val onDeleteClick: ((Memo) -> Unit)? = null
+    private val memoAdapterCallback: MemoAdapterCallback,
+    private val tagAdapterCallback: TagAdapterCallback
 ) : ListAdapter<MemoWithTags, MemoAdapter.MemoViewHolder>(DiffCallback()) {
 
     private var expandedMemoIds: MutableSet<Int> = mutableSetOf()
@@ -35,12 +34,13 @@ class MemoAdapter(
 
     inner class MemoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val tagAdapter: TagAdapter = TagAdapter()
+        private val tagAdapter: TagAdapter = TagAdapter(tagAdapterCallback)
 
         init {
             itemView.findViewById<RecyclerView>(R.id.tagRecyclerView).apply {
                 layoutManager = FlexboxLayoutManager(itemView.context)
                 adapter = tagAdapter
+                itemAnimator = null
             }
         }
 
@@ -94,19 +94,19 @@ class MemoAdapter(
 
                 // memo edit
                 popupView.findViewById<LinearLayout>(R.id.memoEdit).setOnClickListener {
-                    onEditClick?.let { it1 -> it1(memoWithTags.memo, memoWithTags.memo.tagIds) }
+                    memoAdapterCallback.onEditClick(memoWithTags.memo, memoWithTags.memo.tagIds)
                     popupWindow.dismiss()
                 }
 
                 // memo search
                 popupView.findViewById<LinearLayout>(R.id.memoSearch).setOnClickListener {
-                    onSearchClick?.let { it1 -> it1(memoWithTags.memo) }
+                    memoAdapterCallback.onSearchClick(memoWithTags.memo)
                     popupWindow.dismiss()
                 }
 
                 // memo delete
                 popupView.findViewById<LinearLayout>(R.id.memoDelete).setOnClickListener {
-                    onDeleteClick?.invoke(memoWithTags.memo)
+                    memoAdapterCallback.onDeleteClick(memoWithTags.memo)
                     popupWindow.dismiss()
                 }
 
@@ -116,11 +116,11 @@ class MemoAdapter(
 
             // buttonbar click listener
             itemView.findViewById<Button>(R.id.searchButton).setOnClickListener {
-                onSearchClick?.let { it1 -> it1(memoWithTags.memo) }
+                memoAdapterCallback.onSearchClick(memoWithTags.memo)
             }
 
             itemView.findViewById<Button>(R.id.editButton).setOnClickListener {
-                onEasyEditClick?.let { it1 -> it1(memoWithTags.memo, memoWithTags.memo.tagIds) }
+                memoAdapterCallback.onEasyEditClick(memoWithTags.memo, memoWithTags.memo.tagIds)
             }
         }
     }
@@ -164,7 +164,7 @@ class MemoAdapter(
 
             if (oldItem.tags.size != newItem.tags.size) return false
             for (i in oldItem.tags.indices) {
-                if (!Companion.TAG_DIFF_CALLBACK.areContentsTheSame(oldItem.tags[i], newItem.tags[i])) return false
+                if (!TAG_DIFF_CALLBACK.areContentsTheSame(oldItem.tags[i], newItem.tags[i])) return false
             }
             return isMemoContentsSame
         }
