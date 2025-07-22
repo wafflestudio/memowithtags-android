@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.memowithtags.R
 import com.example.memowithtags.databinding.FragmentEditMemoBinding
 import com.example.memowithtags.mainMemo.adapters.TagAdapter
 import com.example.memowithtags.mainMemo.adapters.callbacks.TagAdapterCallback
@@ -74,6 +75,13 @@ class EditMemoFragment : Fragment() {
                     if (onSuccess) memoViewModel.deleteTagFromMemo(tagId)
                 }
             }
+
+            override fun onEditClick(tagId: Int) {
+                val bundle = Bundle().apply {
+                    putInt("tagId", tagId)
+                }
+                findNavController().navigate(R.id.action_editMemo_to_editTag, bundle)
+            }
         }
 
         selectedTagAdapter = TagAdapter(selectedTagAdapterCallback)
@@ -86,6 +94,12 @@ class EditMemoFragment : Fragment() {
         // observe 변경
         tagViewModel.selectedTagIds.observe(viewLifecycleOwner) { it ->
             selectedTagAdapter.submitList(it.map { tagViewModel.getTag(it) })
+        }
+
+        // 태그 변경 감지
+        tagViewModel.tagList.observe(viewLifecycleOwner) {
+            updateTagAdapterData()
+            selectedTagAdapter.submitList(tagViewModel.selectedTagIds.value?.map { tagViewModel.getTag(it) })
         }
 
         // 키보드 활성화 -> 태그 생성창 보이기
@@ -124,6 +138,13 @@ class EditMemoFragment : Fragment() {
                 tagViewModel.deleteTag(tagId) { onSuccess ->
                     if (onSuccess) memoViewModel.deleteTagFromMemo(tagId)
                 }
+            }
+
+            override fun onEditClick(tagId: Int) {
+                val bundle = Bundle().apply {
+                    putInt("tagId", tagId)
+                }
+                findNavController().navigate(R.id.action_editMemo_to_editTag, bundle)
             }
         }
 
