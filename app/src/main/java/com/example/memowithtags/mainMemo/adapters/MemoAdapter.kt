@@ -35,7 +35,7 @@ class MemoAdapter(
 
     inner class MemoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val tagAdapter: TagAdapter = TagAdapter(tagAdapterCallback)
+        private val tagAdapter: TagAdapter = TagAdapter(tagAdapterCallback, true)
 
         init {
             itemView.findViewById<RecyclerView>(R.id.tagRecyclerView).apply {
