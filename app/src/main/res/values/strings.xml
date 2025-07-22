@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">MemoWithTags</string>
+
+    <string name="open_source_license">
+    <![CDATA[<a href="https://wafflestudio.github.io/memowithtags-ios/opensource-license.html">오픈소스 라이센스</a>]]>
+    </string>
+
+    <string name="terms_of_service">
+    <![CDATA[<a href="https://wafflestudio.github.io/memowithtags-ios/service-term.html">이용약관</a>]]>
+    </string>
+
+    <string name="privacy_policy">
+    <![CDATA[<a href="https://wafflestudio.github.io/memowithtags-ios/privacy-policy.html">개인정보처리방침</a>]]>
+    </string>
+
 </resources>

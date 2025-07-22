@@ -11,6 +11,7 @@
     <color name="colorPrimary">#202021</color>
     <color name="colorSecondary">#A0A0A1</color>
     <color name="colorDanger">#FF5151</color>
+    <color name="colorLink">#B2202021</color>
 
     <!-- Icon -->
     <color name="colorChecked">#FF9C9C</color>

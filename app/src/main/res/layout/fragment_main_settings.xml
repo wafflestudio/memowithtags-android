@@ -136,14 +136,13 @@
             android:background="@drawable/rounded_background"
             android:backgroundTint="@color/colorMemoBackground"
             android:layout_marginBottom="12dp"
-            android:paddingTop="13dp"
+            android:paddingTop="16dp"
             android:paddingBottom="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="10dp"
                 android:paddingLeft="17dp"
                 android:paddingRight="17dp">
 
@@ -360,7 +359,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="8dp"
-                    android:paddingBottom="8dp">
+                    android:paddingBottom="16dp">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -380,9 +379,58 @@
 
             </LinearLayout>
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/PoliciesAndTerms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/rounded_background"
+            android:backgroundTint="@color/colorMemoBackground"
+            android:layout_marginBottom="12dp"
+            android:paddingLeft="17dp"
+            android:paddingTop="13dp"
+            android:paddingRight="17dp"
+            android:paddingBottom="13dp">
 
 
+            <TextView
+                android:id="@+id/openSourceLicenseText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/open_source_license"
+                android:textSize="14sp"
+                android:layout_weight="1"
+                android:linksClickable="true"
+                android:textColor="@color/colorPrimary"
+                android:textColorLink="@color/colorLink"
+                android:layout_marginBottom="6dp"/>
 
+            <TextView
+                android:id="@+id/termsOfServiceText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/terms_of_service"
+                android:textSize="14sp"
+                android:layout_weight="1"
+                android:linksClickable="true"
+                android:textColor="@color/colorPrimary"
+                android:textColorLink="@color/colorLink"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"/>
+
+            <TextView
+                android:id="@+id/privacyPolicyText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/privacy_policy"
+                android:textSize="14sp"
+                android:layout_weight="1"
+                android:linksClickable="true"
+                android:textColor="@color/colorPrimary"
+                android:textColorLink="@color/colorLink"
+                android:layout_marginTop="6dp"/>
 
         </LinearLayout>
 

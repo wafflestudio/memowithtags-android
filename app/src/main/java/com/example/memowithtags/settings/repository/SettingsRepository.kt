@@ -2,22 +2,40 @@ package com.example.memowithtags.settings.repository
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import com.example.memowithtags.common.model.SearchFilterType
+import com.example.memowithtags.common.model.SearchSortType
 import com.example.memowithtags.common.model.TagSortType
+import com.example.memowithtags.common.model.TextSizeType
 import javax.inject.Inject
 
 class SettingsRepository @Inject constructor(
     private val prefs: SharedPreferences
 ) {
-    fun getSearchFilterOption(): String? {
-        return prefs.getString("search_filter_option", null)
+    fun getSearchFilterOption(): SearchFilterType {
+        return try {
+            val name = prefs.getString("search_filter_option", null)
+            SearchFilterType.valueOf(name ?: return SearchFilterType.AND)
+        } catch (e: IllegalArgumentException) {
+            SearchFilterType.AND
+        }
     }
 
-    fun getSearchSortOption(): String? {
-        return prefs.getString("search_sort_option", null)
+    fun getSearchSortOption(): SearchSortType {
+        return try {
+            val name = prefs.getString("search_sort_option", null)
+            SearchSortType.valueOf(name ?: return SearchSortType.CREATED)
+        } catch (e: IllegalArgumentException) {
+            SearchSortType.CREATED
+        }
     }
 
-    fun getTextSizeOption(): String? {
-        return prefs.getString("text_size_option", null)
+    fun getTextSizeOption(): TextSizeType {
+        return try {
+            val name = prefs.getString("text_size_option", null)
+            TextSizeType.valueOf(name ?: return TextSizeType.MEDIUM)
+        } catch (e: IllegalArgumentException) {
+            TextSizeType.MEDIUM
+        }
     }
 
     fun getTagSortOption(): TagSortType {
@@ -33,16 +51,16 @@ class SettingsRepository @Inject constructor(
         return prefs.getBoolean("tag_sort_in_memo_option", false)
     }
 
-    fun setSearchFilterOption(option: String) {
-        prefs.edit() { putString("search_filter_option", option) }
+    fun setSearchFilterOption(option: SearchFilterType) {
+        prefs.edit() { putString("search_filter_option", option.toString()) }
     }
 
-    fun setSearchSortOption(option: String) {
-        prefs.edit() { putString("search_sort_option", option) }
+    fun setSearchSortOption(option: SearchSortType) {
+        prefs.edit() { putString("search_sort_option", option.toString()) }
     }
 
-    fun setTextSizeOption(option: String) {
-        prefs.edit() { putString("text_size_option", option) }
+    fun setTextSizeOption(option: TextSizeType) {
+        prefs.edit() { putString("text_size_option", option.toString()) }
     }
 
     fun setTagSortOption(option: TagSortType) {
