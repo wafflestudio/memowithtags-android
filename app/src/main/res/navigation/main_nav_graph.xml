@@ -22,12 +22,27 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_mainMemo_to_editTag"
+            app:destination="@id/editTagFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
         android:id="@+id/editMemoFragment"
         android:name="com.example.memowithtags.mainMemo.fragments.EditMemoFragment"
-        tools:layout="@layout/fragment_edit_memo"/>
+        tools:layout="@layout/fragment_edit_memo">
+        <action
+            android:id="@+id/action_editMemo_to_editTag"
+            app:destination="@id/editTagFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
 
     <fragment
         android:id="@+id/searchFragment"
@@ -40,6 +55,18 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_search_to_editTag"
+            app:destination="@id/editTagFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
+
+    <fragment
+        android:id="@+id/editTagFragment"
+        android:name="com.example.memowithtags.mainMemo.fragments.EditTagFragment"
+        tools:layout="@layout/fragment_edit_tag_settings"/>
 
 </navigation>

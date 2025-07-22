@@ -20,7 +20,7 @@ class AlphanumComparator : Comparator<String> {
         val isDigit1 = c1.all { it.isDigit() }
         val isDigit2 = c2.all { it.isDigit() }
 
-        return if (isDigit1 && isDigit2) {
+        return if (isDigit1 && isDigit2 && c1.isNotEmpty() && c2.isNotEmpty()) {
             c1.toBigInteger().compareTo(c2.toBigInteger())
         } else {
             c1.compareTo(c2)
