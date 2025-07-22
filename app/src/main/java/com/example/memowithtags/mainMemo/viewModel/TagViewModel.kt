@@ -32,8 +32,8 @@ class TagViewModel @Inject constructor(
     val tagList: LiveData<List<Tag>> = _tagList
 
     // 선택된 Tag의 id를 저장하는 List
-    private val _selectedTagIds = MutableLiveData<List<Int>>()
-    val selectedTagIds: LiveData<List<Int>> = _selectedTagIds
+    private val _selectedTagIds = MutableLiveData<LinkedHashSet<Int>>()
+    val selectedTagIds: LiveData<LinkedHashSet<Int>> = _selectedTagIds
 
     // 이름 정렬을 위한 collator
     private val collator = AlphanumComparator()
@@ -116,7 +116,7 @@ class TagViewModel @Inject constructor(
                     removeIf { it.id == tagId }
                 }
                 _tagList.postValue(updated)
-                val selected = _selectedTagIds.value.orEmpty().toMutableList().apply {
+                val selected = LinkedHashSet(_selectedTagIds.value.orEmpty()).apply {
                     removeIf { it == tagId }
                 }
                 _selectedTagIds.postValue(selected)
@@ -180,7 +180,9 @@ class TagViewModel @Inject constructor(
         } ?: return
         _tagList.value = updatedTags
 
-        val selected = _selectedTagIds.value.orEmpty().toMutableList().apply { add(tagId) }
+        val selected = LinkedHashSet(_selectedTagIds.value.orEmpty()).apply {
+            add(tagId)
+        }
         _selectedTagIds.value = selected
         sortTag()
     }
@@ -191,7 +193,9 @@ class TagViewModel @Inject constructor(
         } ?: return
         _tagList.value = updatedTags
 
-        val selected = _selectedTagIds.value.orEmpty().toMutableList().apply { remove(tagId) }
+        val selected = LinkedHashSet(_selectedTagIds.value.orEmpty()).apply {
+            remove(tagId)
+        }
         _selectedTagIds.value = selected
         sortTag()
     }
@@ -199,11 +203,11 @@ class TagViewModel @Inject constructor(
     fun clearSelectedTags() {
         val updatedTags = _tagList.value?.map { it.copy(isVisible = true) } ?: return
         _tagList.value = updatedTags
-        _selectedTagIds.value = emptyList()
+        _selectedTagIds.value = LinkedHashSet()
     }
 
     fun setSelectedTags(tagIds: List<Int>) {
-        _selectedTagIds.value = tagIds
+        _selectedTagIds.value = LinkedHashSet(tagIds)
 
         // visibility 수정하기
         val currentList = _tagList.value ?: return
@@ -222,7 +226,7 @@ class TagViewModel @Inject constructor(
         val currentList = _tagList.value ?: return
         when (settingsRepository.getTagSortOption()) {
             TagSortType.ALPHABETIC -> {
-                _tagList.value = currentList.sortedWith(compareBy(collator) { it.name })
+                _tagList.value = currentList.sortedBy { it.name }
             }
             TagSortType.COLOR -> {
                 _tagList.value = currentList.sortedBy { tag ->
@@ -233,7 +237,7 @@ class TagViewModel @Inject constructor(
                 _tagList.value = currentList.sortedByDescending { it.createdAt }
             }
         }
-        _selectedTagIds.value = sortTagIds(_selectedTagIds.value.orEmpty())
+        _selectedTagIds.value = LinkedHashSet(sortTagIds(_selectedTagIds.value.orEmpty().toList()))
     }
 
     // memo의 tagIds를 정렬하는 함수
