@@ -10,6 +10,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -41,6 +42,8 @@ class MainMemoFragment : Fragment() {
 
     private val memoViewModel: MemoViewModel by activityViewModels()
     private val tagViewModel: TagViewModel by activityViewModels()
+
+    var initialFlag = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -135,14 +138,11 @@ class MainMemoFragment : Fragment() {
                     MemoWithTags(memo, tags)
                 }
             ) {
-                if (memoList.isNotEmpty()) {
-                    memoViewModel.isPaging.value?.let { isPaging ->
-                        if (!isPaging) {
-                            binding.memoRecyclerView.post {
-                                // binding.memoRecyclerView.scrollToPosition(0)
-                            }
-                        } else {
-                            memoViewModel.stopPaging()
+                memoViewModel.shouldScrollToTop.value?.let { shouldScroll ->
+                    if (shouldScroll) {
+                        binding.memoRecyclerView.post {
+                            binding.memoRecyclerView.scrollToPosition(0)
+                            memoViewModel.consumeScrollToTopFlag()
                         }
                     }
                 }
@@ -150,6 +150,19 @@ class MainMemoFragment : Fragment() {
         }
 
         memoViewModel.resetAndLoadFirstPage()
+
+        if (initialFlag) {
+            binding.memoRecyclerView.viewTreeObserver.addOnPreDrawListener(
+                object : ViewTreeObserver.OnPreDrawListener {
+                    override fun onPreDraw(): Boolean {
+                        binding.memoRecyclerView.viewTreeObserver.removeOnPreDrawListener(this)
+                        binding.memoRecyclerView.scrollToPosition(0)
+                        return true
+                    }
+                }
+            )
+            initialFlag = false
+        }
 
         // 키보드 활성화 -> 태그 생성창 보이기, 메모 수정 아이콘 바 보이기
         view.viewTreeObserver.addOnGlobalLayoutListener {
@@ -332,7 +345,7 @@ class MainMemoFragment : Fragment() {
 
     private val postOrUpdateMemoClickListener = View.OnClickListener {
         val content = binding.newMemoText.text.toString()
-        val tagIds = tagViewModel.selectedTagIds.value
+        val tagIds = tagViewModel.selectedTagIds.value?.toList()
             ?.takeIf { it.isNotEmpty() }
             ?: listOf(0)
 

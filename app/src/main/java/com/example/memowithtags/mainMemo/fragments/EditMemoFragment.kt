@@ -185,7 +185,7 @@ class EditMemoFragment : Fragment() {
 
     private fun handleBackPressed() {
         val content = binding.newMemoText.text.toString()
-        val tagIds = tagViewModel.selectedTagIds.value
+        val tagIds = tagViewModel.selectedTagIds.value?.toList()
             ?.takeIf { it.isNotEmpty() }
             ?: listOf(0)
 

@@ -30,9 +30,9 @@ class MemoViewModel @Inject constructor(
     var lastLoadedItemCount = 0
 
     // fragment 참고용
-    private val _isPaging = MutableLiveData(false)
-    val isPaging: LiveData<Boolean> = _isPaging
-    private var isinitialPaging = false
+    private val _shouldScrollToTop = MutableLiveData<Boolean>(false)
+    val shouldScrollToTop: LiveData<Boolean> get() = _shouldScrollToTop
+    var isinitialPaging = false
 
     private var lastDeletedMemoId: Int? = null
 
@@ -48,7 +48,6 @@ class MemoViewModel @Inject constructor(
 
     fun loadNextPage() {
         if (isLoading || isLastPage) return
-        if (!isinitialPaging) _isPaging.postValue(true)
 
         Log.d("Paging", "loadNextPage 호출됨. 현재 페이지: $currentPage")
 
@@ -62,7 +61,11 @@ class MemoViewModel @Inject constructor(
             page = currentPage,
             onResult = { memos, totalPages ->
                 val currentList = _memoList.value.orEmpty()
-                _memoList.postValue(currentList + memos)
+
+                // 중복 메모 방지
+                val existingIds = currentList.map { it.id }.toSet()
+                val newMemos = memos.filter { it.id !in existingIds }
+                _memoList.postValue(currentList + newMemos)
 
                 lastLoadedItemCount = memos.size
 
@@ -75,12 +78,6 @@ class MemoViewModel @Inject constructor(
                 isLoading = false
             }
         )
-
-        isinitialPaging = false
-    }
-
-    fun stopPaging() {
-        _isPaging.postValue(false)
     }
 
     fun postMemo(content: String, tagIds: List<Int>) {
@@ -90,7 +87,8 @@ class MemoViewModel @Inject constructor(
             request = request,
             onSuccess = { memo ->
                 Log.d("MemoViewModel", "메모 등록 성공: $memo")
-                resetAndLoadFirstPage()
+                addMemoToList(memo)
+                triggerScrollToTop()
             },
             onError = { error ->
                 Log.e("MemoViewModel", "메모 등록 실패", error)
@@ -109,8 +107,20 @@ class MemoViewModel @Inject constructor(
             memoId = memoId,
             request = request,
             onSuccess = {
+                val currentList = _memoList.value.orEmpty().toMutableList()
+                val index = currentList.indexOfFirst { it.id == memoId }
+                if (index != -1) {
+                    val oldMemo = currentList[index]
+                    val updatedMemo = oldMemo.copy(
+                        content = updatedContent,
+                        tagIds = updatedTagIds,
+                        locked = locked
+                    )
+                    currentList[index] = updatedMemo
+                    _memoList.value = currentList
+                }
+
                 clearEditing()
-                resetAndLoadFirstPage()
             },
             onError = {
                 Log.e("MemoViewModel", "메모 수정 실패", it)
@@ -150,14 +160,19 @@ class MemoViewModel @Inject constructor(
         _memoList.postValue(updatedMemoList)
     }
 
+    fun addMemoToList(memo: Memo) {
+        val updatedList = _memoList.value?.toMutableList() ?: mutableListOf()
+        updatedList.add(0, memo)
+        _memoList.value = updatedList
+    }
+
     fun removeMemoFromListAndFill(memoId: Int) {
         val oldList = _memoList.value.orEmpty()
-        val pageSize = 15
 
         val index = oldList.indexOfFirst { it.id == memoId }
         if (index == -1) return // 없는 메모
 
-        val page = index / pageSize + 1
+        val page = index / PAGE_SIZE + 1
 
         val updated = oldList.toMutableList().apply {
             removeIf { it.id == memoId }
@@ -197,6 +212,13 @@ class MemoViewModel @Inject constructor(
             onError = {
             }
         )
+    }
+
+    fun triggerScrollToTop() {
+        _shouldScrollToTop.value = true
+    }
+    fun consumeScrollToTopFlag() {
+        _shouldScrollToTop.value = false
     }
 
     fun startEditing(memo: Memo) {
