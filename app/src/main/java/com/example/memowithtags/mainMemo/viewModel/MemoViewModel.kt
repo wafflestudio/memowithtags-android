@@ -4,11 +4,17 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.memowithtags.common.model.Memo
 import com.example.memowithtags.common.network.api.CreateMemoRequest
 import com.example.memowithtags.common.network.api.UpdateMemoRequest
 import com.example.memowithtags.mainMemo.repository.MemoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,6 +34,36 @@ class MemoViewModel @Inject constructor(
     private var isLastPage = false
     private var isLoading = false
     var lastLoadedItemCount = 0
+
+    // search 페이지용
+    private val _query = MutableStateFlow("")
+
+    private var searchCurrentPage = 1
+    private var searchIsLastPage = false
+    private var searchIsLoading = false
+
+    private val searchMemoIdList = mutableListOf<Int>()
+
+    private val _memoSearchResult = MutableLiveData<List<Int>>()
+    val memoSearchResult: LiveData<List<Int>> = _memoSearchResult
+
+    private val _tagSearchResult = MutableLiveData<List<Int>>()
+    val tagSearchResult: LiveData<List<Int>> = _tagSearchResult
+
+    private val _selectedSearchTagIds = MutableLiveData<List<Int>>(emptyList())
+    val selectedSearchTagIds: LiveData<List<Int>> = _selectedSearchTagIds
+
+    init {
+        viewModelScope.launch {
+            _query
+                .debounce(300)
+                .distinctUntilChanged()
+                .collectLatest { query ->
+                    resetSearchState()
+                    performSearch(query)
+                }
+        }
+    }
 
     // fragment 참고용
     private val _shouldScrollToTop = MutableLiveData<Boolean>(false)
@@ -212,6 +248,74 @@ class MemoViewModel @Inject constructor(
             onError = {
             }
         )
+    }
+
+    private fun performSearch(query: String) {
+        if (searchIsLoading || searchIsLastPage) {
+            return
+        }
+
+        if (query.isBlank() && _selectedSearchTagIds.value.isNullOrEmpty()) {
+            _memoSearchResult.value = emptyList()
+            return
+        }
+
+        searchIsLoading = true
+
+        memoRepository.searchMemo(
+            content = query,
+            tagIds = _selectedSearchTagIds.value ?: emptyList(),
+            startDate = null,
+            endDate = null,
+            page = searchCurrentPage,
+            callback = { result ->
+                searchIsLoading = false
+                if (result.isEmpty()) {
+                    searchIsLastPage = true
+                } else {
+                    val ids = result.map { it.id }
+                    searchMemoIdList.addAll(ids)
+                    _memoSearchResult.postValue(searchMemoIdList.toList())
+                    searchCurrentPage++
+                }
+            },
+            onError = {
+                searchIsLoading = false
+            }
+        )
+    }
+
+    fun addSelectedTagId(tagId: Int) {
+        val updated = _selectedSearchTagIds.value.orEmpty().toMutableList().apply {
+            if (!contains(tagId)) add(tagId)
+        }
+        _selectedSearchTagIds.value = updated
+        resetSearchState()
+        performSearch(_query.value)
+    }
+
+    fun removeSelectedTagId(tagId: Int) {
+        val updated = _selectedSearchTagIds.value.orEmpty().toMutableList().apply {
+            remove(tagId)
+        }
+        _selectedSearchTagIds.value = updated
+        resetSearchState()
+        performSearch(_query.value)
+    }
+
+    private fun resetSearchState() {
+        searchCurrentPage = 1
+        searchIsLastPage = false
+        searchMemoIdList.clear()
+    }
+
+    fun updateQuery(newQuery: String) {
+        _query.value = newQuery
+        resetSearchState()
+    }
+
+    fun loadNextSearchPage() {
+        performSearch(_query.value)
     }
 
     fun triggerScrollToTop() {
