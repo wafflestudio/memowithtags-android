@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,7 +20,6 @@ import com.example.memowithtags.mainMemo.adapters.TagAdapter
 import com.example.memowithtags.mainMemo.adapters.callbacks.MemoAdapterCallback
 import com.example.memowithtags.mainMemo.adapters.callbacks.TagAdapterCallback
 import com.example.memowithtags.mainMemo.viewModel.MemoViewModel
-import com.example.memowithtags.mainMemo.viewModel.SearchViewModel
 import com.example.memowithtags.mainMemo.viewModel.TagViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,7 +28,6 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
-    private val searchViewModel: SearchViewModel by viewModels()
     private val tagViewModel: TagViewModel by activityViewModels()
     private val memoViewModel: MemoViewModel by activityViewModels()
 
@@ -58,7 +55,7 @@ class SearchFragment : Fragment() {
         val content = arguments?.getString("memoContent")
         if (content != null) {
             binding.searchText.setText(content)
-            searchViewModel.updateQuery(content)
+            memoViewModel.updateQuery(content)
             tagViewModel.updateQuery(content)
         }
 
@@ -69,7 +66,7 @@ class SearchFragment : Fragment() {
                     selectedQueryTags.add(tagId)
                     queryTagAdapter.submitList(selectedQueryTags.toList().map { tagViewModel.getTag(it) })
                     binding.querytagRecyclerView.visibility = View.VISIBLE
-                    searchViewModel.addSelectedTagId(tagId)
+                    memoViewModel.addSelectedTagId(tagId)
                 }
             }
 
@@ -113,7 +110,7 @@ class SearchFragment : Fragment() {
                 if (selectedQueryTags.isEmpty()) {
                     binding.querytagRecyclerView.visibility = View.GONE
                 }
-                searchViewModel.removeSelectedTagId(tagId)
+                memoViewModel.removeSelectedTagId(tagId)
             }
 
             override fun onDeleteClick(tagId: Int) {
@@ -142,7 +139,7 @@ class SearchFragment : Fragment() {
         val memoAdapterCallback = object : MemoAdapterCallback {
             override fun onSearchClick(memo: Memo) {
                 binding.searchText.setText(memo.content)
-                searchViewModel.updateQuery(memo.content)
+                memoViewModel.updateQuery(memo.content)
                 tagViewModel.updateQuery(memo.content)
             }
 
@@ -194,7 +191,7 @@ class SearchFragment : Fragment() {
                     val totalItemCount = layoutManager.itemCount
 
                     if (lastVisibleItemPosition >= totalItemCount - 1 && dy > 0) {
-                        searchViewModel.loadNextPage()
+                        memoViewModel.loadNextSearchPage()
                     }
                 }
             })
@@ -202,12 +199,12 @@ class SearchFragment : Fragment() {
 
         // 검색어 입력 감지
         binding.searchText.addTextChangedListener {
-            searchViewModel.updateQuery(it.toString())
+            memoViewModel.updateQuery(it.toString())
             tagViewModel.updateQuery(it.toString())
         }
 
         // ViewModel에서 결과 수신
-        searchViewModel.memoSearchResult.observe(viewLifecycleOwner) { memoList ->
+        memoViewModel.memoSearchResult.observe(viewLifecycleOwner) { memoList ->
             Log.d("SearchFragment", "검색 결과 memoList.size = ${memoList.size}")
 
             if (memoList.isNotEmpty()) {
