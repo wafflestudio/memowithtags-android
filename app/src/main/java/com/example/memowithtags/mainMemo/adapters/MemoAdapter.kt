@@ -2,6 +2,7 @@ package com.example.memowithtags.mainMemo.adapters
 
 import android.icu.text.SimpleDateFormat
 import android.icu.util.TimeZone
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +35,7 @@ class MemoAdapter(
 
     inner class MemoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val tagAdapter: TagAdapter = TagAdapter(tagAdapterCallback)
+        private val tagAdapter: TagAdapter = TagAdapter(tagAdapterCallback, true)
 
         init {
             itemView.findViewById<RecyclerView>(R.id.tagRecyclerView).apply {
@@ -110,7 +111,33 @@ class MemoAdapter(
                     popupWindow.dismiss()
                 }
 
-                popupWindow.showAsDropDown(view)
+                // show popup window
+                val location = IntArray(2)
+                view.getLocationOnScreen(location)
+                val anchorX = location[0]
+                val anchorY = location[1]
+                val displayMetrics = view.context.resources.displayMetrics
+                val screenWidth = displayMetrics.widthPixels
+                val screenHeight = displayMetrics.heightPixels
+
+                popupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+                val popupHeight = popupView.measuredHeight
+                val popupWidth = popupView.measuredWidth
+
+                val spaceBelow = screenHeight - (anchorY + view.height)
+                val spaceAbove = anchorY
+                val popupX = anchorX.coerceAtMost(screenWidth - popupWidth)
+
+                val popupY = if (spaceBelow >= popupHeight) {
+                    anchorY + view.height + 12
+                } else if (spaceAbove >= popupHeight) {
+                    anchorY - popupHeight
+                } else {
+                    screenHeight - popupHeight
+                }
+
+                popupWindow.animationStyle = android.R.style.Animation_Dialog
+                popupWindow.showAtLocation(view, Gravity.NO_GRAVITY, popupX, popupY)
                 true
             }
 
