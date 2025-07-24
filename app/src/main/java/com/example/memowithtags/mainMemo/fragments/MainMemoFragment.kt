@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Memo
+import com.example.memowithtags.common.model.MemoSource
 import com.example.memowithtags.common.model.MemoWithTags
 import com.example.memowithtags.common.model.tagColors
 import com.example.memowithtags.databinding.FragmentMainMemoBinding
@@ -91,8 +92,8 @@ class MainMemoFragment : Fragment() {
                 tagViewModel.setSelectedTags(tagIds)
             }
 
-            override fun onDeleteClick(memo: Memo) {
-                memoViewModel.deleteMemo(memo.id)
+            override fun onDeleteClick(memo: Memo, source: MemoSource) {
+                memoViewModel.deleteMemo(memo.id, source)
             }
         }
 
@@ -111,7 +112,7 @@ class MainMemoFragment : Fragment() {
             }
         }
 
-        memoAdapter = MemoAdapter(memoAdapterCallback, tagInMemoAdapterCallback)
+        memoAdapter = MemoAdapter(MemoSource.MAIN ,memoAdapterCallback, tagInMemoAdapterCallback)
 
         binding.memoRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext()).apply {
@@ -128,7 +129,7 @@ class MainMemoFragment : Fragment() {
                     val lastVisiblePosition = layoutManager.findLastVisibleItemPosition()
 
                     if (lastVisiblePosition >= layoutManager.itemCount - 3) {
-                        memoViewModel.loadNextPage()
+                        memoViewModel.loadNextPage(MemoSource.MAIN)
                     }
                 }
             })
@@ -144,27 +145,24 @@ class MainMemoFragment : Fragment() {
             ) {
                 memoViewModel.shouldScrollToTop.value?.let { shouldScroll ->
                     if (shouldScroll) {
-                        binding.memoRecyclerView.post {
-                            binding.memoRecyclerView.scrollToPosition(0)
-                            memoViewModel.consumeScrollToTopFlag()
-                        }
+                        binding.memoRecyclerView.viewTreeObserver.addOnPreDrawListener(
+                            object : ViewTreeObserver.OnPreDrawListener {
+                                override fun onPreDraw(): Boolean {
+                                    binding.memoRecyclerView.viewTreeObserver.removeOnPreDrawListener(this)
+                                    binding.memoRecyclerView.scrollToPosition(0)
+                                    memoViewModel.consumeScrollToTopFlag()
+                                    return true
+                                }
+                            }
+                        )
                     }
                 }
             }
         }
 
-        memoViewModel.resetAndLoadFirstPage()
-
         if (initialFlag) {
-            binding.memoRecyclerView.viewTreeObserver.addOnPreDrawListener(
-                object : ViewTreeObserver.OnPreDrawListener {
-                    override fun onPreDraw(): Boolean {
-                        binding.memoRecyclerView.viewTreeObserver.removeOnPreDrawListener(this)
-                        binding.memoRecyclerView.scrollToPosition(0)
-                        return true
-                    }
-                }
-            )
+            memoViewModel.resetAndLoadFirstPage()
+            memoViewModel.triggerScrollToTop()
             initialFlag = false
         }
 

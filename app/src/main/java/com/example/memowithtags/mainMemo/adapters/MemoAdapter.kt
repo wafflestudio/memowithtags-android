@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
+import com.example.memowithtags.common.model.MemoSource
 import com.example.memowithtags.common.model.MemoWithTags
 import com.example.memowithtags.mainMemo.adapters.callbacks.MemoAdapterCallback
 import com.example.memowithtags.mainMemo.adapters.callbacks.TagAdapterCallback
@@ -23,6 +24,7 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import java.util.Locale
 
 class MemoAdapter(
+    private val source: MemoSource,
     private val memoAdapterCallback: MemoAdapterCallback,
     private val tagAdapterCallback: TagAdapterCallback
 ) : ListAdapter<MemoWithTags, MemoAdapter.MemoViewHolder>(DiffCallback()) {
@@ -107,7 +109,7 @@ class MemoAdapter(
 
                 // memo delete
                 popupView.findViewById<LinearLayout>(R.id.memoDelete).setOnClickListener {
-                    memoAdapterCallback.onDeleteClick(memoWithTags.memo)
+                    memoAdapterCallback.onDeleteClick(memoWithTags.memo, source)
                     popupWindow.dismiss()
                 }
 
