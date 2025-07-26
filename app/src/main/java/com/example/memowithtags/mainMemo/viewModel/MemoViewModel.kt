@@ -65,6 +65,9 @@ class MemoViewModel @Inject constructor(
     val shouldScrollToTop: LiveData<Boolean> get() = _shouldScrollToTop
     var isinitialPaging = false
 
+    private val _recommendedMemoIds = MutableLiveData<List<Int>>(emptyList())
+    val recommendedMemoIds: LiveData<List<Int>> get() = _recommendedMemoIds
+
     private var lastDeletedMemoId: Int? = null
 
     val PAGE_SIZE = 15
@@ -166,14 +169,58 @@ class MemoViewModel @Inject constructor(
         )
     }
 
-    fun getMemo(memoId: Int): Memo? {
-        val memo = _memoList.value?.find { it.id == memoId }
+    fun fetchRecommendedMemoIds(
+        content: String,
+        tagIds: List<Int>,
+        onComplete: () -> Unit = {},
+        onError: (Throwable) -> Unit = {}
+    ) {
+        memoRepository.recommendMemos(
+            content = content,
+            tagIds = tagIds,
+            onSuccess = { ids ->
+                _recommendedMemoIds.postValue(ids)
+                onComplete()
+            },
+            onError = { error ->
+                Log.e("MemoViewModel", "추천 실패", error)
+                onError(error)
+            }
+        )
+    }
+
+    fun findMemoById(memoId: Int): Memo? {
+        return _memoList.value?.find { it.id == memoId }
+    }
+
+    fun loadUntilMemoFound(
+        targetMemoId: Int,
+        onFound: (Memo) -> Unit,
+        onNotFound: () -> Unit
+    ) {
+        val memo = findMemoById(targetMemoId)
         if (memo != null) {
-            Log.d("MemoViewModel", "getMemo($memoId) → ${memo.content}")
-        } else {
-            Log.d("MemoViewModel", "getMemo($memoId) → null")
+            onFound(memo)
+            return
         }
-        return memo
+
+        if (isLastPage) {
+            onNotFound()
+            return
+        }
+
+        // 다음 페이지 요청
+        loadNextPage(MemoSource.MAIN)
+
+        // delay 후 다시 시도 (RecyclerView 업데이트 기다림)
+        viewModelScope.launch {
+            kotlinx.coroutines.delay(300)
+            loadUntilMemoFound(targetMemoId, onFound, onNotFound)
+        }
+    }
+
+    fun setRecommendedMemoIds(ids: List<Int>) {
+        _recommendedMemoIds.value = ids
     }
 
     fun deleteMemo(memoId: Int, source: MemoSource) {

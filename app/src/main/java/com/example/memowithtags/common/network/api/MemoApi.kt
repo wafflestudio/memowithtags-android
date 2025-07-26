@@ -32,4 +32,9 @@ interface MemoApi {
     fun deleteMemo(
         @Path("id") id: Int
     ): Call<Void>
+
+    @POST("/api/v1/recommend-memo")
+    fun recommendMemos(
+        @Body request: RecommendMemoRequest
+    ): Call<RecommendMemoResponse>
 }

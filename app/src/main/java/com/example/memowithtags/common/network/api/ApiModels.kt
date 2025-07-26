@@ -75,6 +75,11 @@ data class SearchMemoRequest(
     val page: Int
 )
 
+data class RecommendMemoRequest(
+    val content: String,
+    val tagIds: List<Int>
+)
+
 data class RefreshTokenResponse(
     val accessToken: String,
     val refreshToken: String,
@@ -146,4 +151,8 @@ data class SocialLoginResponse(
     val accessToken: String,
     val refreshToken: String,
     val isNewUser: Boolean
+)
+
+data class RecommendMemoResponse(
+    val memoIds: List<Int>
 )

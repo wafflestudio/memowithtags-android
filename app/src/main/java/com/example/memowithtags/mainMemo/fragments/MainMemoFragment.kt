@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -46,6 +47,9 @@ class MainMemoFragment : Fragment() {
 
     var initialFlag = true
 
+    private var recommendedMemoIds: List<Int> = emptyList()
+    private var currentRecommendIndex = -1
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -66,6 +70,9 @@ class MainMemoFragment : Fragment() {
 
         // 태그 불러오기
         tagViewModel.getMyTags()
+
+        // 추천 레이아웃
+        setupRecommendationUI()
 
         // 메모 recycler view 세팅
         val memoAdapterCallback = object : MemoAdapterCallback {
@@ -401,13 +408,92 @@ class MainMemoFragment : Fragment() {
             adapter = selectedTagAdapter
         }
 
-        tagViewModel.selectedTagIds.observe(viewLifecycleOwner) {
-            selectedTagAdapter.submitList(tagViewModel.selectedTagIds.value?.mapNotNull { tagViewModel.getTag(it) })
+        tagViewModel.selectedTagIds.observe(viewLifecycleOwner) { selectedTags ->
+            selectedTagAdapter.submitList(
+                selectedTags.mapNotNull { tagViewModel.getTag(it) }
+            )
+
+            val content = binding.newMemoText.text.toString()
+
+            if (selectedTags.isNotEmpty()) {
+                memoViewModel.fetchRecommendedMemoIds(
+                    content = content,
+                    tagIds = selectedTags.toList(),
+                    onComplete = {
+                    },
+                    onError = {
+                    }
+                )
+            } else {
+                memoViewModel.setRecommendedMemoIds(emptyList())
+                memoAdapter.clearFocusedMemo()
+                binding.recommendStatusBar.visibility = View.GONE
+            }
         }
 
         tagViewModel.tagList.observe(viewLifecycleOwner) {
             selectedTagAdapter.submitList(tagViewModel.selectedTagIds.value?.mapNotNull { tagViewModel.getTag(it) })
         }
+    }
+
+    // 메모 추천 관련
+    private fun setupRecommendationUI() {
+        memoViewModel.recommendedMemoIds.observe(viewLifecycleOwner) { ids ->
+            recommendedMemoIds = ids
+            currentRecommendIndex = if (ids.isNotEmpty()) 0 else -1
+
+            if (ids.isNotEmpty()) {
+                binding.recommendStatusBar.visibility = View.VISIBLE
+                updateRecommendationText()
+                focusRecommendedMemo(currentRecommendIndex)
+            } else {
+                binding.recommendStatusBar.visibility = View.GONE
+            }
+        }
+
+        binding.btnNextRecommend.setOnClickListener {
+            if (currentRecommendIndex > 0) {
+                currentRecommendIndex--
+                focusRecommendedMemo(currentRecommendIndex)
+            }
+        }
+
+        binding.btnPrevRecommend.setOnClickListener {
+            if (currentRecommendIndex < recommendedMemoIds.lastIndex) {
+                currentRecommendIndex++
+                focusRecommendedMemo(currentRecommendIndex)
+            }
+        }
+    }
+
+    private fun updateRecommendationText() {
+        if (recommendedMemoIds.isEmpty()) {
+            binding.recommendText.text = "- / 0"
+        } else if (currentRecommendIndex in recommendedMemoIds.indices) {
+            binding.recommendText.text = "${currentRecommendIndex + 1} / ${recommendedMemoIds.size}"
+        } else {
+            binding.recommendText.text = "- / ${recommendedMemoIds.size}"
+        }
+    }
+
+
+    private fun focusRecommendedMemo(index: Int) {
+        val targetId = recommendedMemoIds.getOrNull(index) ?: return
+        updateRecommendationText()
+
+        memoViewModel.loadUntilMemoFound(
+            targetMemoId = targetId,
+            onFound = { memo ->
+                val position = memoAdapter.getPositionByMemoId(memo.id)
+                if (position != -1) {
+                    memoAdapter.setFocusedMemoId(memo.id)
+                    binding.memoRecyclerView.smoothScrollToPosition(position)
+                }
+            },
+            onNotFound = {
+                Toast.makeText(requireContext(), "추천된 메모를 찾을 수 없습니다", Toast.LENGTH_SHORT).show()
+            }
+        )
     }
 
     override fun onResume() {
