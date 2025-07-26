@@ -9,6 +9,6 @@
     android:paddingHorizontal="6dp"
     android:paddingVertical="2dp"
     android:text="태그"
-    android:textColor="@android:color/black"
+    android:textColor="@color/textTag"
     android:textSize="14sp"
     android:background="@drawable/tag_background" />

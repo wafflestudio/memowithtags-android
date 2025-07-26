@@ -7,6 +7,7 @@
     android:layout_margin="6dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="1dp"
+    android:backgroundTint="@color/colorMemoBackground"
     android:foreground="@android:color/transparent"
     app:rippleColor="@android:color/transparent">
 
@@ -27,7 +28,7 @@
             android:paddingHorizontal="8dp"
             android:layout_marginTop="9dp"
             android:layout_marginBottom="4dp"
-            android:textColor="@android:color/black" />
+            android:textColor="@color/colorPrimary" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/tagRecyclerView"
@@ -66,7 +67,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0000년 00월 00일"
-                        android:textColor="#A0A0A1"
+                        android:textColor="@color/colorSecondary"
                         android:textSize="11sp" />
                 </LinearLayout>
 
@@ -89,7 +90,8 @@
                     android:paddingVertical="6dp"
                     android:stateListAnimator="@null"
                     android:text="관련 검색"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:textColor="@color/colorPrimary"/>
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/editButton"
@@ -104,7 +106,8 @@
                     android:paddingVertical="6dp"
                     android:stateListAnimator="@null"
                     android:text="간편 수정"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:textColor="@color/colorPrimary"/>
             </LinearLayout>
         </FrameLayout>
     </LinearLayout>

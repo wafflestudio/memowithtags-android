@@ -165,7 +165,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="20dp"
-                android:background="#20202126" />
+                android:background="@color/colorSecondary" />
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -18,7 +18,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
         <ImageView
             android:id="@+id/leftArrowIcon"
             android:layout_width="14dp"
@@ -74,19 +73,22 @@
                 android:layout_width="294dp"
                 android:layout_height="10dp"
                 android:layout_marginBottom="12dp"
-                android:background="#E3E3E7" />
+                android:background="@drawable/rounded_background"
+                android:backgroundTint="@color/placeholder1" />
 
             <View
                 android:layout_width="186dp"
                 android:layout_height="10dp"
                 android:layout_marginBottom="12dp"
-                android:background="#F1F1F3" />
+                android:background="@drawable/rounded_background"
+                android:backgroundTint="@color/placeholder2" />
 
             <View
                 android:layout_width="232dp"
                 android:layout_height="10dp"
                 android:layout_marginBottom="12dp"
-                android:background="#F5F5F5" />
+                android:background="@drawable/rounded_background"
+                android:backgroundTint="@color/placeholder3" />
 
             <include
                 android:id="@+id/tagInclude"

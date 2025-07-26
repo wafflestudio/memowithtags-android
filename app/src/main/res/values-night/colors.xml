@@ -1,3 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Background -->
+    <color name="colorBackground">#000000</color>
+    <color name="colorMemoBackground">#202021</color>
+    <color name="newMemoBackground">#2F2F33</color>
+    <color name="searchBox">#202021</color>
+    <color name="colorTagInput">#2F2F33</color>
+    <color name="placeholder1">#66E3E3E7</color>
+    <color name="placeholder2">#66F1F1F3</color>
+    <color name="placeholder3">#66F5F5F5</color>
+    <color name="btnEnabled">#99A0A0A1</color>
+    <color name="btnNotEnabled">#2F2F33</color>
+    <color name="signUpTag">#66FF5151</color>
+    <color name="findPwTag">#2F2F33</color>
+    <color name="backTag">#4DA0A0A1</color>
+
+    <!-- Border -->
+    <color name="colorDivider">#A0A0A1</color>
+    <color name="newMemoBorder">#A0A0A14D</color>
+    <color name="tagInputBorder">#A0A0A1</color>
+    <color name="memoItemBorder">#4DA0A0A1</color>
+    <color name="googleIconBorder">#99A0A0A1</color>
+
+    <!-- Text -->
+    <color name="colorPrimary">#F5F5F5</color>
+    <color name="colorSecondary">#A0A0A199</color>
+    <color name="colorDanger">#FF5151</color>
+    <color name="colorLink">#A0A0A199</color>
+    <color name="textTag">#E3E3E7</color>
+
+    <!-- Icon -->
+    <color name="colorChecked">#FF5151</color>
+    <color name="colorUnchecked">#202021</color>
+    <color name="colorCancelBtn">#4DA0A0A1</color>
+
+    <!-- Switch -->
+    <color name="switchThumbOn">#FF9C9C</color>
+    <color name="switchThumbOff">#BDBDBD</color>
+    <color name="switchTrackOn">#FFBDBD</color>
+    <color name="switchTrackOff">#BDBDBD</color>
 </resources>
