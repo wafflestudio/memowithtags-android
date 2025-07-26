@@ -5,14 +5,14 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
+    android:background="@color/bg_screen"
     tools:context=".login.LoginActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorBackground"
+        android:background="@color/bg_screen"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Memo with Tags"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/text_primary"
             android:textSize="24sp"
             app:layout_constraintTop_toTopOf="parent"/>
 
@@ -53,7 +53,7 @@
                 android:background="@drawable/rounded_edittext"
                 android:hint="이메일"
                 android:padding="12dp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/text_primary"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +68,7 @@
                 android:background="@drawable/rounded_edittext"
                 android:hint="비밀번호"
                 android:padding="12dp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/text_primary"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -100,13 +100,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/tag_background"
-                    android:backgroundTint="@color/signUpTag"
+                    android:backgroundTint="@color/bg_tag_signup"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
                     android:paddingHorizontal="6dp"
                     android:paddingVertical="2dp"
                     android:text="이메일로 회원가입"
-                    android:textColor="@color/textTag"
+                    android:textColor="@color/text_tag"
                     android:textSize="14sp" />
 
                 <View
@@ -119,13 +119,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/tag_background"
-                    android:backgroundTint="@color/findPwTag"
+                    android:backgroundTint="@color/bg_tag_findpw"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
                     android:paddingHorizontal="6dp"
                     android:paddingVertical="2dp"
                     android:text="비밀번호 찾기"
-                    android:textColor="@color/textTag"
+                    android:textColor="@color/text_tag"
                     android:textSize="14sp" />
             </LinearLayout>
 
@@ -145,7 +145,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/line"
-                    app:tint="@color/colorSecondary"/>
+                    app:tint="@color/text_secondary"/>
 
                 <TextView
                     android:id="@+id/textView"
@@ -155,13 +155,13 @@
                     android:text="다른 계정으로 로그인"
                     android:textAlignment="center"
                     android:textSize="12dp"
-                    android:textColor="@color/colorSecondary"/>
+                    android:textColor="@color/text_secondary"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/line"
-                    app:tint="@color/colorSecondary"/>
+                    app:tint="@color/text_secondary"/>
 
             </LinearLayout>
 

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/colorBackground">
+    android:background="@color/bg_screen">
 
     <LinearLayout
         android:id="@+id/topBar"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             android:text="내 계정"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/text_primary"
             android:textSize="18dp" />
 
     </LinearLayout>
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:background="@drawable/rounded_background"
-            android:backgroundTint="@color/colorMemoBackground"
+            android:backgroundTint="@color/bg_memo"
             android:orientation="vertical"
             android:paddingLeft="17dp"
             android:paddingTop="13dp"
@@ -76,7 +76,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="닉네임"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/text_primary"
                     android:textSize="16sp" />
 
                 <TextView
@@ -86,7 +86,7 @@
                     android:layout_marginLeft="6dp"
                     android:text="닉네임#식별코드"
                     android:gravity="center_vertical"
-                    android:textColor="@color/colorSecondary"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp" />
 
             </LinearLayout>
@@ -102,14 +102,14 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="닉네임 변경"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/text_primary"
                     android:textSize="14sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/right_arrow"
-                    app:tint="@color/colorPrimary" />
+                    app:tint="@color/text_primary" />
 
 
             </LinearLayout>
@@ -121,7 +121,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/rounded_background"
-            android:backgroundTint="@color/colorMemoBackground"
+            android:backgroundTint="@color/bg_memo"
             android:layout_marginBottom="12dp"
             android:paddingLeft="17dp"
             android:paddingTop="13dp"
@@ -139,7 +139,7 @@
                     android:text="이메일"
                     android:textSize="14sp"
                     android:layout_weight="1"
-                    android:textColor="@color/colorPrimary"/>
+                    android:textColor="@color/text_primary"/>
 
                 <TextView
                     android:id="@+id/emailText"
@@ -148,7 +148,7 @@
                     android:text="memo2025@gmail.com"
                     android:gravity="center_vertical"
                     android:textSize="12sp"
-                    android:textColor="@color/colorSecondary"/>
+                    android:textColor="@color/text_secondary"/>
 
             </LinearLayout>
             <LinearLayout
@@ -163,13 +163,13 @@
                     android:text="비밀번호 변경"
                     android:textSize="14sp"
                     android:layout_weight="1"
-                    android:textColor="@color/colorPrimary"/>
+                    android:textColor="@color/text_primary"/>
 
                 <ImageView
                     android:id="@+id/imageView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:tint="@color/colorPrimary"
+                    app:tint="@color/text_primary"
                     app:srcCompat="@drawable/right_arrow"/>
 
 
@@ -183,7 +183,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:background="@drawable/rounded_background"
-            android:backgroundTint="@color/colorMemoBackground"
+            android:backgroundTint="@color/bg_memo"
             android:orientation="vertical"
             android:paddingLeft="17dp"
             android:paddingTop="13dp"
@@ -199,7 +199,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="로그아웃"
-                    android:textColor="@color/colorDanger"
+                    android:textColor="@color/text_danger"
                     android:textSize="14sp" />
 
             </LinearLayout>
@@ -212,7 +212,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:background="@drawable/rounded_background"
-            android:backgroundTint="@color/colorMemoBackground"
+            android:backgroundTint="@color/bg_memo"
             android:orientation="vertical"
             android:paddingLeft="17dp"
             android:paddingTop="13dp"
@@ -228,7 +228,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="계정 삭제"
-                    android:textColor="@color/colorDanger"
+                    android:textColor="@color/text_danger"
                     android:textSize="14sp" />
 
             </LinearLayout>

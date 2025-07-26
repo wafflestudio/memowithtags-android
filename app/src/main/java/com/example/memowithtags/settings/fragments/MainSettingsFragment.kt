@@ -100,39 +100,39 @@ class MainSettingsFragment : Fragment() {
         // 검색 필터 기준
         viewModel.searchFilterOption.observe(viewLifecycleOwner) { option ->
             if (option == SearchFilterType.AND) {
-                binding.searchFilterCheckAnd.imageTintList = resources.getColorStateList(R.color.colorChecked, null)
-                binding.searchFilterCheckOr.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
+                binding.searchFilterCheckAnd.imageTintList = resources.getColorStateList(R.color.icon_checked, null)
+                binding.searchFilterCheckOr.imageTintList = resources.getColorStateList(R.color.icon_unchecked, null)
             } else if (option == SearchFilterType.OR) {
-                binding.searchFilterCheckAnd.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
-                binding.searchFilterCheckOr.imageTintList = resources.getColorStateList(R.color.colorChecked, null)
+                binding.searchFilterCheckAnd.imageTintList = resources.getColorStateList(R.color.icon_unchecked, null)
+                binding.searchFilterCheckOr.imageTintList = resources.getColorStateList(R.color.icon_checked, null)
             }
         }
 
         // 검색 정렬 기준
         viewModel.searchSortOption.observe(viewLifecycleOwner) { option ->
             if (option == SearchSortType.CREATED) {
-                binding.searchSortCheckCreated.imageTintList = resources.getColorStateList(R.color.colorChecked, null)
-                binding.searchSortCheckModified.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
+                binding.searchSortCheckCreated.imageTintList = resources.getColorStateList(R.color.icon_checked, null)
+                binding.searchSortCheckModified.imageTintList = resources.getColorStateList(R.color.icon_unchecked, null)
             } else if (option == SearchSortType.MODIFIED) {
-                binding.searchSortCheckCreated.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
-                binding.searchSortCheckModified.imageTintList = resources.getColorStateList(R.color.colorChecked, null)
+                binding.searchSortCheckCreated.imageTintList = resources.getColorStateList(R.color.icon_unchecked, null)
+                binding.searchSortCheckModified.imageTintList = resources.getColorStateList(R.color.icon_checked, null)
             }
         }
 
         // 텍스트 사이즈 설정
         viewModel.textSizeOption.observe(viewLifecycleOwner) { option ->
             if (option == TextSizeType.SMALL) {
-                binding.textSizeSmallCheck.imageTintList = resources.getColorStateList(R.color.colorChecked, null)
-                binding.textSizeMediumCheck.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
-                binding.textSizeBigCheck.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
+                binding.textSizeSmallCheck.imageTintList = resources.getColorStateList(R.color.icon_checked, null)
+                binding.textSizeMediumCheck.imageTintList = resources.getColorStateList(R.color.icon_unchecked, null)
+                binding.textSizeBigCheck.imageTintList = resources.getColorStateList(R.color.icon_unchecked, null)
             } else if (option == TextSizeType.MEDIUM) {
-                binding.textSizeSmallCheck.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
-                binding.textSizeMediumCheck.imageTintList = resources.getColorStateList(R.color.colorChecked, null)
-                binding.textSizeBigCheck.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
+                binding.textSizeSmallCheck.imageTintList = resources.getColorStateList(R.color.icon_unchecked, null)
+                binding.textSizeMediumCheck.imageTintList = resources.getColorStateList(R.color.icon_checked, null)
+                binding.textSizeBigCheck.imageTintList = resources.getColorStateList(R.color.icon_unchecked, null)
             } else if (option == TextSizeType.BIG) {
-                binding.textSizeSmallCheck.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
-                binding.textSizeMediumCheck.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
-                binding.textSizeBigCheck.imageTintList = resources.getColorStateList(R.color.colorChecked, null)
+                binding.textSizeSmallCheck.imageTintList = resources.getColorStateList(R.color.icon_unchecked, null)
+                binding.textSizeMediumCheck.imageTintList = resources.getColorStateList(R.color.icon_unchecked, null)
+                binding.textSizeBigCheck.imageTintList = resources.getColorStateList(R.color.icon_checked, null)
             }
         }
     }

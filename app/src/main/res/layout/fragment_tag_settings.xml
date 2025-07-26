@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/colorBackground">
+    android:background="@color/bg_screen">
 
     <LinearLayout
         android:id="@+id/topBar"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             android:text="태그 관리"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/text_primary"
             android:textSize="18dp" />
 
     </LinearLayout>
@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/rounded_background"
-        android:backgroundTint="@color/colorMemoBackground"
+        android:backgroundTint="@color/bg_memo"
         android:layout_marginBottom="12dp"
         android:paddingTop="13dp"
         android:paddingBottom="16dp">
@@ -83,7 +83,7 @@
                     android:layout_weight="1"
                     android:paddingLeft="6dp"
                     android:text="태그 목록 정렬"
-                    android:textColor="@color/colorSecondary"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp" />
 
             </LinearLayout>
@@ -100,7 +100,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="가나다순"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/text_primary"
                     android:textSize="14sp" />
 
                 <ImageView
@@ -108,7 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/checkmark"
-                    app:tint="@color/colorChecked" />
+                    app:tint="@color/icon_checked" />
 
             </LinearLayout>
 
@@ -124,7 +124,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="색상순"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/text_primary"
                     android:textSize="14sp" />
 
                 <ImageView
@@ -132,7 +132,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/checkmark"
-                    app:tint="@color/colorUnchecked" />
+                    app:tint="@color/icon_unchecked" />
 
             </LinearLayout>
 
@@ -148,7 +148,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="최근 생성순"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@color/text_primary"
                     android:textSize="14sp" />
 
                 <ImageView
@@ -156,7 +156,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/checkmark"
-                    app:tint="@color/colorUnchecked" />
+                    app:tint="@color/icon_unchecked" />
 
             </LinearLayout>
 
@@ -165,7 +165,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="20dp"
-                android:background="@color/colorSecondary" />
+                android:background="@color/text_secondary" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -194,7 +194,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/rounded_background"
-        android:backgroundTint="@color/colorMemoBackground"
+        android:backgroundTint="@color/bg_memo"
         android:layout_marginBottom="12dp"
         android:paddingTop="13dp"
         android:paddingBottom="5dp">
@@ -219,7 +219,7 @@
                 android:layout_weight="1"
                 android:paddingLeft="6dp"
                 android:text="태그 개별 수정"
-                android:textColor="@color/colorSecondary"
+                android:textColor="@color/text_secondary"
                 android:textSize="12sp" />
 
         </LinearLayout>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/colorMemoBackground">
+    android:background="@color/bg_memo">
 
     <LinearLayout
         android:id="@+id/topBar"
@@ -23,7 +23,7 @@
             android:layout_width="14dp"
             android:layout_height="23dp"
             app:srcCompat="@drawable/left_arrow"
-            app:tint="@color/colorPrimary"/>
+            app:tint="@color/text_primary"/>
 
     </LinearLayout>
 
@@ -31,7 +31,7 @@
         android:id="@+id/topDivider"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="@color/colorDivider"
+        android:background="@color/border_divider"
         app:layout_constraintTop_toBottomOf="@id/topBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -44,7 +44,7 @@
         android:hint="새로운 메모"
         android:lineSpacingMultiplier="1.3"
         android:background="@drawable/rounded_noborder"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/text_primary"
         android:textSize="16sp"
         android:layout_marginTop="6dp"
         android:layout_marginHorizontal="12dp"
@@ -71,7 +71,7 @@
         android:orientation="horizontal"
         android:visibility="gone"
         android:padding="8dp"
-        android:background="@color/colorBackground"
+        android:background="@color/bg_screen"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -86,8 +86,8 @@
             android:paddingHorizontal="10dp"
             android:paddingVertical="2.5dp"
             android:background="@drawable/rounded_noborder"
-            android:backgroundTint="@color/colorTagInput"
-            android:textColor="@color/colorPrimary"
+            android:backgroundTint="@color/bg_tag_input"
+            android:textColor="@color/text_primary"
             android:textSize="14sp"
             android:singleLine="true"
             android:ellipsize="none"
@@ -98,7 +98,7 @@
             android:layout_width="0.3dp"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
-            android:background="@color/tagInputBorder" />
+            android:background="@color/border_tag_input" />
 
         <!-- 신규 태그 만들기 -->
         <TextView

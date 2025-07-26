@@ -21,13 +21,13 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="2dp"
         android:text="태그"
-        android:textColor="@color/textTag"/>
+        android:textColor="@color/text_tag"/>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/settingsTagDelete"
         android:src="@drawable/tag_edit"
-        app:tint="@color/textTag"/>
+        app:tint="@color/text_tag"/>
 
 </LinearLayout>
