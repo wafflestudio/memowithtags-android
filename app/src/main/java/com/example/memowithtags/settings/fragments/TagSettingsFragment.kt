@@ -82,17 +82,17 @@ class TagSettingsFragment : Fragment() {
         // 태그 정렬 세팅
         tagSettingsViewModel.tagSortOption.observe(viewLifecycleOwner) { option ->
             if (option == TagSortType.ALPHABETIC) {
-                binding.tagSortCheckAlphabetic.imageTintList = resources.getColorStateList(R.color.colorChecked, null)
-                binding.tagSortCheckColor.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
-                binding.tagSortCheckCreated.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
+                binding.tagSortCheckAlphabetic.imageTintList = resources.getColorStateList(R.color.icon_checked, null)
+                binding.tagSortCheckColor.imageTintList = resources.getColorStateList(R.color.icon_unchecked, null)
+                binding.tagSortCheckCreated.imageTintList = resources.getColorStateList(R.color.icon_unchecked, null)
             } else if (option == TagSortType.COLOR) {
-                binding.tagSortCheckAlphabetic.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
-                binding.tagSortCheckColor.imageTintList = resources.getColorStateList(R.color.colorChecked, null)
-                binding.tagSortCheckCreated.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
+                binding.tagSortCheckAlphabetic.imageTintList = resources.getColorStateList(R.color.icon_unchecked, null)
+                binding.tagSortCheckColor.imageTintList = resources.getColorStateList(R.color.icon_checked, null)
+                binding.tagSortCheckCreated.imageTintList = resources.getColorStateList(R.color.icon_unchecked, null)
             } else if (option == TagSortType.CREATED) {
-                binding.tagSortCheckAlphabetic.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
-                binding.tagSortCheckColor.imageTintList = resources.getColorStateList(R.color.colorUnchecked, null)
-                binding.tagSortCheckCreated.imageTintList = resources.getColorStateList(R.color.colorChecked, null)
+                binding.tagSortCheckAlphabetic.imageTintList = resources.getColorStateList(R.color.icon_unchecked, null)
+                binding.tagSortCheckColor.imageTintList = resources.getColorStateList(R.color.icon_unchecked, null)
+                binding.tagSortCheckCreated.imageTintList = resources.getColorStateList(R.color.icon_checked, null)
             }
         }
     }

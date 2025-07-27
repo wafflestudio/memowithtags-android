@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/colorBackground">
+    android:background="@color/bg_screen">
 
     <LinearLayout
         android:id="@+id/topBar"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             android:text="설정"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/text_primary"
             android:textSize="18dp" />
 
     </LinearLayout>
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/rounded_background"
-            android:backgroundTint="@color/colorMemoBackground"
+            android:backgroundTint="@color/bg_memo"
             android:layout_marginBottom="12dp"
             android:paddingLeft="17dp"
             android:paddingTop="13dp"
@@ -78,12 +78,12 @@
                     android:text="내 계정"
                     android:textSize="14sp"
                     android:layout_weight="1"
-                    android:textColor="@color/colorPrimary"/>
+                    android:textColor="@color/text_primary"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:tint="@color/colorPrimary"
+                    app:tint="@color/text_primary"
                     app:srcCompat="@drawable/right_arrow"/>
 
 
@@ -97,7 +97,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/rounded_background"
-            android:backgroundTint="@color/colorMemoBackground"
+            android:backgroundTint="@color/bg_memo"
             android:layout_marginBottom="12dp"
             android:paddingLeft="17dp"
             android:paddingTop="13dp"
@@ -114,12 +114,12 @@
                     android:text="태그 관리"
                     android:textSize="14sp"
                     android:layout_weight="1"
-                    android:textColor="@color/colorPrimary"/>
+                    android:textColor="@color/text_primary"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:tint="@color/colorPrimary"
+                    app:tint="@color/text_primary"
                     app:srcCompat="@drawable/right_arrow"/>
 
 
@@ -134,7 +134,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/rounded_background"
-            android:backgroundTint="@color/colorMemoBackground"
+            android:backgroundTint="@color/bg_memo"
             android:layout_marginBottom="12dp"
             android:paddingTop="16dp"
             android:paddingBottom="5dp">
@@ -157,7 +157,7 @@
                         android:text="글씨 크기"
                         android:textSize="12sp"
                         android:layout_weight="1"
-                        android:textColor="@color/colorSecondary"/>
+                        android:textColor="@color/text_secondary"/>
 
                 </LinearLayout>
 
@@ -173,14 +173,14 @@
                         android:text="작게"
                         android:textSize="14sp"
                         android:layout_weight="1"
-                        android:textColor="@color/colorPrimary"/>
+                        android:textColor="@color/text_primary"/>
 
                     <ImageView
                         android:id="@+id/textSizeSmallCheck"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:srcCompat="@drawable/checkmark"
-                        app:tint="@color/colorChecked"/>
+                        app:tint="@color/icon_checked"/>
 
                 </LinearLayout>
 
@@ -196,7 +196,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="적당히"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/text_primary"
                         android:textSize="14sp" />
 
                     <ImageView
@@ -204,7 +204,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:srcCompat="@drawable/checkmark"
-                        app:tint="@color/colorUnchecked" />
+                        app:tint="@color/icon_unchecked" />
 
                 </LinearLayout>
 
@@ -220,14 +220,14 @@
                         android:text="크게"
                         android:textSize="14sp"
                         android:layout_weight="1"
-                        android:textColor="@color/colorPrimary"/>
+                        android:textColor="@color/text_primary"/>
 
                     <ImageView
                         android:id="@+id/textSizeBigCheck"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:srcCompat="@drawable/checkmark"
-                        app:tint="@color/colorUnchecked"/>
+                        app:tint="@color/icon_unchecked"/>
 
                 </LinearLayout>
 
@@ -253,7 +253,7 @@
                         android:layout_weight="1"
                         android:paddingLeft="6dp"
                         android:text="검색 필터 기준"
-                        android:textColor="@color/colorSecondary"
+                        android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
 
                 </LinearLayout>
@@ -270,7 +270,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="그리고"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/text_primary"
                         android:textSize="14sp" />
 
                     <ImageView
@@ -278,7 +278,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:srcCompat="@drawable/checkmark"
-                        app:tint="@color/colorChecked" />
+                        app:tint="@color/icon_checked" />
 
                 </LinearLayout>
 
@@ -294,7 +294,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="또는"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/text_primary"
                         android:textSize="14sp" />
 
                     <ImageView
@@ -302,7 +302,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:srcCompat="@drawable/checkmark"
-                        app:tint="@color/colorUnchecked" />
+                        app:tint="@color/icon_unchecked" />
 
                 </LinearLayout>
 
@@ -327,7 +327,7 @@
                         android:text="검색 정렬 기준"
                         android:textSize="12sp"
                         android:layout_weight="1"
-                        android:textColor="@color/colorSecondary"/>
+                        android:textColor="@color/text_secondary"/>
 
                 </LinearLayout>
 
@@ -343,14 +343,14 @@
                         android:text="만든 날짜"
                         android:textSize="14sp"
                         android:layout_weight="1"
-                        android:textColor="@color/colorPrimary"/>
+                        android:textColor="@color/text_primary"/>
 
                     <ImageView
                         android:id="@+id/searchSortCheckCreated"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:srcCompat="@drawable/checkmark"
-                        app:tint="@color/colorChecked"/>
+                        app:tint="@color/icon_checked"/>
 
                 </LinearLayout>
 
@@ -366,14 +366,14 @@
                         android:text="수정한 날짜"
                         android:textSize="14sp"
                         android:layout_weight="1"
-                        android:textColor="@color/colorPrimary"/>
+                        android:textColor="@color/text_primary"/>
 
                     <ImageView
                         android:id="@+id/searchSortCheckModified"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:srcCompat="@drawable/checkmark"
-                        app:tint="@color/colorUnchecked"/>
+                        app:tint="@color/icon_unchecked"/>
 
                 </LinearLayout>
 
@@ -387,7 +387,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/rounded_background"
-            android:backgroundTint="@color/colorMemoBackground"
+            android:backgroundTint="@color/bg_memo"
             android:layout_marginBottom="12dp"
             android:paddingLeft="17dp"
             android:paddingTop="13dp"
@@ -403,8 +403,8 @@
                 android:textSize="14sp"
                 android:layout_weight="1"
                 android:linksClickable="true"
-                android:textColor="@color/colorPrimary"
-                android:textColorLink="@color/colorLink"
+                android:textColor="@color/text_primary"
+                android:textColorLink="@color/text_link"
                 android:layout_marginBottom="6dp"/>
 
             <TextView
@@ -415,8 +415,8 @@
                 android:textSize="14sp"
                 android:layout_weight="1"
                 android:linksClickable="true"
-                android:textColor="@color/colorPrimary"
-                android:textColorLink="@color/colorLink"
+                android:textColor="@color/text_primary"
+                android:textColorLink="@color/text_link"
                 android:layout_marginTop="6dp"
                 android:layout_marginBottom="6dp"/>
 
@@ -428,8 +428,8 @@
                 android:textSize="14sp"
                 android:layout_weight="1"
                 android:linksClickable="true"
-                android:textColor="@color/colorPrimary"
-                android:textColorLink="@color/colorLink"
+                android:textColor="@color/text_primary"
+                android:textColorLink="@color/text_link"
                 android:layout_marginTop="6dp"/>
 
         </LinearLayout>

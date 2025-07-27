@@ -1,5 +1,6 @@
 package com.example.memowithtags.mainMemo.adapters
 
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.Gravity
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -29,9 +31,17 @@ class TagAdapter(
             tagName.text = tag.name
 
             val background = tagName.background
+
             if (background is GradientDrawable) {
                 try {
-                    background.setColor(Color.parseColor(tag.colorHex))
+                    // Set background color based on the current night mode
+                    val nightModeFlags = itemView.context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+
+                    if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
+                        background.setColor(addAlphaToColor(tag.colorHex).toColorInt())
+                    } else if (nightModeFlags == Configuration.UI_MODE_NIGHT_NO) {
+                        background.setColor(tag.colorHex.toColorInt())
+                    }
                 } catch (e: IllegalArgumentException) {
                     background.setColor(Color.LTGRAY)
                 }
@@ -110,6 +120,11 @@ class TagAdapter(
     override fun onBindViewHolder(holder: TagViewHolder, position: Int) {
         val tag = getItem(position)
         return holder.bind(tag)
+    }
+
+    private fun addAlphaToColor(hexColor: String, alpha: String = "66"): String {
+        val cleanHex = hexColor.removePrefix("#")
+        return "#$alpha$cleanHex"
     }
 
     class DiffCallback : DiffUtil.ItemCallback<Tag>() {

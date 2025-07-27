@@ -1,3 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Background -->
+    <color name="bg_screen">#000000</color>
+    <color name="bg_memo">#202021</color>
+    <color name="bg_memo_new">#2F2F33</color>
+    <color name="bg_search_box">#202021</color>
+    <color name="bg_tag_input">#2F2F33</color>
+    <color name="placeholder_primary">#66E3E3E7</color>
+    <color name="placeholder_secondary">#66F1F1F3</color>
+    <color name="placeholder_tertiary">#66F5F5F5</color>
+    <color name="bg_btn_enabled">#99A0A0A1</color>
+    <color name="bg_btn_disabled">#2F2F33</color>
+    <color name="bg_tag_signup">#66FF5151</color>
+    <color name="bg_tag_findpw">#2F2F33</color>
+    <color name="bg_tag_back">#4DA0A0A1</color>
+
+    <!-- Border -->
+    <color name="border_divider">#A0A0A1</color>
+    <color name="border_memo_new">#A0A0A14D</color>
+    <color name="border_tag_input">#A0A0A1</color>
+    <color name="border_memo_item">#4DA0A0A1</color>
+    <color name="border_icon_google">#99A0A0A1</color>
+
+    <!-- Text -->
+    <color name="text_primary">#F5F5F5</color>
+    <color name="text_secondary">#A0A0A199</color>
+    <color name="text_danger">#FF5151</color>
+    <color name="text_link">#A0A0A199</color>
+    <color name="text_tag">#E3E3E7</color>
+
+    <!-- Icon -->
+    <color name="icon_checked">#FF5151</color>
+    <color name="icon_unchecked">#202021</color>
+    <color name="icon_cancel">#4DA0A0A1</color>
+
+    <!-- Switch -->
+    <color name="switch_thumb_on">#FF9C9C</color>
+    <color name="switch_thumb_off">#BDBDBD</color>
+    <color name="switch_track_on">#FFBDBD</color>
+    <color name="switch_track_off">#BDBDBD</color>
 </resources>
