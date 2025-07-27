@@ -1,6 +1,5 @@
 package com.example.memowithtags.mainMemo.adapters
 
-import android.graphics.Color
 import android.icu.text.SimpleDateFormat
 import android.icu.util.TimeZone
 import android.view.Gravity
@@ -84,7 +83,7 @@ class MemoAdapter(
                 }
             }
 
-            //추천 메모 포커싱
+            // 추천 메모 포커싱
             if (isFocused) {
                 itemView.setBackgroundResource(R.drawable.recommend_highlight_border)
             } else {

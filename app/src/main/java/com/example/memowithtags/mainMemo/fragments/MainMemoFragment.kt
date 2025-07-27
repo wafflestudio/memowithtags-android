@@ -119,7 +119,7 @@ class MainMemoFragment : Fragment() {
             }
         }
 
-        memoAdapter = MemoAdapter(MemoSource.MAIN ,memoAdapterCallback, tagInMemoAdapterCallback)
+        memoAdapter = MemoAdapter(MemoSource.MAIN, memoAdapterCallback, tagInMemoAdapterCallback)
 
         binding.memoRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext()).apply {
@@ -475,7 +475,6 @@ class MainMemoFragment : Fragment() {
             binding.recommendText.text = "- / ${recommendedMemoIds.size}"
         }
     }
-
 
     private fun focusRecommendedMemo(index: Int) {
         val targetId = recommendedMemoIds.getOrNull(index) ?: return
