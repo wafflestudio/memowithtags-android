@@ -1,5 +1,6 @@
 package com.example.memowithtags.settings.adapters
 
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Tag
@@ -41,7 +43,14 @@ class TagAdapter(
         val background = holder.tagColor.background
         if (background is GradientDrawable) {
             try {
-                background.setColor(Color.parseColor(tag.colorHex))
+                // Set background color based on the current night mode
+                val nightModeFlags = holder.itemView.context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+
+                if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
+                    background.setColor(addAlphaToColor(tag.colorHex).toColorInt())
+                } else if (nightModeFlags == Configuration.UI_MODE_NIGHT_NO) {
+                    background.setColor(tag.colorHex.toColorInt())
+                }
             } catch (e: IllegalArgumentException) {
                 background.setColor(Color.LTGRAY)
             }
@@ -49,6 +58,11 @@ class TagAdapter(
     }
 
     override fun getItemCount(): Int = tagList.size
+
+    private fun addAlphaToColor(hexColor: String, alpha: String = "66"): String {
+        val cleanHex = hexColor.removePrefix("#")
+        return "#$alpha$cleanHex"
+    }
 
     fun updateData(newTags: List<Tag>) {
         this.tagList = newTags

@@ -4,17 +4,43 @@
     <color name="white">#FFFFFFFF</color>
 
     <!-- Background -->
-    <color name="colorBackground">#F1F1F3</color>
-    <color name="colorMemoBackground">#FFFFFF</color>
+    <color name="bg_screen">#F1F1F3</color>
+    <color name="bg_memo">#FFFFFF</color>
+    <color name="bg_memo_new">#FFFFFF</color>
+    <color name="bg_search_box">#E3E3E7</color>
+    <color name="bg_tag_input">#E5E5E6</color>
+    <color name="placeholder_primary">#E3E3E7</color>
+    <color name="placeholder_secondary">#F1F1F3</color>
+    <color name="placeholder_tertiary">#F5F5F5</color>
+    <color name="bg_btn_enabled">#000000</color>
+    <color name="bg_btn_disabled">#A0A0A0</color>
+    <color name="bg_tag_signup">#FFBDBD</color>
+    <color name="bg_tag_findpw">#F1F1F3</color>
+    <color name="bg_tag_back">#E3E3E7</color>
+
+    <!-- Border -->
+    <color name="border_divider">#A0A0A1</color>
+    <color name="border_memo_new">#4DA0A0A1</color>
+    <color name="border_tag_input">#B0B0B1</color>
+    <color name="border_memo_item">#26202021</color>
+    <color name="border_icon_google">#E3E3E7</color>
 
     <!-- Text -->
-    <color name="colorPrimary">#202021</color>
-    <color name="colorSecondary">#A0A0A1</color>
-    <color name="colorDanger">#FF5151</color>
-    <color name="colorLink">#B2202021</color>
+    <color name="text_primary">#202021</color>
+    <color name="text_secondary">#A0A0A1</color>
+    <color name="text_danger">#FF5151</color>
+    <color name="text_link">#B2202021</color>
+    <color name="text_tag">#B2202021</color>
 
     <!-- Icon -->
-    <color name="colorChecked">#FF9C9C</color>
-    <color name="colorUnchecked">#FFFFFF</color>
+    <color name="icon_checked">#FF9C9C</color>
+    <color name="icon_unchecked">#FFFFFF</color>
+    <color name="icon_cancel">#FF5151</color>
+
+    <!-- Switch -->
+    <color name="switch_thumb_on">#FF9C9C</color>
+    <color name="switch_thumb_off">#BDBDBD</color>
+    <color name="switch_track_on">#FFBDBD</color>
+    <color name="switch_track_off">#BDBDBD</color>
 
 </resources>

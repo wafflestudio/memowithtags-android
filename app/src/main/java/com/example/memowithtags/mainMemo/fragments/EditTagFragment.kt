@@ -1,11 +1,13 @@
 package com.example.memowithtags.mainMemo.fragments
 
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.graphics.toColorInt
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -62,7 +64,15 @@ class EditTagFragment : Fragment() {
         // 샘플 태그 설정
         binding.tagInclude.tagText.text = tagEditViewModel.selectedTag.value?.name
         val drawable = DrawableCompat.wrap(binding.tagInclude.tagText.background).mutate()
-        DrawableCompat.setTint(drawable, Color.parseColor(tagEditViewModel.colorSelected.value))
+        tagEditViewModel.colorSelected.value?.let {
+            val nightModeFlags = view.context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+
+            if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
+                DrawableCompat.setTint(drawable, addAlphaToColor(it).toColorInt())
+            } else {
+                DrawableCompat.setTint(drawable, it.toColorInt())
+            }
+        }
         binding.tagInclude.tagText.background = drawable
 
         binding.tagNameInput.addTextChangedListener {
@@ -104,5 +114,10 @@ class EditTagFragment : Fragment() {
             }?.onFailure {
             }
         }
+    }
+
+    private fun addAlphaToColor(hexColor: String, alpha: String = "66"): String {
+        val cleanHex = hexColor.removePrefix("#")
+        return "#$alpha$cleanHex"
     }
 }
