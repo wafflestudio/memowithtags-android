@@ -90,7 +90,7 @@
             android:layout_height="wrap_content"
             android:text="- / -"
             android:textSize="13sp"
-            android:textColor="@android:color/black"
+            android:textColor="@color/text_primary"
             android:layout_marginEnd="4dp" />
 
         <FrameLayout
@@ -118,7 +118,7 @@
                     android:layout_height="32dp"
                     android:src="@drawable/ic_arrow_up"
                     android:background="@drawable/bg_recommend_button"
-                    app:tint="#000000"
+                    app:tint="@color/text_primary"
                     android:contentDescription="이전 추천" />
 
                 <ImageButton
@@ -127,7 +127,7 @@
                     android:layout_height="32dp"
                     android:src="@drawable/ic_arrow_down"
                     android:background="@drawable/bg_recommend_button"
-                    app:tint="#000000"
+                    app:tint="@color/text_primary"
                     android:layout_marginStart="6dp"
                     android:contentDescription="다음 추천" />
             </LinearLayout>
