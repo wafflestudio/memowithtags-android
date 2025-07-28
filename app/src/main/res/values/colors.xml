@@ -17,6 +17,7 @@
     <color name="bg_tag_signup">#FFBDBD</color>
     <color name="bg_tag_findpw">#F1F1F3</color>
     <color name="bg_tag_back">#E3E3E7</color>
+    <color name="bg_memo_fold_btn">#F5F5F5</color>
 
     <!-- Border -->
     <color name="border_divider">#A0A0A1</color>
@@ -36,6 +37,7 @@
     <color name="icon_checked">#FF9C9C</color>
     <color name="icon_unchecked">#FFFFFF</color>
     <color name="icon_cancel">#FF5151</color>
+    <color name="icon_memo_fold_btn">#B2202021</color>
 
     <!-- Switch -->
     <color name="switch_thumb_on">#FF9C9C</color>
