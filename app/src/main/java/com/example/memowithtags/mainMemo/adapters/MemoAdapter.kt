@@ -54,6 +54,12 @@ class MemoAdapter(
             val memoContent: TextView = itemView.findViewById(R.id.memoContent)
             val memoCreated: TextView = itemView.findViewById(R.id.memoCreated)
 
+            if (memoWithTags.memo.id in expandedMemoIds) {
+                ViewExpandAnimator.setTextView(memoContent, true, Int.MAX_VALUE)
+            } else {
+                ViewExpandAnimator.setTextView(memoContent, false, 2)
+            }
+
             memoContent.text = memoWithTags.memo.content
             memoCreated.text = formatDate(memoWithTags.memo.createdAt)
 
@@ -61,8 +67,10 @@ class MemoAdapter(
 
             // expand & collapse memo
             if (memoWithTags.memo.id in expandedMemoIds) {
+                memoContent.maxLines = Integer.MAX_VALUE
                 ViewExpandAnimator.setExpandedState(buttonBarContainer, buttonBar)
             } else {
+                memoContent.maxLines = 2
                 ViewExpandAnimator.setCollapsedState(buttonBarContainer, buttonBar)
             }
 
@@ -75,6 +83,7 @@ class MemoAdapter(
                     memoAdapterCallback.onEditClick(memoWithTags.memo, memoWithTags.memo.tagIds)
                 } else {
                     expandedMemoIds.add(memoWithTags.memo.id)
+                    ViewExpandAnimator.animateTextHeightChange(memoContent, true, 2)
                     ViewExpandAnimator.expandView(buttonBarContainer, buttonBar)
                 }
             }
@@ -157,6 +166,7 @@ class MemoAdapter(
 
                 if (isExpanded) {
                     expandedMemoIds.remove(memoWithTags.memo.id)
+                    ViewExpandAnimator.animateTextHeightChange(memoContent, false, 2)
                     ViewExpandAnimator.collapseView(buttonBarContainer, buttonBar)
                 }
             }
@@ -182,6 +192,15 @@ class MemoAdapter(
             submitList(currentList)
         }
     }
+
+    private fun shortenMemo(content: String): String {
+        return if (content.length > 10) {
+            content.substring(0, 50) + "..."
+        } else {
+            content
+        }
+    }
+
     private fun formatDate(isoDate: String): String {
         val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
         inputFormat.timeZone = TimeZone.getTimeZone("UTC")
