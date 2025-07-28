@@ -216,7 +216,6 @@ class MemoAdapter(
         }
     }
 
-
     fun clearFocusedMemo() {
         val previousFocusedId = focusedMemoId
         focusedMemoId = null
