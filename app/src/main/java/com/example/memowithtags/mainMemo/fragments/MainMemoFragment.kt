@@ -440,26 +440,37 @@ class MainMemoFragment : Fragment() {
     private fun setupRecommendationUI() {
         memoViewModel.recommendedMemoIds.observe(viewLifecycleOwner) { ids ->
             recommendedMemoIds = ids
-            currentRecommendIndex = if (ids.isNotEmpty()) 0 else -1
+            currentRecommendIndex = -1
 
             if (ids.isNotEmpty()) {
                 binding.recommendStatusBar.visibility = View.VISIBLE
                 updateRecommendationText()
-                focusRecommendedMemo(currentRecommendIndex)
+                memoAdapter.clearFocusedMemo()
             } else {
                 binding.recommendStatusBar.visibility = View.GONE
             }
         }
 
         binding.btnNextRecommend.setOnClickListener {
+            if (recommendedMemoIds.isEmpty()) return@setOnClickListener
+
             if (currentRecommendIndex > 0) {
                 currentRecommendIndex--
                 focusRecommendedMemo(currentRecommendIndex)
+            } else if (currentRecommendIndex == 0) {
+                currentRecommendIndex = -1
+                memoAdapter.clearFocusedMemo()
+                updateRecommendationText()
             }
         }
 
         binding.btnPrevRecommend.setOnClickListener {
-            if (currentRecommendIndex < recommendedMemoIds.lastIndex) {
+            if (recommendedMemoIds.isEmpty()) return@setOnClickListener
+
+            if (currentRecommendIndex == -1 && recommendedMemoIds.isNotEmpty()) {
+                currentRecommendIndex = 0
+                focusRecommendedMemo(currentRecommendIndex)
+            } else if (currentRecommendIndex < recommendedMemoIds.lastIndex) {
                 currentRecommendIndex++
                 focusRecommendedMemo(currentRecommendIndex)
             }
