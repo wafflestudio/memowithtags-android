@@ -18,6 +18,8 @@
     <color name="bg_tag_findpw">#F1F1F3</color>
     <color name="bg_tag_back">#E3E3E7</color>
     <color name="bg_memo_fold_btn">#F5F5F5</color>
+    <color name="bg_recommend_middle">#F5F5F5</color>
+    <color name="bg_recommend_btn">#FFFFFF</color>
 
     <!-- Border -->
     <color name="border_divider">#A0A0A1</color>

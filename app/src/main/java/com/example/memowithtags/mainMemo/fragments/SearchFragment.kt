@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Memo
+import com.example.memowithtags.common.model.MemoSource
 import com.example.memowithtags.common.model.MemoWithTags
 import com.example.memowithtags.databinding.FragmentSearchBinding
 import com.example.memowithtags.mainMemo.adapters.MemoAdapter
@@ -155,9 +156,8 @@ class SearchFragment : Fragment() {
                 findNavController().navigate(R.id.action_searchFragment_to_editMemoFragment, bundle)
             }
 
-            override fun onDeleteClick(memo: Memo) {
-                memoViewModel.deleteMemo(memo.id)
-                memoAdapter.removeItem(memo.id)
+            override fun onDeleteClick(memo: Memo, source: MemoSource) {
+                memoViewModel.deleteMemo(memo.id, source)
             }
         }
 
@@ -176,7 +176,7 @@ class SearchFragment : Fragment() {
             }
         }
 
-        memoAdapter = MemoAdapter(memoAdapterCallback, tagInMemoAdapterCallback)
+        memoAdapter = MemoAdapter(MemoSource.SEARCH, memoAdapterCallback, tagInMemoAdapterCallback)
 
         binding.searchmemoRecyclerView.apply {
             adapter = memoAdapter
@@ -191,7 +191,8 @@ class SearchFragment : Fragment() {
                     val totalItemCount = layoutManager.itemCount
 
                     if (lastVisibleItemPosition >= totalItemCount - 1 && dy > 0) {
-                        memoViewModel.loadNextSearchPage()
+                        val currentQuery = binding.searchText.text.toString()
+                        memoViewModel.loadNextPage(MemoSource.SEARCH)
                     }
                 }
             })
@@ -204,7 +205,7 @@ class SearchFragment : Fragment() {
         }
 
         // ViewModel에서 결과 수신
-        memoViewModel.memoSearchResult.observe(viewLifecycleOwner) { memoList ->
+        memoViewModel.searchMemoList.observe(viewLifecycleOwner) { memoList ->
             Log.d("SearchFragment", "검색 결과 memoList.size = ${memoList.size}")
 
             if (memoList.isNotEmpty()) {
@@ -214,8 +215,7 @@ class SearchFragment : Fragment() {
             }
 
             memoAdapter.submitList(
-                memoList.map { memoId ->
-                    val memo = memoViewModel.getMemo(memoId) ?: return@map null
+                memoList.map { memo ->
                     val sortedTagIds = tagViewModel.sortTagIds(memo.tagIds)
                     val tags = tagViewModel.tagList.value?.filter { it.id in sortedTagIds } ?: emptyList()
                     MemoWithTags(memo, tags)
@@ -231,10 +231,12 @@ class SearchFragment : Fragment() {
 
         binding.leftArrowIcon.setOnClickListener {
             findNavController().popBackStack()
+            memoViewModel.resetAndLoadFirstPage()
         }
     }
 
     override fun onDestroyView() {
+        memoViewModel.resetSearchState()
         tagViewModel.clearSearch()
         super.onDestroyView()
     }

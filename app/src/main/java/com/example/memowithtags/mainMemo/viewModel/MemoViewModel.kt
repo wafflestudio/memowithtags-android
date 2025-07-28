@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.memowithtags.common.model.Memo
+import com.example.memowithtags.common.model.MemoSource
 import com.example.memowithtags.common.network.api.CreateMemoRequest
 import com.example.memowithtags.common.network.api.UpdateMemoRequest
 import com.example.memowithtags.mainMemo.repository.MemoRepository
@@ -36,16 +37,10 @@ class MemoViewModel @Inject constructor(
     var lastLoadedItemCount = 0
 
     // search 페이지용
+    private val _searchMemoList = MutableLiveData<List<Memo>>(emptyList())
+    val searchMemoList: LiveData<List<Memo>> = _searchMemoList
+
     private val _query = MutableStateFlow("")
-
-    private var searchCurrentPage = 1
-    private var searchIsLastPage = false
-    private var searchIsLoading = false
-
-    private val searchMemoIdList = mutableListOf<Int>()
-
-    private val _memoSearchResult = MutableLiveData<List<Int>>()
-    val memoSearchResult: LiveData<List<Int>> = _memoSearchResult
 
     private val _tagSearchResult = MutableLiveData<List<Int>>()
     val tagSearchResult: LiveData<List<Int>> = _tagSearchResult
@@ -70,6 +65,9 @@ class MemoViewModel @Inject constructor(
     val shouldScrollToTop: LiveData<Boolean> get() = _shouldScrollToTop
     var isinitialPaging = false
 
+    private val _recommendedMemoIds = MutableLiveData<List<Int>>(emptyList())
+    val recommendedMemoIds: LiveData<List<Int>> get() = _recommendedMemoIds
+
     private var lastDeletedMemoId: Int? = null
 
     val PAGE_SIZE = 15
@@ -79,35 +77,42 @@ class MemoViewModel @Inject constructor(
         isLastPage = false
         _memoList.value = emptyList()
         isinitialPaging = true
-        loadNextPage()
+        loadNextPage(MemoSource.MAIN)
     }
 
-    fun loadNextPage() {
+    fun loadNextPage(source: MemoSource) {
         if (isLoading || isLastPage) return
 
         Log.d("Paging", "loadNextPage 호출됨. 현재 페이지: $currentPage")
 
         isLoading = true
 
+        val isSearchMode = source == MemoSource.SEARCH
+
         memoRepository.getMyMemos(
-            content = null,
-            tagIds = null,
+            content = if (isSearchMode) _query.value else null,
+            tagIds = if (isSearchMode) _selectedSearchTagIds.value else null,
             startDate = null,
             endDate = null,
             page = currentPage,
             onResult = { memos, totalPages ->
-                val currentList = _memoList.value.orEmpty()
-
-                // 중복 메모 방지
-                val existingIds = currentList.map { it.id }.toSet()
-                val newMemos = memos.filter { it.id !in existingIds }
-                _memoList.postValue(currentList + newMemos)
-
                 lastLoadedItemCount = memos.size
-
                 currentPage++
                 isLastPage = currentPage >= totalPages + 1
                 isLoading = false
+
+                val newMemos = when (source) {
+                    MemoSource.SEARCH -> {
+                        val current = _searchMemoList.value.orEmpty()
+                        memos.filterNot { m -> current.any { it.id == m.id } }
+                            .also { _searchMemoList.postValue(current + it) }
+                    }
+                    MemoSource.MAIN -> {
+                        val current = _memoList.value.orEmpty()
+                        memos.filterNot { m -> current.any { it.id == m.id } }
+                            .also { _memoList.postValue(current + it) }
+                    }
+                }
             },
             onError = { error ->
                 Log.e("MemoViewModel", "페이지 불러오기 실패", error)
@@ -164,23 +169,67 @@ class MemoViewModel @Inject constructor(
         )
     }
 
-    fun getMemo(memoId: Int): Memo? {
-        val memo = _memoList.value?.find { it.id == memoId }
-        if (memo != null) {
-            Log.d("MemoViewModel", "getMemo($memoId) → ${memo.content}")
-        } else {
-            Log.d("MemoViewModel", "getMemo($memoId) → null")
-        }
-        return memo
+    fun fetchRecommendedMemoIds(
+        content: String,
+        tagIds: List<Int>,
+        onComplete: () -> Unit = {},
+        onError: (Throwable) -> Unit = {}
+    ) {
+        memoRepository.recommendMemos(
+            content = content,
+            tagIds = tagIds,
+            onSuccess = { ids ->
+                _recommendedMemoIds.postValue(ids)
+                onComplete()
+            },
+            onError = { error ->
+                Log.e("MemoViewModel", "추천 실패", error)
+                onError(error)
+            }
+        )
     }
 
-    fun deleteMemo(memoId: Int) {
+    fun findMemoById(memoId: Int): Memo? {
+        return _memoList.value?.find { it.id == memoId }
+    }
+
+    fun loadUntilMemoFound(
+        targetMemoId: Int,
+        onFound: (Memo) -> Unit,
+        onNotFound: () -> Unit
+    ) {
+        val memo = findMemoById(targetMemoId)
+        if (memo != null) {
+            onFound(memo)
+            return
+        }
+
+        if (isLastPage) {
+            onNotFound()
+            return
+        }
+
+        // 다음 페이지 요청
+        loadNextPage(MemoSource.MAIN)
+
+        // delay 후 다시 시도 (RecyclerView 업데이트 기다림)
+        viewModelScope.launch {
+            kotlinx.coroutines.delay(300)
+            loadUntilMemoFound(targetMemoId, onFound, onNotFound)
+        }
+    }
+
+    fun setRecommendedMemoIds(ids: List<Int>) {
+        _recommendedMemoIds.value = ids
+    }
+
+    fun deleteMemo(memoId: Int, source: MemoSource) {
         lastDeletedMemoId = memoId
 
         memoRepository.deleteMemo(
             memoId,
             onSuccess = {
-                removeMemoFromListAndFill(memoId)
+                removeMemoFromListAndFill(memoId, source)
             },
             onError = {
                 Log.e("MemoViewModel", "메모 삭제 실패", it)
@@ -202,8 +251,11 @@ class MemoViewModel @Inject constructor(
         _memoList.value = updatedList
     }
 
-    fun removeMemoFromListAndFill(memoId: Int) {
-        val oldList = _memoList.value.orEmpty()
+    fun removeMemoFromListAndFill(memoId: Int, source: MemoSource = MemoSource.MAIN) {
+        val oldList = when (source) {
+            MemoSource.MAIN -> _memoList.value.orEmpty()
+            MemoSource.SEARCH -> _searchMemoList.value.orEmpty()
+        }
 
         val index = oldList.indexOfFirst { it.id == memoId }
         if (index == -1) return // 없는 메모
@@ -218,30 +270,42 @@ class MemoViewModel @Inject constructor(
             isLastPage = false
         }
 
-        _memoList.postValue(updated)
+        when (source) {
+            MemoSource.MAIN -> _memoList.postValue(updated)
+            MemoSource.SEARCH -> _searchMemoList.postValue(updated)
+        }
         // 아이템을 삭제하면 현재 페이지의 마지막 아이템 받아와서 채우기
-        fetchOneItemAtEndOfPage(page)
+        fetchOneItemAtEndOfPage(page, source)
     }
 
-    private fun fetchOneItemAtEndOfPage(page: Int) {
+    private fun fetchOneItemAtEndOfPage(page: Int, source: MemoSource = MemoSource.MAIN) {
+        val isSearchMode = source == MemoSource.SEARCH
+
         memoRepository.getMyMemos(
-            content = null,
-            tagIds = null,
+            content = if (isSearchMode) _query.value else null,
+            tagIds = if (isSearchMode) _selectedSearchTagIds.value else null,
             startDate = null,
             endDate = null,
             page = page,
             onResult = { result, totalPages ->
                 result.getOrNull(PAGE_SIZE - 1)?.let { newItem ->
-                    if (newItem.id == lastDeletedMemoId) {
-                        return@let
+                    if (newItem.id == lastDeletedMemoId) return@let
+
+                    val currentList = when (source) {
+                        MemoSource.SEARCH -> _searchMemoList.value.orEmpty().toMutableList()
+                        MemoSource.MAIN -> _memoList.value.orEmpty().toMutableList()
                     }
 
-                    val current = _memoList.value.orEmpty().toMutableList()
-                    if (current.none { it.id == newItem.id }) {
-                        val insertIndex = (page * PAGE_SIZE - 1).coerceAtMost(current.size)
-                        current.add(insertIndex, newItem)
+                    if (currentList.none { it.id == newItem.id }) {
+                        val insertIndex = (page * PAGE_SIZE - 1).coerceAtMost(currentList.size)
+                        currentList.add(insertIndex, newItem)
+
+                        when (source) {
+                            MemoSource.SEARCH -> _searchMemoList.postValue(currentList)
+                            MemoSource.MAIN -> _memoList.postValue(currentList)
+                        }
+
                         Log.d("MemoViewModel", "fetchOneItemAtEndOfPage: $newItem")
-                        _memoList.postValue(current)
                     }
                 }
             },
@@ -251,38 +315,15 @@ class MemoViewModel @Inject constructor(
     }
 
     private fun performSearch(query: String) {
-        if (searchIsLoading || searchIsLastPage) {
-            return
-        }
-
         if (query.isBlank() && _selectedSearchTagIds.value.isNullOrEmpty()) {
-            _memoSearchResult.value = emptyList()
+            _searchMemoList.value = emptyList()
             return
         }
 
-        searchIsLoading = true
-
-        memoRepository.searchMemo(
-            content = query,
-            tagIds = _selectedSearchTagIds.value ?: emptyList(),
-            startDate = null,
-            endDate = null,
-            page = searchCurrentPage,
-            callback = { result ->
-                searchIsLoading = false
-                if (result.isEmpty()) {
-                    searchIsLastPage = true
-                } else {
-                    val ids = result.map { it.id }
-                    searchMemoIdList.addAll(ids)
-                    _memoSearchResult.postValue(searchMemoIdList.toList())
-                    searchCurrentPage++
-                }
-            },
-            onError = {
-                searchIsLoading = false
-            }
-        )
+        currentPage = 1
+        isLastPage = false
+        _searchMemoList.value = emptyList()
+        loadNextPage(MemoSource.SEARCH)
     }
 
     fun addSelectedTagId(tagId: Int) {
@@ -303,19 +344,15 @@ class MemoViewModel @Inject constructor(
         performSearch(_query.value)
     }
 
-    private fun resetSearchState() {
-        searchCurrentPage = 1
-        searchIsLastPage = false
-        searchMemoIdList.clear()
+    fun resetSearchState() {
+        currentPage = 1
+        isLastPage = false
+        _searchMemoList.value = emptyList()
     }
 
     fun updateQuery(newQuery: String) {
         _query.value = newQuery
         resetSearchState()
-    }
-
-    fun loadNextSearchPage() {
-        performSearch(_query.value)
     }
 
     fun triggerScrollToTop() {

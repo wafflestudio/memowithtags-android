@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
 import com.example.memowithtags.common.model.Memo
+import com.example.memowithtags.common.model.MemoSource
 import com.example.memowithtags.common.model.MemoWithTags
 import com.example.memowithtags.common.model.tagColors
 import com.example.memowithtags.databinding.FragmentMainMemoBinding
@@ -45,6 +47,9 @@ class MainMemoFragment : Fragment() {
 
     var initialFlag = true
 
+    private var recommendedMemoIds: List<Int> = emptyList()
+    private var currentRecommendIndex = -1
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -65,6 +70,9 @@ class MainMemoFragment : Fragment() {
 
         // 태그 불러오기
         tagViewModel.getMyTags()
+
+        // 추천 레이아웃
+        setupRecommendationUI()
 
         // 메모 recycler view 세팅
         val memoAdapterCallback = object : MemoAdapterCallback {
@@ -91,8 +99,8 @@ class MainMemoFragment : Fragment() {
                 tagViewModel.setSelectedTags(tagIds)
             }
 
-            override fun onDeleteClick(memo: Memo) {
-                memoViewModel.deleteMemo(memo.id)
+            override fun onDeleteClick(memo: Memo, source: MemoSource) {
+                memoViewModel.deleteMemo(memo.id, source)
             }
         }
 
@@ -111,7 +119,7 @@ class MainMemoFragment : Fragment() {
             }
         }
 
-        memoAdapter = MemoAdapter(memoAdapterCallback, tagInMemoAdapterCallback)
+        memoAdapter = MemoAdapter(MemoSource.MAIN, memoAdapterCallback, tagInMemoAdapterCallback)
 
         binding.memoRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext()).apply {
@@ -128,7 +136,7 @@ class MainMemoFragment : Fragment() {
                     val lastVisiblePosition = layoutManager.findLastVisibleItemPosition()
 
                     if (lastVisiblePosition >= layoutManager.itemCount - 3) {
-                        memoViewModel.loadNextPage()
+                        memoViewModel.loadNextPage(MemoSource.MAIN)
                     }
                 }
             })
@@ -144,27 +152,24 @@ class MainMemoFragment : Fragment() {
             ) {
                 memoViewModel.shouldScrollToTop.value?.let { shouldScroll ->
                     if (shouldScroll) {
-                        binding.memoRecyclerView.post {
-                            binding.memoRecyclerView.scrollToPosition(0)
-                            memoViewModel.consumeScrollToTopFlag()
-                        }
+                        binding.memoRecyclerView.viewTreeObserver.addOnPreDrawListener(
+                            object : ViewTreeObserver.OnPreDrawListener {
+                                override fun onPreDraw(): Boolean {
+                                    binding.memoRecyclerView.viewTreeObserver.removeOnPreDrawListener(this)
+                                    binding.memoRecyclerView.scrollToPosition(0)
+                                    memoViewModel.consumeScrollToTopFlag()
+                                    return true
+                                }
+                            }
+                        )
                     }
                 }
             }
         }
 
-        memoViewModel.resetAndLoadFirstPage()
-
         if (initialFlag) {
-            binding.memoRecyclerView.viewTreeObserver.addOnPreDrawListener(
-                object : ViewTreeObserver.OnPreDrawListener {
-                    override fun onPreDraw(): Boolean {
-                        binding.memoRecyclerView.viewTreeObserver.removeOnPreDrawListener(this)
-                        binding.memoRecyclerView.scrollToPosition(0)
-                        return true
-                    }
-                }
-            )
+            memoViewModel.resetAndLoadFirstPage()
+            memoViewModel.triggerScrollToTop()
             initialFlag = false
         }
 
@@ -403,13 +408,102 @@ class MainMemoFragment : Fragment() {
             adapter = selectedTagAdapter
         }
 
-        tagViewModel.selectedTagIds.observe(viewLifecycleOwner) {
-            selectedTagAdapter.submitList(tagViewModel.selectedTagIds.value?.mapNotNull { tagViewModel.getTag(it) })
+        tagViewModel.selectedTagIds.observe(viewLifecycleOwner) { selectedTags ->
+            selectedTagAdapter.submitList(
+                selectedTags.mapNotNull { tagViewModel.getTag(it) }
+            )
+
+            val content = binding.newMemoText.text.toString()
+
+            if (selectedTags.isNotEmpty()) {
+                memoViewModel.fetchRecommendedMemoIds(
+                    content = content,
+                    tagIds = selectedTags.toList(),
+                    onComplete = {
+                    },
+                    onError = {
+                    }
+                )
+            } else {
+                memoViewModel.setRecommendedMemoIds(emptyList())
+                memoAdapter.clearFocusedMemo()
+                binding.recommendStatusBar.visibility = View.GONE
+            }
         }
 
         tagViewModel.tagList.observe(viewLifecycleOwner) {
             selectedTagAdapter.submitList(tagViewModel.selectedTagIds.value?.mapNotNull { tagViewModel.getTag(it) })
         }
+    }
+
+    // 메모 추천 관련
+    private fun setupRecommendationUI() {
+        memoViewModel.recommendedMemoIds.observe(viewLifecycleOwner) { ids ->
+            recommendedMemoIds = ids
+            currentRecommendIndex = -1
+
+            if (ids.isNotEmpty()) {
+                binding.recommendStatusBar.visibility = View.VISIBLE
+                updateRecommendationText()
+                memoAdapter.clearFocusedMemo()
+            } else {
+                binding.recommendStatusBar.visibility = View.GONE
+            }
+        }
+
+        binding.btnNextRecommend.setOnClickListener {
+            if (recommendedMemoIds.isEmpty()) return@setOnClickListener
+
+            if (currentRecommendIndex > 0) {
+                currentRecommendIndex--
+                focusRecommendedMemo(currentRecommendIndex)
+            } else if (currentRecommendIndex == 0) {
+                currentRecommendIndex = -1
+                memoAdapter.clearFocusedMemo()
+                updateRecommendationText()
+            }
+        }
+
+        binding.btnPrevRecommend.setOnClickListener {
+            if (recommendedMemoIds.isEmpty()) return@setOnClickListener
+
+            if (currentRecommendIndex == -1 && recommendedMemoIds.isNotEmpty()) {
+                currentRecommendIndex = 0
+                focusRecommendedMemo(currentRecommendIndex)
+            } else if (currentRecommendIndex < recommendedMemoIds.lastIndex) {
+                currentRecommendIndex++
+                focusRecommendedMemo(currentRecommendIndex)
+            }
+        }
+    }
+
+    private fun updateRecommendationText() {
+        if (recommendedMemoIds.isEmpty()) {
+            binding.recommendText.text = "- / 0"
+        } else if (currentRecommendIndex in recommendedMemoIds.indices) {
+            binding.recommendText.text = "${currentRecommendIndex + 1} / ${recommendedMemoIds.size}"
+        } else {
+            binding.recommendText.text = "- / ${recommendedMemoIds.size}"
+        }
+    }
+
+    private fun focusRecommendedMemo(index: Int) {
+        val targetId = recommendedMemoIds.getOrNull(index) ?: return
+        updateRecommendationText()
+
+        memoViewModel.loadUntilMemoFound(
+            targetMemoId = targetId,
+            onFound = { memo ->
+                val position = memoAdapter.getPositionByMemoId(memo.id)
+                if (position != -1) {
+                    memoAdapter.setFocusedMemoId(memo.id)
+                    binding.memoRecyclerView.smoothScrollToPosition(position)
+                }
+            },
+            onNotFound = {
+                Toast.makeText(requireContext(), "추천된 메모를 찾을 수 없습니다", Toast.LENGTH_SHORT).show()
+            }
+        )
     }
 
     override fun onResume() {

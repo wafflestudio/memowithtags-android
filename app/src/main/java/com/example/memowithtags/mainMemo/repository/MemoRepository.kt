@@ -4,6 +4,8 @@ import com.example.memowithtags.common.model.Memo
 import com.example.memowithtags.common.network.api.CreateMemoRequest
 import com.example.memowithtags.common.network.api.CreateMemoResponse
 import com.example.memowithtags.common.network.api.MemoApi
+import com.example.memowithtags.common.network.api.RecommendMemoRequest
+import com.example.memowithtags.common.network.api.RecommendMemoResponse
 import com.example.memowithtags.common.network.api.SearchMemoResponse
 import com.example.memowithtags.common.network.api.UpdateMemoRequest
 import retrofit2.Call
@@ -168,5 +170,28 @@ class MemoRepository @Inject constructor(
                     onError(t)
                 }
             })
+    }
+
+    fun recommendMemos(
+        content: String,
+        tagIds: List<Int>,
+        onSuccess: (List<Int>) -> Unit,
+        onError: (Throwable) -> Unit
+    ) {
+        val request = RecommendMemoRequest(content, tagIds)
+        memoApi.recommendMemos(request).enqueue(object : Callback<RecommendMemoResponse> {
+            override fun onResponse(call: Call<RecommendMemoResponse>, response: Response<RecommendMemoResponse>) {
+                if (response.isSuccessful) {
+                    val ids = response.body()?.memoIds ?: emptyList()
+                    onSuccess(ids)
+                } else {
+                    onError(Exception("추천 실패: ${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<RecommendMemoResponse>, t: Throwable) {
+                onError(t)
+            }
+        })
     }
 }

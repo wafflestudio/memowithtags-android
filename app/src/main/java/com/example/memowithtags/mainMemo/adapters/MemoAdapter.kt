@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
+import com.example.memowithtags.common.model.MemoSource
 import com.example.memowithtags.common.model.MemoWithTags
 import com.example.memowithtags.mainMemo.adapters.callbacks.MemoAdapterCallback
 import com.example.memowithtags.mainMemo.adapters.callbacks.TagAdapterCallback
@@ -24,11 +25,14 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import java.util.Locale
 
 class MemoAdapter(
+    private val source: MemoSource,
     private val memoAdapterCallback: MemoAdapterCallback,
     private val tagAdapterCallback: TagAdapterCallback
 ) : ListAdapter<MemoWithTags, MemoAdapter.MemoViewHolder>(DiffCallback()) {
 
     private var expandedMemoIds: MutableSet<Int> = mutableSetOf()
+
+    private var focusedMemoId: Int? = null
 
     companion object {
         val TAG_DIFF_CALLBACK = TagAdapter.DiffCallback()
@@ -49,7 +53,7 @@ class MemoAdapter(
         private val buttonBarContainer: FrameLayout = itemView.findViewById(R.id.buttonBarContainer)
         private val buttonBar: LinearLayout = itemView.findViewById(R.id.buttonBar)
 
-        fun bind(memoWithTags: MemoWithTags) {
+        fun bind(memoWithTags: MemoWithTags, isFocused: Boolean) {
             // set memo content & created date
             val memoContent: TextView = itemView.findViewById(R.id.memoContent)
             val memoCreated: TextView = itemView.findViewById(R.id.memoCreated)
@@ -88,6 +92,13 @@ class MemoAdapter(
                 }
             }
 
+            // 추천 메모 포커싱
+            if (isFocused) {
+                itemView.setBackgroundResource(R.drawable.recommend_highlight_border)
+            } else {
+                itemView.setBackgroundResource(R.drawable.default_memo_background)
+            }
+
             // show context menu
             itemView.setOnLongClickListener { view ->
 
@@ -116,7 +127,7 @@ class MemoAdapter(
 
                 // memo delete
                 popupView.findViewById<LinearLayout>(R.id.memoDelete).setOnClickListener {
-                    memoAdapterCallback.onDeleteClick(memoWithTags.memo)
+                    memoAdapterCallback.onDeleteClick(memoWithTags.memo, source)
                     popupWindow.dismiss()
                 }
 
@@ -179,17 +190,39 @@ class MemoAdapter(
     }
 
     override fun onBindViewHolder(holder: MemoViewHolder, position: Int) {
-        val memoWithTags = getItem(position) ?: return
-        holder.bind(memoWithTags)
+        val memoWithTags = getItem(position)
+        val isFocused = memoWithTags.memo.id == focusedMemoId
+        holder.bind(memoWithTags, isFocused)
     }
 
-    fun removeItem(memoId: Int) {
-        val currentList = currentList.toMutableList()
-        val index = currentList.indexOfFirst { it.memo.id == memoId }
+    fun getPositionByMemoId(memoId: Int): Int {
+        return currentList.indexOfFirst { it.memo.id == memoId }
+    }
 
-        if (index != -1) {
-            currentList.removeAt(index)
-            submitList(currentList)
+    fun setFocusedMemoId(newMemoId: Int?) {
+        val previousFocusedId = focusedMemoId
+        focusedMemoId = newMemoId
+
+        // 이전 포커싱 메모 인덱스만 갱신
+        previousFocusedId?.let { prevId ->
+            val prevIndex = currentList.indexOfFirst { it.memo.id == prevId }
+            if (prevIndex != -1) notifyItemChanged(prevIndex)
+        }
+
+        // 새 포커싱 메모 인덱스만 갱신
+        newMemoId?.let { newId ->
+            val newIndex = currentList.indexOfFirst { it.memo.id == newId }
+            if (newIndex != -1) notifyItemChanged(newIndex)
+        }
+    }
+
+    fun clearFocusedMemo() {
+        val previousFocusedId = focusedMemoId
+        focusedMemoId = null
+
+        previousFocusedId?.let { prevId ->
+            val prevIndex = currentList.indexOfFirst { it.memo.id == prevId }
+            if (prevIndex != -1) notifyItemChanged(prevIndex)
         }
     }
 

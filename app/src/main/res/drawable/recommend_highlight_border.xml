@@ -1,0 +1,50 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Top shadow -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="90"
+                android:startColor="#22000000"
+                android:endColor="#00000000" />
+        </shape>
+    </item>
+
+    <!-- Bottom shadow -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="270"
+                android:startColor="#22000000"
+                android:endColor="#00000000" />
+        </shape>
+    </item>
+
+    <!-- Left shadow -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="0"
+                android:startColor="#22000000"
+                android:endColor="#00000000" />
+        </shape>
+    </item>
+
+    <!-- Right shadow -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="180"
+                android:startColor="#22000000"
+                android:endColor="#00000000" />
+        </shape>
+    </item>
+
+    <!-- Main content with white background -->
+    <item android:left="2dp" android:top="2dp" android:right="2dp" android:bottom="2dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/white"/>
+            <corners android:radius="16dp"/>
+        </shape>
+    </item>
+</layer-list>

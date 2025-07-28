@@ -24,6 +24,10 @@ data class MemoWithTags(
     val tags: List<Tag>
 )
 
+enum class MemoSource {
+    MAIN, SEARCH
+}
+
 val tagColors = listOf(
     "#FF9C9C",
     "#FFF56F",
