@@ -45,7 +45,7 @@
                 android:id="@+id/buttonBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_gravity="bottom"
                 android:paddingTop="10dp"
                 android:alpha="0"
@@ -86,7 +86,7 @@
                     android:drawablePadding="4dp"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
-                    android:paddingHorizontal="8dp"
+                    android:paddingHorizontal="13dp"
                     android:paddingVertical="6dp"
                     android:stateListAnimator="@null"
                     android:text="관련 검색"
@@ -102,12 +102,21 @@
                     android:drawablePadding="4dp"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
-                    android:paddingHorizontal="8dp"
+                    android:paddingHorizontal="13dp"
                     android:paddingVertical="6dp"
                     android:stateListAnimator="@null"
                     android:text="간편 수정"
                     android:textSize="12sp"
                     android:textColor="@color/text_primary"/>
+
+                <ImageView
+                    android:id="@+id/foldButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="memoFoldBtn"
+                    android:src="@drawable/memo_fold_btn"
+                    android:layout_marginStart="6dp"/>
+
             </LinearLayout>
         </FrameLayout>
     </LinearLayout>

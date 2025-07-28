@@ -1,0 +1,12 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="30dp"
+    android:height="29dp"
+    android:viewportWidth="30"
+    android:viewportHeight="29">
+  <path
+      android:pathData="M14.5,0L15.5,0A14.5,14.5 0,0 1,30 14.5L30,14.5A14.5,14.5 0,0 1,15.5 29L14.5,29A14.5,14.5 0,0 1,0 14.5L0,14.5A14.5,14.5 0,0 1,14.5 0z"
+      android:fillColor="@color/bg_memo_fold_btn"/>
+  <path
+      android:pathData="M8.928,16.067L14.219,10.653C14.342,10.523 14.506,10.448 14.684,10.448C14.854,10.448 15.025,10.523 15.142,10.653L20.433,16.067C20.549,16.177 20.617,16.334 20.617,16.512C20.617,16.867 20.351,17.134 19.995,17.134C19.824,17.134 19.66,17.072 19.551,16.956L14.684,11.979L9.81,16.956C9.707,17.072 9.543,17.134 9.365,17.134C9.01,17.134 8.743,16.867 8.743,16.512C8.743,16.334 8.812,16.177 8.928,16.067Z"
+      android:fillColor="@color/icon_memo_fold_btn"/>
+</vector>

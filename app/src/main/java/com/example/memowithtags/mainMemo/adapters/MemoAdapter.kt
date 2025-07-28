@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
@@ -71,8 +72,7 @@ class MemoAdapter(
                 buttonBar.animate().cancel()
 
                 if (isExpanded) {
-                    expandedMemoIds.remove(memoWithTags.memo.id)
-                    ViewExpandAnimator.collapseView(buttonBarContainer, buttonBar)
+                    memoAdapterCallback.onEditClick(memoWithTags.memo, memoWithTags.memo.tagIds)
                 } else {
                     expandedMemoIds.add(memoWithTags.memo.id)
                     ViewExpandAnimator.expandView(buttonBarContainer, buttonBar)
@@ -148,6 +148,17 @@ class MemoAdapter(
 
             itemView.findViewById<Button>(R.id.editButton).setOnClickListener {
                 memoAdapterCallback.onEasyEditClick(memoWithTags.memo, memoWithTags.memo.tagIds)
+            }
+
+            itemView.findViewById<ImageView>(R.id.foldButton).setOnClickListener {
+                val isExpanded = memoWithTags.memo.id in expandedMemoIds
+
+                buttonBar.animate().cancel()
+
+                if (isExpanded) {
+                    expandedMemoIds.remove(memoWithTags.memo.id)
+                    ViewExpandAnimator.collapseView(buttonBarContainer, buttonBar)
+                }
             }
         }
     }
