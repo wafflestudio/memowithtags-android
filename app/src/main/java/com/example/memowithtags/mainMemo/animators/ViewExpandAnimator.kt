@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 
 object ViewExpandAnimator {
 
@@ -68,7 +69,7 @@ object ViewExpandAnimator {
         // 1. fade-out 애니메이션
         buttonBar.animate()
             .alpha(0f)
-            .setDuration(200)
+            .setDuration(100)
             .withEndAction {
                 buttonBar.visibility = View.GONE
 
@@ -89,5 +90,45 @@ object ViewExpandAnimator {
                 heightAnimator.start()
             }
             .start()
+    }
+
+    fun animateTextHeightChange(textView: TextView, expanded: Boolean, collapsedMaxLines: Int) {
+        // 1. 현재 높이 측정
+        val startHeight = textView.height
+
+        // 2. 텍스트 최대 길이 설정
+        if (expanded) {
+            textView.maxLines = Integer.MAX_VALUE
+        } else {
+            textView.maxLines = collapsedMaxLines
+        }
+
+        // 3. 재측정 → target height 계산
+        textView.measure(
+            View.MeasureSpec.makeMeasureSpec(textView.width, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.UNSPECIFIED
+        )
+        val targetHeight = textView.measuredHeight
+
+        // 4. height 애니메이션
+        val animator = ValueAnimator.ofInt(startHeight, targetHeight)
+        animator.duration = 200
+        animator.addUpdateListener {
+            val value = it.animatedValue as Int
+            textView.layoutParams.height = value
+            textView.requestLayout()
+        }
+
+        animator.start()
+    }
+
+    fun setTextView(textView: TextView, expanded: Boolean, collapsedMaxLines: Int) {
+        textView.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        textView.requestLayout()
+        if (expanded) {
+            textView.maxLines = Integer.MAX_VALUE
+        } else {
+            textView.maxLines = collapsedMaxLines
+        }
     }
 }
