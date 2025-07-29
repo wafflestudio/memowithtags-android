@@ -1,7 +1,7 @@
 package com.example.memowithtags.mainMemo.adapters.callbacks
 
-import com.example.memowithtags.common.model.Memo
-import com.example.memowithtags.common.model.MemoSource
+import com.example.memowithtags.common.model.entity.Memo
+import com.example.memowithtags.common.model.enums.MemoSource
 
 interface MemoAdapterCallback {
     fun onSearchClick(memo: Memo) {}

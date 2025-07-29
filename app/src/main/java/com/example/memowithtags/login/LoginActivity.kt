@@ -6,12 +6,15 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.memowithtags.common.model.HttpException
+import androidx.lifecycle.lifecycleScope
+import com.example.memowithtags.common.model.result.LoginResult
+import com.example.memowithtags.common.model.result.SocialLoginResult
 import com.example.memowithtags.databinding.ActivityLoginBinding
 import com.example.memowithtags.login.viewModel.LoginViewModel
 import com.example.memowithtags.mainMemo.MainActivity
 import com.example.memowithtags.signup.SignupActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
@@ -61,31 +64,59 @@ class LoginActivity : AppCompatActivity() {
 
         // 자체 로그인
         binding.loginButton.setOnClickListener {
-            val email = binding.emailEditText.text.toString()
+            binding.loginButton.isEnabled = false
+            binding.loginButton.isClickable = false
+
+            val email = binding.emailEditText.text.toString().trim()
             val password = binding.passwordEditText.text.toString()
 
             loginViewModel.login(email, password)
         }
 
-        loginViewModel.loginResult.observe(this) { result ->
-            result.onSuccess {
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                this.finish()
-            }.onFailure {
+        lifecycleScope.launch {
+            loginViewModel.loginEvent.collect { result ->
+                when (result) {
+                    is LoginResult.Success -> {
+                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        startActivity(intent)
+                        this@LoginActivity.finish()
+                    }
+                    is LoginResult.Error -> {
+                        when (result.code) {
+                            401 -> { Toast.makeText(this@LoginActivity, "이메일 또는 비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show() }
+                            500 -> { Toast.makeText(this@LoginActivity, "서버 오류", Toast.LENGTH_SHORT).show() }
+                            else -> { Toast.makeText(this@LoginActivity, "알 수 없는 오류", Toast.LENGTH_SHORT).show() }
+                        }
+                        binding.loginButton.isEnabled = true
+                        binding.loginButton.isClickable = true
+                    }
+                    is LoginResult.Exception -> {
+                        Toast.makeText(this@LoginActivity, "네트워크 오류", Toast.LENGTH_SHORT).show()
+                        binding.loginButton.isEnabled = true
+                        binding.loginButton.isClickable = true
+                    }
+                }
             }
         }
 
-        loginViewModel.socialLoginResult.observe(this) { result ->
-            result.onSuccess {
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                this.finish()
-            }.onFailure {
-                if (it is HttpException && it.statusCode == 409) {
-                    Toast.makeText(this, "이미 가입된 계정입니다.", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "로그인 실패", Toast.LENGTH_SHORT).show()
+        lifecycleScope.launch {
+            loginViewModel.socialLoginEvent.collect { result ->
+                when (result) {
+                    is SocialLoginResult.Success -> {
+                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        startActivity(intent)
+                        this@LoginActivity.finish()
+                    }
+                    is SocialLoginResult.Error -> {
+                        when (result.code) {
+                            409 -> { Toast.makeText(this@LoginActivity, "이미 가입된 계정입니다.", Toast.LENGTH_SHORT).show() }
+                            500 -> { Toast.makeText(this@LoginActivity, "서버 오류", Toast.LENGTH_SHORT).show() }
+                            else -> { Toast.makeText(this@LoginActivity, "알 수 없는 오류", Toast.LENGTH_SHORT).show() }
+                        }
+                    }
+                    is SocialLoginResult.Exception -> {
+                        Toast.makeText(this@LoginActivity, "네트워크 오류", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -101,7 +132,7 @@ class LoginActivity : AppCompatActivity() {
     private fun handleAuthRedirect(intent: Intent) {
         val data = intent.data
         if (data != null && data.scheme == "memowithtags") {
-            val provider = data.pathSegments?.getOrNull(0) // 0번째가 'naver'
+            val provider = data.pathSegments?.getOrNull(0)
             val code = data.getQueryParameter("code")
 
             Log.d("OAuth", "provider: $provider, code: $code")

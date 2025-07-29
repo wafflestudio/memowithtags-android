@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.memowithtags.common.model.AlphanumComparator
-import com.example.memowithtags.common.model.Tag
-import com.example.memowithtags.common.model.TagSortType
+import com.example.memowithtags.common.model.entity.Tag
+import com.example.memowithtags.common.model.enums.TagSortType
 import com.example.memowithtags.common.model.tagColors
 import com.example.memowithtags.mainMemo.repository.TagRepository
 import com.example.memowithtags.settings.repository.SettingsRepository

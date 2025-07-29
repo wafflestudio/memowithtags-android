@@ -2,10 +2,10 @@ package com.example.memowithtags.settings.repository
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.example.memowithtags.common.model.SearchFilterType
-import com.example.memowithtags.common.model.SearchSortType
-import com.example.memowithtags.common.model.TagSortType
-import com.example.memowithtags.common.model.TextSizeType
+import com.example.memowithtags.common.model.enums.SearchFilterType
+import com.example.memowithtags.common.model.enums.SearchSortType
+import com.example.memowithtags.common.model.enums.TagSortType
+import com.example.memowithtags.common.model.enums.TextSizeType
 import javax.inject.Inject
 
 class SettingsRepository @Inject constructor(

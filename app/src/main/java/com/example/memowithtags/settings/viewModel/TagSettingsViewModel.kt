@@ -4,9 +4,9 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.memowithtags.common.model.Tag
-import com.example.memowithtags.common.model.TagSortType
-import com.example.memowithtags.common.network.api.TagResponse
+import com.example.memowithtags.common.model.entity.Tag
+import com.example.memowithtags.common.model.enums.TagSortType
+import com.example.memowithtags.common.model.response.tag.TagResponse
 import com.example.memowithtags.mainMemo.repository.TagRepository
 import com.example.memowithtags.settings.repository.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
-import com.example.memowithtags.common.model.MemoSource
-import com.example.memowithtags.common.model.MemoWithTags
+import com.example.memowithtags.common.model.entity.MemoWithTags
+import com.example.memowithtags.common.model.enums.MemoSource
 import com.example.memowithtags.mainMemo.adapters.callbacks.MemoAdapterCallback
 import com.example.memowithtags.mainMemo.adapters.callbacks.TagAdapterCallback
 import com.example.memowithtags.mainMemo.animators.ViewExpandAnimator

@@ -1,5 +1,11 @@
 package com.example.memowithtags.common.network.api
 
+import com.example.memowithtags.common.model.request.memo.CreateMemoRequest
+import com.example.memowithtags.common.model.request.memo.RecommendMemoRequest
+import com.example.memowithtags.common.model.request.memo.UpdateMemoRequest
+import com.example.memowithtags.common.model.response.memo.CreateMemoResponse
+import com.example.memowithtags.common.model.response.memo.RecommendMemoResponse
+import com.example.memowithtags.common.model.response.memo.SearchMemoResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE

@@ -1,4 +1,4 @@
-package com.example.memowithtags.common.model
+package com.example.memowithtags.common.model.enums
 
 enum class SearchSortType {
     CREATED,

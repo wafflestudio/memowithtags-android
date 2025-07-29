@@ -1,5 +1,11 @@
 package com.example.memowithtags.common.network.api
 
+import com.example.memowithtags.common.model.request.user.ChangeNicknameRequest
+import com.example.memowithtags.common.model.request.user.ChangePWLoginedRequest
+import com.example.memowithtags.common.model.request.user.WithdrawalRequest
+import com.example.memowithtags.common.model.response.user.ChangeNicknameResponse
+import com.example.memowithtags.common.model.response.user.ChangePWLoginedResponse
+import com.example.memowithtags.common.model.response.user.MeResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET

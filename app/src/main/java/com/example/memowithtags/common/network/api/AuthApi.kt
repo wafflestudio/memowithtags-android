@@ -1,6 +1,17 @@
 package com.example.memowithtags.common.network.api
 
+import com.example.memowithtags.common.model.request.auth.ChangePwRequest
+import com.example.memowithtags.common.model.request.auth.LoginRequest
+import com.example.memowithtags.common.model.request.auth.RefreshTokenRequest
+import com.example.memowithtags.common.model.request.auth.SendEmailRequest
+import com.example.memowithtags.common.model.request.auth.SignupRequest
+import com.example.memowithtags.common.model.request.auth.VerifyEmailRequest
+import com.example.memowithtags.common.model.response.auth.LoginResponse
+import com.example.memowithtags.common.model.response.auth.RefreshTokenResponse
+import com.example.memowithtags.common.model.response.auth.SignupResponse
+import com.example.memowithtags.common.model.response.auth.SocialLoginResponse
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -9,26 +20,26 @@ import retrofit2.http.Query
 
 interface AuthApi {
     @POST("api/v1/auth/register")
-    fun signup(@Body signupRequest: SignupRequest): Call<SignupResponse>
+    suspend fun signup(@Body signupRequest: SignupRequest): Response<SignupResponse>
 
     @POST("api/v1/auth/send-email")
-    fun sendEmail(@Body sendEmailRequest: SendEmailRequest): Call<Unit>
+    suspend fun sendEmail(@Body sendEmailRequest: SendEmailRequest): Response<Unit>
 
     @POST("api/v1/auth/verify-email")
-    fun verifyEmail(@Body verifyEmailRequest: VerifyEmailRequest): Call<Unit>
+    suspend fun verifyEmail(@Body verifyEmailRequest: VerifyEmailRequest): Response<Unit>
 
     @POST("api/v1/auth/login")
-    fun login(@Body loginRequest: LoginRequest): Call<LoginResponse>
+    suspend fun login(@Body loginRequest: LoginRequest): Response<LoginResponse>
 
     @POST("api/v1/auth/refresh-token")
     fun refreshToken(@Body refreshTokenRequest: RefreshTokenRequest): Call<RefreshTokenResponse>
 
     @POST("api/v1/auth/reset-password")
-    fun changePw(@Body changePwRequest: ChangePwRequest): Call<Unit>
+    suspend fun changePw(@Body changePwRequest: ChangePwRequest): Response<Unit>
 
     @GET("api/v1/auth/login/{provider}")
-    fun socialLogin(
+    suspend fun socialLogin(
         @Path("provider") provider: String,
         @Query("code") code: String
-    ): Call<SocialLoginResponse>
+    ): Response<SocialLoginResponse>
 }

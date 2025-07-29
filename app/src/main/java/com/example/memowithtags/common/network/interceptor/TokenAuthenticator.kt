@@ -2,8 +2,8 @@ package com.example.memowithtags.common.network.interceptor
 
 import android.content.Context
 import android.content.Intent
+import com.example.memowithtags.common.model.request.auth.RefreshTokenRequest
 import com.example.memowithtags.common.network.api.AuthApi
-import com.example.memowithtags.common.network.api.RefreshTokenRequest
 import com.example.memowithtags.common.network.token.TokenProvider
 import com.example.memowithtags.login.LoginActivity
 import dagger.hilt.android.qualifiers.ApplicationContext

@@ -7,9 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/bg_screen">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,8 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        >
+        app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
             android:id="@+id/signupTitle"
@@ -36,14 +33,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             android:layout_marginTop="48dp"
+            android:layout_marginEnd="16dp"
             android:background="@drawable/rounded_background"
             android:padding="12dp"
-            app:layout_constraintTop_toBottomOf="@+id/signupTitle"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/signupTitle"
+            app:layout_constraintVertical_bias="0.0">
 
             <EditText
                 android:id="@+id/emailEditText"
@@ -52,47 +51,92 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="8dp"
+                android:background="@drawable/rounded_edittext"
                 android:hint="이메일"
+                android:padding="10dp"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp"
-                android:background="@drawable/rounded_edittext"
-                android:padding="10dp"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
+
+            <TextView
+                android:id="@+id/errorText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text=""
+                android:textSize="12sp"
+                android:textColor="@color/text_danger"
+                android:layout_marginTop="4dp"
+                android:paddingHorizontal="6dp"
+                app:layout_constraintTop_toBottomOf="@+id/emailEditText"/>
 
             <Button
                 android:id="@+id/nextButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/btn_tint_color"
-                android:text="다음"
-                android:paddingVertical="12dp"
-                android:textColor="@android:color/white"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="16dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/emailEditText" />
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/btn_tint_color"
+                android:paddingVertical="12dp"
+                android:text="다음"
+                android:textColor="@android:color/white"
+                app:layout_constraintTop_toBottomOf="@+id/errorText" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/prevButton"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="이전"
-                android:paddingHorizontal="6dp"
-                android:paddingVertical="2dp"
-                android:minHeight="0dp"
-                android:minWidth="0dp"
-                android:textSize="14sp"
-                android:background="@drawable/tag_background"
-                android:backgroundTint="@color/bg_tag_back"
-                android:textColor="@color/text_tag"
-                android:layout_marginTop="12dp"
                 android:layout_marginStart="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/nextButton"
-                app:layout_constraintStart_toStartOf="parent"/>
+                android:layout_marginTop="36dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nextButton">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/prevButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/tag_background"
+                    android:backgroundTint="@color/bg_tag_back"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:paddingHorizontal="6dp"
+                    android:paddingVertical="2dp"
+                    android:text="이전"
+                    android:textColor="@color/text_tag"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/progress_bar"
+                    app:tint="@color/bg_progress_done" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/progress_bar"
+                    app:tint="@color/bg_progress_undone" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/progress_bar"
+                    app:tint="@color/bg_progress_undone" />
+
+            </LinearLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
