@@ -3,9 +3,9 @@ package com.example.memowithtags.settings.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.memowithtags.common.model.SearchFilterType
-import com.example.memowithtags.common.model.SearchSortType
-import com.example.memowithtags.common.model.TextSizeType
+import com.example.memowithtags.common.model.enums.SearchFilterType
+import com.example.memowithtags.common.model.enums.SearchSortType
+import com.example.memowithtags.common.model.enums.TextSizeType
 import com.example.memowithtags.settings.repository.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

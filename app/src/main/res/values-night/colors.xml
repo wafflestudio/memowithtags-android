@@ -18,6 +18,13 @@
     <color name="bg_recommend_middle">#000000</color>
     <color name="bg_recommend_btn">#202021</color>
 
+    <color name="bg_progress_done">#66FF5151</color>
+    <color name="bg_progress_undone">#4DA0A0A1</color>
+
+    <color name="bg_start_btn">#FF9C9C</color>
+
+    <color name="bg_logo_tag">#202021</color>
+
     <!-- Border -->
     <color name="border_divider">#A0A0A1</color>
     <color name="border_memo_new">#A0A0A14D</color>
@@ -31,6 +38,7 @@
     <color name="text_danger">#FF5151</color>
     <color name="text_link">#A0A0A199</color>
     <color name="text_tag">#E3E3E7</color>
+    <color name="text_tag_logo">#A0A0A1</color>
 
     <!-- Icon -->
     <color name="icon_checked">#FF5151</color>

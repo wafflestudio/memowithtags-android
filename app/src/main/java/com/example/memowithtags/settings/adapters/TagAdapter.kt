@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
-import com.example.memowithtags.common.model.Tag
+import com.example.memowithtags.common.model.entity.Tag
 
 class TagAdapter(
     private val tags: List<Tag>,

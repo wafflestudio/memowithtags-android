@@ -21,6 +21,13 @@
     <color name="bg_recommend_middle">#F5F5F5</color>
     <color name="bg_recommend_btn">#FFFFFF</color>
 
+    <color name="bg_progress_done">#FFBDBD</color>
+    <color name="bg_progress_undone">#F1F1F3</color>
+
+    <color name="bg_start_btn">#FF5151</color>
+
+    <color name="bg_logo_tag">#E3E3E7</color>
+
     <!-- Border -->
     <color name="border_divider">#A0A0A1</color>
     <color name="border_memo_new">#4DA0A0A1</color>
@@ -34,6 +41,7 @@
     <color name="text_danger">#FF5151</color>
     <color name="text_link">#B2202021</color>
     <color name="text_tag">#B2202021</color>
+    <color name="text_tag_logo">#B2202021</color>
 
     <!-- Icon -->
     <color name="icon_checked">#FF9C9C</color>

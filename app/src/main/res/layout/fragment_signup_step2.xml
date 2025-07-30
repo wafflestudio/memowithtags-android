@@ -39,7 +39,9 @@
             android:layout_marginEnd="16dp"
             android:layout_marginTop="48dp"
             android:background="@drawable/rounded_background"
-            android:padding="12dp"
+            android:paddingTop="12dp"
+            android:paddingHorizontal="12dp"
+            android:paddingBottom="16dp"
             app:layout_constraintTop_toBottomOf="@+id/signupTitle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -74,9 +76,10 @@
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="4dp"
                     android:textColor="@color/text_primary"
-                    android:textSize="24sp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     android:inputType="number"
+                    android:maxLength="1"
                     android:background="@drawable/rounded_edittext"
                     android:padding="12dp"/>
 
@@ -89,9 +92,10 @@
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="4dp"
                     android:textColor="@color/text_primary"
-                    android:textSize="24sp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     android:inputType="number"
+                    android:maxLength="1"
                     android:background="@drawable/rounded_edittext"
                     android:padding="12dp"/>
 
@@ -104,9 +108,10 @@
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="4dp"
                     android:textColor="@color/text_primary"
-                    android:textSize="24sp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     android:inputType="number"
+                    android:maxLength="1"
                     android:background="@drawable/rounded_edittext"
                     android:padding="12dp"/>
 
@@ -119,9 +124,10 @@
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="4dp"
                     android:textColor="@color/text_primary"
-                    android:textSize="24sp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     android:inputType="number"
+                    android:maxLength="1"
                     android:background="@drawable/rounded_edittext"
                     android:padding="12dp"/>
 
@@ -134,9 +140,10 @@
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="4dp"
                     android:textColor="@color/text_primary"
-                    android:textSize="24sp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     android:inputType="number"
+                    android:maxLength="1"
                     android:background="@drawable/rounded_edittext"
                     android:padding="12dp"/>
 
@@ -149,13 +156,13 @@
                     android:layout_marginEnd="4dp"
                     android:layout_marginBottom="4dp"
                     android:textColor="@color/text_primary"
-                    android:textSize="24sp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     android:inputType="number"
+                    android:maxLength="1"
                     android:background="@drawable/rounded_edittext"
                     android:padding="12dp"/>
             </LinearLayout>
-
 
             <Button
                 android:id="@+id/nextButton"
@@ -171,23 +178,55 @@
                 android:layout_marginEnd="8dp"
                 app:layout_constraintTop_toBottomOf="@+id/certifinumInputs" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/prevButton"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="이전"
-                android:paddingHorizontal="6dp"
-                android:paddingVertical="2dp"
-                android:minHeight="0dp"
-                android:minWidth="0dp"
-                android:textSize="14sp"
-                android:background="@drawable/tag_background"
-                android:backgroundTint="@color/bg_tag_back"
-                android:textColor="@color/text_tag"
-                android:layout_marginTop="12dp"
-                android:layout_marginStart="8dp"
                 app:layout_constraintTop_toBottomOf="@+id/nextButton"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="36dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/prevButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="이전"
+                    android:paddingHorizontal="6dp"
+                    android:paddingVertical="2dp"
+                    android:minHeight="0dp"
+                    android:minWidth="0dp"
+                    android:textSize="14sp"
+                    android:background="@drawable/tag_background"
+                    android:backgroundTint="@color/bg_tag_back"
+                    android:textColor="@color/text_tag" />
+
+                <View
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/progress_bar"
+                    android:layout_marginEnd="8dp"
+                    app:tint="@color/bg_progress_done" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/progress_bar"
+                    android:layout_marginEnd="8dp"
+                    app:tint="@color/bg_progress_done"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/progress_bar"
+                    app:tint="@color/bg_progress_undone"/>
+
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,15 +19,32 @@
         app:layout_constraintEnd_toEndOf="parent"
         >
 
-        <TextView
+        <LinearLayout
             android:id="@+id/loginTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Memo with Tags"
-            android:textColor="@color/text_primary"
-            android:textSize="24sp"
-            app:layout_constraintTop_toTopOf="parent"/>
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Memo with"
+                android:textColor="@color/text_primary"
+                android:textSize="22sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tags"
+                android:layout_marginStart="4dp"
+                android:paddingHorizontal="7dp"
+                android:paddingVertical="2dp"
+                android:background="@drawable/tag_background"
+                android:backgroundTint="@color/bg_logo_tag"
+                android:textColor="@color/text_tag_logo"
+                android:textSize="19sp"/>
+        </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/loginBox"
@@ -70,6 +87,7 @@
                 android:padding="12dp"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp"
+                android:inputType="textPassword"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/emailEditText" />

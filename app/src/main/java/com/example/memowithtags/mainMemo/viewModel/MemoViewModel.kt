@@ -5,10 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.memowithtags.common.model.Memo
-import com.example.memowithtags.common.model.MemoSource
-import com.example.memowithtags.common.network.api.CreateMemoRequest
-import com.example.memowithtags.common.network.api.UpdateMemoRequest
+import com.example.memowithtags.common.model.entity.Memo
+import com.example.memowithtags.common.model.enums.MemoSource
+import com.example.memowithtags.common.model.request.memo.CreateMemoRequest
+import com.example.memowithtags.common.model.request.memo.UpdateMemoRequest
 import com.example.memowithtags.mainMemo.repository.MemoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,15 +1,20 @@
 package com.example.memowithtags.signup.viewModel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.memowithtags.common.network.api.SignupRequest
-import com.example.memowithtags.common.network.api.SignupResponse
+import androidx.lifecycle.viewModelScope
+import com.example.memowithtags.common.model.request.auth.ChangePwRequest
+import com.example.memowithtags.common.model.request.auth.SendEmailRequest
+import com.example.memowithtags.common.model.request.auth.SignupRequest
+import com.example.memowithtags.common.model.request.auth.VerifyEmailRequest
+import com.example.memowithtags.common.model.result.ChangePwResult
+import com.example.memowithtags.common.model.result.SendEmailResult
+import com.example.memowithtags.common.model.result.SignupResult
+import com.example.memowithtags.common.model.result.VerifyEmailResult
 import com.example.memowithtags.signup.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,32 +22,57 @@ class SignupViewModel @Inject constructor(
     private val repository: AuthRepository
 ) : ViewModel() {
 
-    private val _signupResult = MutableLiveData<Result<SignupResponse>>()
-    val signupResult: LiveData<Result<SignupResponse>> get() = _signupResult
+    private val _emailSentEvent = MutableSharedFlow<SendEmailResult>(replay = 0)
+    val emailSentEvent: SharedFlow<SendEmailResult> = _emailSentEvent
 
-    fun signup(email: String, nickname: String, password: String) {
-        val request = SignupRequest(email, nickname, password)
+    private val _verifyEmailEvent = MutableSharedFlow<VerifyEmailResult>(replay = 0)
+    val verifyEmailEvent: SharedFlow<VerifyEmailResult> = _verifyEmailEvent
 
-        repository.signup(request).enqueue(object : Callback<SignupResponse> {
-            override fun onResponse(call: Call<SignupResponse>, response: Response<SignupResponse>) {
-                if (response.isSuccessful) {
-                    val body = response.body()
-                    if (body != null) {
-                        repository.saveAccessToken(body.accessToken)
-                        repository.saveRefreshToken(body.refreshToken)
-                        repository.saveEmail(email)
-                        _signupResult.value = Result.success(body)
-                    } else {
-                        _signupResult.value = Result.failure(Exception("응답 없음"))
-                    }
-                } else {
-                    _signupResult.value = Result.failure(Exception("회원가입 실패: ${response.message()}"))
-                }
+    private val _signupEvent = MutableSharedFlow<SignupResult>(replay = 0)
+    val signupEvent: SharedFlow<SignupResult> = _signupEvent
+
+    private val _changePwEvent = MutableSharedFlow<ChangePwResult>(replay = 0)
+    val changePwEvent: SharedFlow<ChangePwResult> = _changePwEvent
+
+    private var email: String = ""
+
+    fun signup(nickname: String, password: String) {
+        viewModelScope.launch {
+            val result = repository.signup(SignupRequest(email, nickname, password))
+            if (result is SignupResult.Success) {
+                repository.saveAccessToken(result.response.accessToken)
+                repository.saveRefreshToken(result.response.refreshToken)
+                repository.saveEmail(email)
             }
+            _signupEvent.emit(result)
+        }
+    }
 
-            override fun onFailure(call: Call<SignupResponse>, t: Throwable) {
-                _signupResult.value = Result.failure(t)
+    fun sendEmail(email: String) {
+        viewModelScope.launch {
+            val result = repository.sendEmail(SendEmailRequest(email))
+            if (result is SendEmailResult.Success) {
+                this@SignupViewModel.email = email
             }
-        })
+            _emailSentEvent.emit(result)
+        }
+    }
+
+    fun verifyEmail(code: String) {
+        viewModelScope.launch {
+            val result = repository.verifyEmail(VerifyEmailRequest(email, code))
+            _verifyEmailEvent.emit(result)
+        }
+    }
+
+    fun changePw(password: String) {
+        viewModelScope.launch {
+            val result = repository.changePw(ChangePwRequest(email, password))
+            _changePwEvent.emit(result)
+        }
+    }
+
+    fun logout() {
+        repository.clearAuthData()
     }
 }

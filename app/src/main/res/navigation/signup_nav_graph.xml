@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_signup_step1">
         <action
             android:id="@+id/action_step1_to_step2"
-            app:destination="@id/signupStep2Fragment" />
+            app:destination="@id/signupStep2Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <!-- 두 번째 회원가입 단계 -->
@@ -23,10 +27,18 @@
         tools:layout="@layout/fragment_signup_step2">
         <action
             android:id="@+id/action_step2_to_step3"
-            app:destination="@id/signupStep3Fragment" />
+            app:destination="@id/signupStep3Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_step2_to_chpw"
-            app:destination="@id/changePWFragment" />
+            app:destination="@id/changePWFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <!-- 세 번째 회원가입 단계 -->
@@ -37,7 +49,11 @@
         tools:layout="@layout/fragment_signup_step3">
         <action
             android:id="@+id/action_step3_to_step4"
-            app:destination="@id/signupStep4Fragment" />
+            app:destination="@id/signupStep4Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
@@ -47,12 +63,20 @@
         tools:layout="@layout/fragment_change_pw">
         <action
             android:id="@+id/action_chpw_to_step4"
-            app:destination="@id/signupStep4Fragment" />
+            app:destination="@id/signupStep4Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
 
     <fragment
         android:id="@+id/signupStep4Fragment"
         android:name="com.example.memowithtags.signup.fragments.SignupStep4Fragment"
         android:label="Step 4"
-        tools:layout="@layout/fragment_signup_step4" />
+        tools:layout="@layout/fragment_signup_step4"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right"/>
 </navigation>

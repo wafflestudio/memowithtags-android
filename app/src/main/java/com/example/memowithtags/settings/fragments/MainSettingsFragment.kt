@@ -11,9 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.memowithtags.R
-import com.example.memowithtags.common.model.SearchFilterType
-import com.example.memowithtags.common.model.SearchSortType
-import com.example.memowithtags.common.model.TextSizeType
+import com.example.memowithtags.common.model.enums.SearchFilterType
+import com.example.memowithtags.common.model.enums.SearchSortType
+import com.example.memowithtags.common.model.enums.TextSizeType
 import com.example.memowithtags.databinding.FragmentMainSettingsBinding
 import com.example.memowithtags.settings.viewModel.MainSettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint

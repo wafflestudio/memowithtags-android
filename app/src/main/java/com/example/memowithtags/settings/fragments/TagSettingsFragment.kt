@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.memowithtags.R
-import com.example.memowithtags.common.model.TagSortType
+import com.example.memowithtags.common.model.enums.TagSortType
 import com.example.memowithtags.databinding.FragmentTagSettingsBinding
 import com.example.memowithtags.settings.adapters.TagAdapter
 import com.example.memowithtags.settings.viewModel.TagSettingsViewModel

@@ -1,24 +1,27 @@
 package com.example.memowithtags.signup.repository
 
 import android.content.SharedPreferences
-import com.example.memowithtags.common.model.HttpException
+import com.example.memowithtags.common.model.request.auth.ChangePwRequest
+import com.example.memowithtags.common.model.request.auth.LoginRequest
+import com.example.memowithtags.common.model.request.auth.SendEmailRequest
+import com.example.memowithtags.common.model.request.auth.SignupRequest
+import com.example.memowithtags.common.model.request.auth.VerifyEmailRequest
+import com.example.memowithtags.common.model.request.user.ChangeNicknameRequest
+import com.example.memowithtags.common.model.request.user.ChangePWLoginedRequest
+import com.example.memowithtags.common.model.request.user.WithdrawalRequest
+import com.example.memowithtags.common.model.response.user.ChangeNicknameResponse
+import com.example.memowithtags.common.model.response.user.ChangePWLoginedResponse
+import com.example.memowithtags.common.model.response.user.MeResponse
+import com.example.memowithtags.common.model.result.ChangePwResult
+import com.example.memowithtags.common.model.result.LoginResult
+import com.example.memowithtags.common.model.result.SendEmailResult
+import com.example.memowithtags.common.model.result.SignupResult
+import com.example.memowithtags.common.model.result.SocialLoginResult
+import com.example.memowithtags.common.model.result.VerifyEmailResult
 import com.example.memowithtags.common.network.api.AuthApi
-import com.example.memowithtags.common.network.api.ChangeNicknameRequest
-import com.example.memowithtags.common.network.api.ChangeNicknameResponse
-import com.example.memowithtags.common.network.api.ChangePWLoginedRequest
-import com.example.memowithtags.common.network.api.ChangePWLoginedResponse
-import com.example.memowithtags.common.network.api.LoginRequest
-import com.example.memowithtags.common.network.api.LoginResponse
-import com.example.memowithtags.common.network.api.MeResponse
-import com.example.memowithtags.common.network.api.SignupRequest
-import com.example.memowithtags.common.network.api.SignupResponse
-import com.example.memowithtags.common.network.api.SocialLoginResponse
 import com.example.memowithtags.common.network.api.UserApi
-import com.example.memowithtags.common.network.api.WithdrawalRequest
 import com.example.memowithtags.common.network.token.TokenProvider
 import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import javax.inject.Inject
 
 class AuthRepository @Inject constructor(
@@ -28,12 +31,52 @@ class AuthRepository @Inject constructor(
     private val tokenProvider: TokenProvider
 ) {
 
-    fun login(request: LoginRequest): Call<LoginResponse> {
-        return authApi.login(request)
+    suspend fun login(request: LoginRequest): LoginResult {
+        return try {
+            val response = authApi.login(request)
+            if (response.isSuccessful) {
+                val body = response.body()
+                if (body != null) {
+                    LoginResult.Success(body)
+                } else {
+                    LoginResult.Error(
+                        code = response.code(),
+                        message = "Response body is null"
+                    )
+                }
+            } else {
+                LoginResult.Error(
+                    code = response.code(),
+                    message = response.errorBody()?.string() ?: "Unknown error"
+                )
+            }
+        } catch (e: Exception) {
+            LoginResult.Exception(e)
+        }
     }
 
-    fun signup(request: SignupRequest): Call<SignupResponse> {
-        return authApi.signup(request)
+    suspend fun signup(request: SignupRequest): SignupResult {
+        return try {
+            val response = authApi.signup(request)
+            if (response.isSuccessful) {
+                val body = response.body()
+                if (body != null) {
+                    SignupResult.Success(body)
+                } else {
+                    SignupResult.Error(
+                        code = response.code(),
+                        message = "Response body is null"
+                    )
+                }
+            } else {
+                SignupResult.Error(
+                    code = response.code(),
+                    message = response.errorBody()?.string() ?: "Unknown error"
+                )
+            }
+        } catch (e: Exception) {
+            SignupResult.Exception(e)
+        }
     }
 
     fun me(): Call<MeResponse> {
@@ -48,31 +91,76 @@ class AuthRepository @Inject constructor(
         return userApi.changePWLogined(request)
     }
 
-    fun socialLogin(
-        provider: String,
-        code: String,
-        onSuccess: (Response<SocialLoginResponse>) -> Unit,
-        onError: (Throwable) -> Unit
-    ) {
-        authApi.socialLogin(provider, code).enqueue(object : Callback<SocialLoginResponse> {
-            override fun onResponse(
-                call: Call<SocialLoginResponse>,
-                response: Response<SocialLoginResponse>
-            ) {
-                if (response.isSuccessful && response.body() != null) {
-                    val body = response.body()!!
-                    saveAccessToken(body.accessToken)
-                    saveRefreshToken(body.refreshToken)
-                    onSuccess(response)
+    suspend fun socialLogin(provider: String, code: String): SocialLoginResult {
+        return try {
+            val response = authApi.socialLogin(provider, code)
+            if (response.isSuccessful) {
+                val body = response.body()
+                if (body != null) {
+                    SocialLoginResult.Success(body)
                 } else {
-                    onError(HttpException(response.code(), response.message()))
+                    SocialLoginResult.Error(
+                        code = response.code(),
+                        message = "Response body is null"
+                    )
                 }
+            } else {
+                SocialLoginResult.Error(
+                    code = response.code(),
+                    message = response.errorBody()?.string() ?: "Unknown error"
+                )
             }
+        } catch (e: Exception) {
+            SocialLoginResult.Exception(e)
+        }
+    }
 
-            override fun onFailure(call: Call<SocialLoginResponse>, t: Throwable) {
-                onError(t)
+    suspend fun sendEmail(request: SendEmailRequest): SendEmailResult {
+        return try {
+            val response = authApi.sendEmail(request)
+            if (response.isSuccessful) {
+                SendEmailResult.Success
+            } else {
+                SendEmailResult.Error(
+                    code = response.code(),
+                    message = response.errorBody()?.string() ?: "Unknown error"
+                )
             }
-        })
+        } catch (e: Exception) {
+            SendEmailResult.Exception(e)
+        }
+    }
+
+    suspend fun verifyEmail(request: VerifyEmailRequest): VerifyEmailResult {
+        return try {
+            val response = authApi.verifyEmail(request)
+            if (response.isSuccessful) {
+                VerifyEmailResult.Success
+            } else {
+                VerifyEmailResult.Error(
+                    code = response.code(),
+                    message = response.errorBody()?.string() ?: "Unknown error"
+                )
+            }
+        } catch (e: Exception) {
+            VerifyEmailResult.Exception(e)
+        }
+    }
+
+    suspend fun changePw(request: ChangePwRequest): ChangePwResult {
+        return try {
+            val response = authApi.changePw(request)
+            if (response.isSuccessful) {
+                ChangePwResult.Success
+            } else {
+                ChangePwResult.Error(
+                    code = response.code(),
+                    message = response.errorBody()?.string() ?: "Unknown error"
+                )
+            }
+        } catch (e: Exception) {
+            ChangePwResult.Exception(e)
+        }
     }
 
     fun saveAccessToken(token: String) {

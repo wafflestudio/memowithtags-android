@@ -1,17 +1,16 @@
 package com.example.memowithtags.login.viewModel
 
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.memowithtags.common.network.api.LoginRequest
-import com.example.memowithtags.common.network.api.LoginResponse
-import com.example.memowithtags.common.network.api.SocialLoginResponse
+import androidx.lifecycle.viewModelScope
+import com.example.memowithtags.common.model.request.auth.LoginRequest
+import com.example.memowithtags.common.model.result.LoginResult
+import com.example.memowithtags.common.model.result.SocialLoginResult
 import com.example.memowithtags.signup.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
 
@@ -20,49 +19,33 @@ class LoginViewModel @Inject constructor(
     private val repository: AuthRepository
 ) : ViewModel() {
 
-    private val _loginResult = MutableLiveData<Result<LoginResponse>>()
-    val loginResult: LiveData<Result<LoginResponse>> get() = _loginResult
+    private val _loginEvent = MutableSharedFlow<LoginResult>(replay = 0)
+    val loginEvent: SharedFlow<LoginResult> = _loginEvent
 
-    private val _socialLoginResult = MutableLiveData<Result<SocialLoginResponse>>()
-    val socialLoginResult: LiveData<Result<SocialLoginResponse>> get() = _socialLoginResult
+    private val _socialLoginEvent = MutableSharedFlow<SocialLoginResult>(replay = 0)
+    val socialLoginEvent: SharedFlow<SocialLoginResult> = _socialLoginEvent
 
     fun login(email: String, password: String) {
-        val request = LoginRequest(email, password)
-
-        repository.login(request).enqueue(object : Callback<LoginResponse> {
-            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                if (response.isSuccessful) {
-                    val body = response.body()
-                    if (body != null) {
-                        repository.saveAccessToken(body.accessToken)
-                        repository.saveRefreshToken(body.refreshToken)
-                        repository.saveEmail(email)
-                        _loginResult.value = Result.success(body)
-                    } else {
-                        _loginResult.value = Result.failure(Exception("응답 없음"))
-                    }
-                } else {
-                    _loginResult.value = Result.failure(Exception("로그인 실패: ${response.message()}"))
-                }
+        viewModelScope.launch {
+            val result = repository.login(LoginRequest(email, password))
+            if (result is LoginResult.Success) {
+                repository.saveAccessToken(result.response.accessToken)
+                repository.saveRefreshToken(result.response.refreshToken)
+                repository.saveEmail(email)
             }
-
-            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                _loginResult.value = Result.failure(t)
-            }
-        })
+            _loginEvent.emit(result)
+        }
     }
 
     fun socialLogin(provider: String, code: String) {
-        repository.socialLogin(
-            provider = provider,
-            code = code,
-            onSuccess = { response ->
-                _socialLoginResult.value = Result.success(response.body()!!)
-            },
-            onError = { error ->
-                _socialLoginResult.value = Result.failure(error)
+        viewModelScope.launch {
+            val result = repository.socialLogin(provider, code)
+            if (result is SocialLoginResult.Success) {
+                repository.saveAccessToken(result.response.accessToken)
+                repository.saveRefreshToken(result.response.refreshToken)
             }
-        )
+            _socialLoginEvent.emit(result)
+        }
     }
 
     fun getKakaoAuthUrl(): Uri {

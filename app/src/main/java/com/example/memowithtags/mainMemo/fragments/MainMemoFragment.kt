@@ -18,9 +18,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
-import com.example.memowithtags.common.model.Memo
-import com.example.memowithtags.common.model.MemoSource
-import com.example.memowithtags.common.model.MemoWithTags
+import com.example.memowithtags.common.model.entity.Memo
+import com.example.memowithtags.common.model.entity.MemoWithTags
+import com.example.memowithtags.common.model.enums.MemoSource
 import com.example.memowithtags.common.model.tagColors
 import com.example.memowithtags.databinding.FragmentMainMemoBinding
 import com.example.memowithtags.mainMemo.adapters.MemoAdapter

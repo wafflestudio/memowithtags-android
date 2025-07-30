@@ -1,6 +1,9 @@
 package com.example.memowithtags.common.network.api
 
-import com.example.memowithtags.common.model.Tag
+import com.example.memowithtags.common.model.entity.Tag
+import com.example.memowithtags.common.model.request.tag.CreateTagRequest
+import com.example.memowithtags.common.model.request.tag.UpdateTagRequest
+import com.example.memowithtags.common.model.response.tag.TagResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
