@@ -197,7 +197,6 @@
                 android:enabled="false"
                 android:text="완료"
                 android:textColor="@color/white"
-                android:layout_marginTop="52dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
