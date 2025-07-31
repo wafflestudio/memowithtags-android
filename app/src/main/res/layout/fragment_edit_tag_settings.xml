@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -43,149 +43,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topBar" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        app:flow_verticalGap="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topDivider">
-
-        <LinearLayout
-            android:id="@+id/ExampleMemoLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:background="@drawable/rounded_background"
-            android:backgroundTint="@color/bg_memo"
-            android:orientation="vertical"
-            android:paddingLeft="17dp"
-            android:paddingTop="13dp"
-            android:paddingRight="17dp"
-            android:paddingBottom="13dp">
-
-            <View
-                android:layout_width="294dp"
-                android:layout_height="10dp"
-                android:layout_marginBottom="12dp"
-                android:background="@drawable/rounded_background"
-                android:backgroundTint="@color/placeholder_primary" />
-
-            <View
-                android:layout_width="186dp"
-                android:layout_height="10dp"
-                android:layout_marginBottom="12dp"
-                android:background="@drawable/rounded_background"
-                android:backgroundTint="@color/placeholder_secondary" />
-
-            <View
-                android:layout_width="232dp"
-                android:layout_height="10dp"
-                android:layout_marginBottom="12dp"
-                android:background="@drawable/rounded_background"
-                android:backgroundTint="@color/placeholder_tertiary" />
-
-            <include
-                android:id="@+id/tagInclude"
-                layout="@layout/item_tag" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:background="@drawable/rounded_background"
-            android:backgroundTint="@color/bg_memo"
-            android:orientation="vertical"
-            android:paddingTop="13dp"
-            android:paddingBottom="16dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingLeft="17dp"
-                android:paddingRight="17dp">
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:paddingLeft="6dp"
-                        android:text="태그명"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:orientation="vertical"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <EditText
-                        android:id="@+id/tagNameInput"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/rounded_edittext"
-                        android:hint="태그명"
-                        android:paddingLeft="16dp"
-                        android:paddingTop="14dp"
-                        android:paddingRight="16dp"
-                        android:paddingBottom="14dp"
-                        android:textColor="@color/text_primary"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/limitText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:text="0/10"
-                        android:textColor="@color/text_secondary" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:paddingLeft="6dp"
-                        android:text="태그 색상"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/tagColorPaletteRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
-        </LinearLayout>
-
-    </LinearLayout>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -197,17 +54,154 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topDivider">
-        <Button
-            android:id="@+id/confirmBtn"
-            android:layout_width="388dp"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/btn_tint_color"
-            android:enabled="false"
-            android:text="완료"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/ExampleMemoLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_background"
+                android:backgroundTint="@color/bg_memo"
+                android:orientation="vertical"
+                android:paddingLeft="17dp"
+                android:paddingTop="13dp"
+                android:paddingRight="17dp"
+                android:paddingBottom="13dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <View
+                    android:layout_width="294dp"
+                    android:layout_height="10dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/rounded_background"
+                    android:backgroundTint="@color/placeholder_primary" />
+
+                <View
+                    android:layout_width="186dp"
+                    android:layout_height="10dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/rounded_background"
+                    android:backgroundTint="@color/placeholder_secondary" />
+
+                <View
+                    android:layout_width="232dp"
+                    android:layout_height="10dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/rounded_background"
+                    android:backgroundTint="@color/placeholder_tertiary" />
+
+                <include
+                    android:id="@+id/tagInclude"
+                    layout="@layout/item_tag" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/rounded_background"
+                android:backgroundTint="@color/bg_memo"
+                android:orientation="vertical"
+                android:paddingTop="13dp"
+                android:paddingBottom="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ExampleMemoLayout">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingLeft="17dp"
+                    android:paddingRight="17dp">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:paddingLeft="6dp"
+                            android:text="태그명"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:orientation="vertical"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <EditText
+                            android:id="@+id/tagNameInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/rounded_edittext"
+                            android:hint="태그명"
+                            android:paddingLeft="16dp"
+                            android:paddingTop="14dp"
+                            android:paddingRight="16dp"
+                            android:paddingBottom="14dp"
+                            android:textColor="@color/text_primary"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/limitText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:text="0/10"
+                            android:textColor="@color/text_secondary" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:paddingLeft="6dp"
+                            android:text="태그 색상"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/tagColorPaletteRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/confirmBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/btn_tint_color"
+                android:enabled="false"
+                android:text="완료"
+                android:textColor="@color/white"
+                android:layout_marginTop="52dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
