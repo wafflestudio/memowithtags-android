@@ -69,7 +69,7 @@ object ViewExpandAnimator {
         // 1. fade-out 애니메이션
         buttonBar.animate()
             .alpha(0f)
-            .setDuration(100)
+            .setDuration(50)
             .withEndAction {
                 buttonBar.visibility = View.GONE
 
@@ -81,7 +81,7 @@ object ViewExpandAnimator {
                     container.layoutParams.height = value
                     container.requestLayout()
                 }
-                heightAnimator.duration = 200
+                heightAnimator.duration = 150
                 heightAnimator.addListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
                         container.visibility = View.GONE

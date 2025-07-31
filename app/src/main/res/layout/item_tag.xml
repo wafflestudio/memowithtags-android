@@ -10,5 +10,6 @@
     android:paddingVertical="2dp"
     android:text="태그"
     android:textColor="@color/text_tag"
-    android:textSize="14sp"
+    android:textSize="13sp"
+    android:textFontWeight="400"
     android:background="@drawable/tag_background" />

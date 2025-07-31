@@ -26,7 +26,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_primary"
-                android:text="선택"/>
+                android:text="선택"
+                android:textSize="14sp"
+                android:textFontWeight="400"/>
         </LinearLayout>
 
         <LinearLayout
@@ -40,7 +42,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="설정"
-                android:textColor="@color/text_primary"/>
+                android:textColor="@color/text_primary"
+                android:textSize="14sp"
+                android:textFontWeight="400"/>
         </LinearLayout>
 
     </LinearLayout>

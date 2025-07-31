@@ -32,7 +32,8 @@
             android:layout_marginLeft="12dp"
             android:text="닉네임 변경"
             android:textColor="@color/text_primary"
-            android:textSize="18dp" />
+            android:textSize="18dp"
+            android:textFontWeight="600"/>
 
     </LinearLayout>
 
@@ -75,15 +76,17 @@
                 android:paddingRight="16dp"
                 android:paddingBottom="14dp"
                 android:textColor="@color/text_primary"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textFontWeight="400"/>
 
             <TextView
                 android:id="@+id/limitText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:text="0/8"
-                android:textColor="@color/text_secondary" />
+                android:text="0/16"
+                android:textColor="@color/text_secondary"
+                android:textFontWeight="400"/>
         </LinearLayout>
 
         <Button
@@ -91,9 +94,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="완료"
+            android:textFontWeight="600"
+            android:textSize="16sp"
             android:enabled="false"
             android:textColor="@color/white"
             android:backgroundTint="@color/btn_tint_color"
+            android:paddingVertical="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

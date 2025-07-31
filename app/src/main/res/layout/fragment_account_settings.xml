@@ -31,7 +31,8 @@
             android:layout_marginLeft="12dp"
             android:text="내 계정"
             android:textColor="@color/text_primary"
-            android:textSize="18dp" />
+            android:textSize="18dp"
+            android:textFontWeight="600"/>
 
     </LinearLayout>
 
@@ -77,7 +78,8 @@
                     android:layout_height="match_parent"
                     android:text="닉네임"
                     android:textColor="@color/text_primary"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textFontWeight="600"/>
 
                 <TextView
                     android:id="@+id/nicknameText"
@@ -87,7 +89,8 @@
                     android:text="닉네임#식별코드"
                     android:gravity="center_vertical"
                     android:textColor="@color/text_secondary"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:textFontWeight="400"/>
 
             </LinearLayout>
 
@@ -103,7 +106,8 @@
                     android:layout_weight="1"
                     android:text="닉네임 변경"
                     android:textColor="@color/text_primary"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textFontWeight="400"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -138,6 +142,7 @@
                     android:layout_height="match_parent"
                     android:text="이메일"
                     android:textSize="14sp"
+                    android:textFontWeight="400"
                     android:layout_weight="1"
                     android:textColor="@color/text_primary"/>
 
@@ -146,6 +151,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="memo2025@gmail.com"
+                    android:textFontWeight="400"
                     android:gravity="center_vertical"
                     android:textSize="12sp"
                     android:textColor="@color/text_secondary"/>
@@ -162,6 +168,7 @@
                     android:layout_height="match_parent"
                     android:text="비밀번호 변경"
                     android:textSize="14sp"
+                    android:textFontWeight="400"
                     android:layout_weight="1"
                     android:textColor="@color/text_primary"/>
 
@@ -200,7 +207,8 @@
                     android:layout_weight="1"
                     android:text="로그아웃"
                     android:textColor="@color/text_danger"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textFontWeight="400"/>
 
             </LinearLayout>
 
@@ -229,7 +237,8 @@
                     android:layout_weight="1"
                     android:text="계정 삭제"
                     android:textColor="@color/text_danger"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:textFontWeight="400"/>
 
             </LinearLayout>
 
