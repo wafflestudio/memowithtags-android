@@ -44,7 +44,8 @@ jobs:
           prerelease: true
 
       - name: Output APK Download URL
-        run: echo "APK download: https://github.com/${{ github.repository }}/releases/download/develop-latest/app-release.apk"
+        run: | 
+          echo "APK download: https://github.com/${{ github.repository }}/releases/download/develop-latest/app-release.apk"
 
       - name: Debug: find generated APKs
         run: find app/build -name "*.apk"
