@@ -31,7 +31,7 @@ jobs:
           tag: develop-latest
           name: "Latest Develop Build"
           body: "최신 develop 브랜치 빌드입니다."
-          artifacts: app/build/outputs/apk/release/app-release.apk
+          artifacts: app/build/outputs/apk/release/app-release-unsigned.apk
           allowUpdates: true
           prerelease: true
 
