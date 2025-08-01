@@ -47,5 +47,5 @@ jobs:
         run: | 
           echo "APK download: https://github.com/${{ github.repository }}/releases/download/develop-latest/app-release.apk"
 
-      - name: Debug: find generated APKs
+      - name: find generated APKs
         run: find app/build -name "*.apk"
