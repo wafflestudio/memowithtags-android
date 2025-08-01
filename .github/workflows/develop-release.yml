@@ -1,4 +1,4 @@
-name: Release APK (develop)
+name: Build & Pre-Release from Develop
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up JDK
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -23,21 +23,28 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Decode keystore from secret
-        run: |
-          mkdir -p app
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > app/my-release-key.jks
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > my-release-key.jks
 
       - name: Build signed APK
         run: |
           ./gradlew assembleRelease \
-            -Pandroid.injected.signing.store.file=app/my-release-key.jks \
+            -Pandroid.injected.signing.store.file=my-release-key.jks \
             -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
             -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
             -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
 
-      - name: Upload signed APK to GitHub Release
-        uses: softprops/action-gh-release@v2
+      - name: Upload APK to GitHub Release
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: develop-latest
+          tag: develop-latest
+          name: "Latest Develop Build"
+          body: "최신 develop 브랜치 빌드입니다."
+          artifacts: app/build/outputs/apk/release/app-release.apk
+          allowUpdates: true
           prerelease: true
-          files: app/build/outputs/apk/release/app-release.apk
+
+      - name: Output APK Download URL
+        run: echo "APK download: https://github.com/${{ github.repository }}/releases/download/develop-latest/app-release.apk"
+
+      - name: Debug: find generated APKs
+        run: find app/build -name "*.apk"
