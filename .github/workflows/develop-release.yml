@@ -19,6 +19,9 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
       - name: Decode keystore from secret
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > my-release-key.jks
 
