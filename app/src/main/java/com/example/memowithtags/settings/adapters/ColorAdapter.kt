@@ -1,10 +1,11 @@
 package com.example.memowithtags.settings.adapters
 
-import android.graphics.Color
+import android.content.res.Configuration
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.RecyclerView
 import com.example.memowithtags.R
 import com.example.memowithtags.common.model.tagColors
@@ -16,7 +17,7 @@ class ColorAdapter(
     private val colors: List<String> = tagColors
 
     inner class ColorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val colorPalette: ImageView = itemView.findViewById(R.id.colorPalette)
+        val colorPalette: View = itemView.findViewById(R.id.colorPalette)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ColorViewHolder {
@@ -28,7 +29,20 @@ class ColorAdapter(
     override fun onBindViewHolder(holder: ColorViewHolder, position: Int) {
         val color = colors[position]
 
-        holder.colorPalette.setColorFilter(Color.parseColor(color))
+        val isDarkMode = holder.itemView.context.resources.configuration.uiMode and
+            Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+
+        val backgroundColor = if (isDarkMode) {
+            addAlphaToColor(color).toColorInt()
+        } else {
+            color.toColorInt()
+        }
+        val drawable = GradientDrawable().apply {
+            shape = GradientDrawable.OVAL
+            setColor(backgroundColor)
+        }
+
+        holder.colorPalette.background = drawable
 
         holder.itemView.setOnClickListener {
             onColorClick(color)
@@ -36,4 +50,9 @@ class ColorAdapter(
     }
 
     override fun getItemCount(): Int = colors.size
+
+    private fun addAlphaToColor(hexColor: String, alpha: String = "66"): String {
+        val cleanHex = hexColor.removePrefix("#")
+        return "#$alpha$cleanHex"
+    }
 }

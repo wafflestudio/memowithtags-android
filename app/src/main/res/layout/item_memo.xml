@@ -28,6 +28,7 @@
             android:paddingHorizontal="8dp"
             android:layout_marginTop="9dp"
             android:layout_marginBottom="4dp"
+            android:textFontWeight="400"
             android:ellipsize="end"
             android:textColor="@color/text_primary" />
 
@@ -69,6 +70,7 @@
                         android:layout_height="wrap_content"
                         android:text="0000년 00월 00일"
                         android:textColor="@color/text_secondary"
+                        android:textFontWeight="500"
                         android:textSize="11sp" />
                 </LinearLayout>
 
@@ -92,7 +94,8 @@
                     android:stateListAnimator="@null"
                     android:text="관련 검색"
                     android:textSize="12sp"
-                    android:textColor="@color/text_primary"/>
+                    android:textColor="@color/text_primary"
+                    android:textFontWeight="500"/>
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/editButton"
@@ -108,7 +111,8 @@
                     android:stateListAnimator="@null"
                     android:text="간편 수정"
                     android:textSize="12sp"
-                    android:textColor="@color/text_primary"/>
+                    android:textColor="@color/text_primary"
+                    android:textFontWeight="500"/>
 
                 <ImageView
                     android:id="@+id/foldButton"

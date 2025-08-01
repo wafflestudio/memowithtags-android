@@ -31,7 +31,8 @@
             android:layout_marginLeft="12dp"
             android:text="설정"
             android:textColor="@color/text_primary"
-            android:textSize="18dp" />
+            android:textSize="18sp"
+            android:textFontWeight="600"/>
 
     </LinearLayout>
 
@@ -77,6 +78,7 @@
                     android:layout_height="match_parent"
                     android:text="내 계정"
                     android:textSize="14sp"
+                    android:textFontWeight="500"
                     android:layout_weight="1"
                     android:textColor="@color/text_primary"/>
 
@@ -113,6 +115,7 @@
                     android:layout_height="match_parent"
                     android:text="태그 관리"
                     android:textSize="14sp"
+                    android:textFontWeight="500"
                     android:layout_weight="1"
                     android:textColor="@color/text_primary"/>
 
@@ -156,6 +159,7 @@
                         android:paddingLeft="6dp"
                         android:text="글씨 크기"
                         android:textSize="12sp"
+                        android:textFontWeight="400"
                         android:layout_weight="1"
                         android:textColor="@color/text_secondary"/>
 
@@ -172,6 +176,7 @@
                         android:layout_height="match_parent"
                         android:text="작게"
                         android:textSize="14sp"
+                        android:textFontWeight="400"
                         android:layout_weight="1"
                         android:textColor="@color/text_primary"/>
 
@@ -196,6 +201,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="적당히"
+                        android:textFontWeight="400"
                         android:textColor="@color/text_primary"
                         android:textSize="14sp" />
 
@@ -219,6 +225,7 @@
                         android:layout_height="match_parent"
                         android:text="크게"
                         android:textSize="14sp"
+                        android:textFontWeight="400"
                         android:layout_weight="1"
                         android:textColor="@color/text_primary"/>
 
@@ -253,6 +260,7 @@
                         android:layout_weight="1"
                         android:paddingLeft="6dp"
                         android:text="검색 필터 기준"
+                        android:textFontWeight="400"
                         android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
 
@@ -270,6 +278,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="그리고"
+                        android:textFontWeight="400"
                         android:textColor="@color/text_primary"
                         android:textSize="14sp" />
 
@@ -294,6 +303,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="또는"
+                        android:textFontWeight="400"
                         android:textColor="@color/text_primary"
                         android:textSize="14sp" />
 
@@ -326,6 +336,7 @@
                         android:paddingLeft="6dp"
                         android:text="검색 정렬 기준"
                         android:textSize="12sp"
+                        android:textFontWeight="400"
                         android:layout_weight="1"
                         android:textColor="@color/text_secondary"/>
 
@@ -342,6 +353,7 @@
                         android:layout_height="match_parent"
                         android:text="만든 날짜"
                         android:textSize="14sp"
+                        android:textFontWeight="400"
                         android:layout_weight="1"
                         android:textColor="@color/text_primary"/>
 
@@ -365,6 +377,7 @@
                         android:layout_height="match_parent"
                         android:text="수정한 날짜"
                         android:textSize="14sp"
+                        android:textFontWeight="400"
                         android:layout_weight="1"
                         android:textColor="@color/text_primary"/>
 

@@ -32,7 +32,8 @@
             android:layout_marginLeft="12dp"
             android:text="비밀번호 변경"
             android:textColor="@color/text_primary"
-            android:textSize="18dp" />
+            android:textSize="18dp"
+            android:textFontWeight="600"/>
 
     </LinearLayout>
 
@@ -80,7 +81,8 @@
                 android:paddingRight="16dp"
                 android:paddingBottom="14dp"
                 android:textColor="@color/text_primary"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textFontWeight="400"/>
 
             <EditText
                 android:id="@+id/newPasswordInput"
@@ -94,7 +96,8 @@
                 android:paddingRight="16dp"
                 android:paddingBottom="14dp"
                 android:textColor="@color/text_primary"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textFontWeight="400"/>
 
         </LinearLayout>
 
@@ -102,7 +105,10 @@
             android:id="@+id/confirmBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingVertical="12dp"
             android:text="완료"
+            android:textFontWeight="600"
+            android:textSize="16sp"
             android:enabled="false"
             android:textColor="@color/white"
             android:backgroundTint="@color/btn_tint_color"

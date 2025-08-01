@@ -57,6 +57,7 @@
                 android:layout_weight="1"
                 android:textSize="14sp"
                 android:textColor="@color/text_primary"
+                android:textFontWeight="400"
                 android:paddingHorizontal="4dp"
                 android:background="@drawable/search_edittext"/>
         </LinearLayout>
@@ -71,6 +72,7 @@
         android:visibility="gone"
         android:textSize="14sp"
         android:textColor="@color/text_secondary"
+        android:textFontWeight="500"
         android:layout_margin="10dp"
         app:layout_constraintTop_toBottomOf="@id/topBar"
         app:layout_constraintStart_toStartOf="parent"/>
@@ -96,6 +98,7 @@
         android:visibility="gone"
         android:textSize="14sp"
         android:textColor="@color/text_secondary"
+        android:textFontWeight="500"
         android:layout_margin="10dp"
         app:layout_constraintTop_toBottomOf="@id/searchtagRecyclerView"
         app:layout_constraintStart_toStartOf="parent"/>

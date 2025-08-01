@@ -38,7 +38,7 @@ class ChangeNicknameFragment : Fragment() {
 
         binding.nicknameInput.addTextChangedListener {
             viewModel.onTextChanged(it.toString())
-            binding.limitText.text = "${it.toString().length}/8"
+            binding.limitText.text = "${it.toString().length}/16"
         }
 
         binding.confirmBtn.setOnClickListener {

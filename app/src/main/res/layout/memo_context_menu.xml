@@ -26,7 +26,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_primary"
-                android:text="메모 수정하기"/>
+                android:text="메모 수정하기"
+                android:textSize="14sp"
+                android:textFontWeight="400"/>
         </LinearLayout>
 
         <LinearLayout
@@ -40,7 +42,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_primary"
-                android:text="메모로 검색하기"/>
+                android:text="메모로 검색하기"
+                android:textSize="14sp"
+                android:textFontWeight="400"/>
         </LinearLayout>
 
         <LinearLayout
@@ -54,7 +58,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="메모 삭제하기"
-                android:textColor="@color/text_danger"/>
+                android:textColor="@color/text_danger"
+                android:textSize="14sp"
+                android:textFontWeight="400"/>
         </LinearLayout>
 
     </LinearLayout>
