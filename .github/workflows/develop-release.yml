@@ -38,3 +38,6 @@ jobs:
       - name: Output APK Download URL
         run: |
           echo 'APK download: https://github.com/${{ github.repository }}/releases/download/develop-latest/app-release.apk'
+
+      - name: Find APK Path
+        run: find app/build -name "*.apk"
