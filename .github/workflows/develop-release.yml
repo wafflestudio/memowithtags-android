@@ -1,4 +1,4 @@
-name: Build & Pre-Release from Develop
+name: Release APK (develop)
 
 on:
   push:
@@ -13,31 +13,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
+      - name: Decode keystore from secret
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > my-release-key.jks
 
-      - name: Build APK
-        run: ./gradlew assembleRelease
-
-      - name: Upload APK to GitHub Release
-        uses: ncipollo/release-action@v1
-        with:
-          tag: develop-latest
-          name: "Latest Develop Build"
-          body: "최신 develop 브랜치 빌드입니다."
-          artifacts: app/build/outputs/apk/release/app-release-unsigned.apk
-          allowUpdates: true
-          prerelease: true
-
-      - name: Output APK Download URL
+      - name: Build signed APK
         run: |
-          echo 'APK download: https://github.com/${{ github.repository }}/releases/download/develop-latest/app-release.apk'
+          ./gradlew assembleRelease \
+            -Pandroid.injected.signing.store.file=my-release-key.jks \
+            -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
+            -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} \
+            -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
 
-      - name: Find APK Path
-        run: find app/build -name "*.apk"
+      - name: Upload signed APK to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: develop-latest
+          prerelease: true
+          files: app/build/outputs/apk/release/app-release.apk
