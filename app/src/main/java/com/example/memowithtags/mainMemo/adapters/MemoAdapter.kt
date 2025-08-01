@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -94,8 +95,10 @@ class MemoAdapter(
 
             // 추천 메모 포커싱
             if (isFocused) {
-                itemView.setBackgroundResource(R.drawable.recommend_highlight_border)
+                itemView.animate().scaleX(1.03f).scaleY(1.03f).setDuration(100).start()
+                (itemView as CardView).setBackgroundResource(R.drawable.recommend_highlight_border)
             } else {
+                itemView.animate().scaleX(1f).scaleY(1f).setDuration(100).start()
                 itemView.setBackgroundResource(R.drawable.default_memo_background)
             }
 

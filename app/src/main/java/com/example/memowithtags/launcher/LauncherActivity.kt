@@ -4,10 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.memowithtags.launcher.viewModel.LauncherViewModel
 import com.example.memowithtags.login.LoginActivity
 import com.example.memowithtags.mainMemo.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 
 @AndroidEntryPoint
 class LauncherActivity : AppCompatActivity() {
@@ -18,11 +21,21 @@ class LauncherActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         if (launcherViewModel.isLoggedIn()) {
-            startActivity(Intent(this, MainActivity::class.java))
+            lifecycleScope.launch {
+                suspendCancellableCoroutine<Unit> { continuation ->
+                    launcherViewModel.loadInitialMemos {
+                        if (continuation.isActive) {
+                            continuation.resume(Unit) {}
+                        }
+                    }
+                }
+
+                startActivity(Intent(this@LauncherActivity, MainActivity::class.java))
+                finish()
+            }
         } else {
             startActivity(Intent(this, LoginActivity::class.java))
+            finish()
         }
-
-        finish() // LauncherActivity는 종료
     }
 }

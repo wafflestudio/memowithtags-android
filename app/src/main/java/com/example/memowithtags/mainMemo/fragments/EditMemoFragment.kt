@@ -31,6 +31,8 @@ class EditMemoFragment : Fragment() {
     private val memoViewModel: MemoViewModel by activityViewModels()
     private val tagViewModel: TagViewModel by activityViewModels()
 
+    private var selectedColor: String? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -167,14 +169,47 @@ class EditMemoFragment : Fragment() {
 
         // 입력 텍스트 변경 시 쿼리 전달 + 태그 목록 갱신
         binding.tagInputEditText.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                tagViewModel.setIsSearching(true)
-                tagViewModel.updateQuery(s?.toString()?.trim() ?: "")
-                updateTagAdapterData()
-            }
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val text = s?.toString()?.trim()
+
+                if (!text.isNullOrEmpty()) {
+                    val isDuplicate = tagViewModel.tagList.value
+                        ?.any { it.name.equals(text, ignoreCase = true) } == true
+
+                    if (isDuplicate) {
+                        binding.inputTagButton.visibility = View.GONE
+                        binding.makeTagText.visibility = View.GONE
+                    } else {
+                        binding.inputTagButton.text = text
+                        binding.inputTagButton.visibility = View.VISIBLE
+                        binding.makeTagText.visibility = View.VISIBLE
+
+                        if (selectedColor == null) {
+                            selectedColor = com.example.memowithtags.common.model.tagColors.random()
+                        }
+                        binding.inputTagButton.backgroundTintList =
+                            android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor(selectedColor))
+                    }
+                } else {
+                    selectedColor = null
+                    binding.inputTagButton.visibility = View.GONE
+                    binding.makeTagText.visibility = View.GONE
+                }
+            }
         })
+
+        binding.inputTagButton.setOnClickListener {
+            val name = binding.tagInputEditText.text.toString().trim()
+            val color = selectedColor
+
+            if (name.isNotEmpty() && color != null) {
+                tagViewModel.createTag(name, color)
+                binding.tagInputEditText.text.clear()
+            }
+        }
 
         // 포커스 잃으면 전체 태그 복귀
         binding.tagInputEditText.setOnFocusChangeListener { _, hasFocus ->
