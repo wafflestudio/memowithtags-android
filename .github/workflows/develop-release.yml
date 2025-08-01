@@ -1,0 +1,39 @@
+name: Build & Pre-Release from Develop
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
+      - name: Build APK
+        run: ./gradlew assembleRelease
+
+      - name: Upload APK to GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: develop-latest
+          name: "Latest Develop Build"
+          body: "최신 develop 브랜치 빌드입니다."
+          artifacts: app/build/outputs/apk/release/app-release.apk
+          allowUpdates: true
+          prerelease: true
+
+      - name: Output APK Download URL
+        run: echo "APK download: https://github.com/${{ github.repository }}/releases/download/develop-latest/app-release.apk"
