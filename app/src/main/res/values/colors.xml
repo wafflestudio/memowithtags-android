@@ -55,4 +55,7 @@
     <color name="switch_track_on">#FFBDBD</color>
     <color name="switch_track_off">#BDBDBD</color>
 
+    <color name="memo_highlight_shadow">#33000000</color>
+    <color name="memo_highlight_border">#777777</color>
+
 </resources>

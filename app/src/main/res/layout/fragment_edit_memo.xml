@@ -60,6 +60,7 @@
         android:overScrollMode="never"
         android:scrollbars="horizontal"
         android:layout_marginBottom="6dp"
+        android:layout_marginStart="8dp"
         tools:listitem="@layout/item_tag"
         app:layout_constraintBottom_toTopOf="@id/tagInputLayout"
         app:layout_constraintStart_toStartOf="parent"

@@ -72,6 +72,19 @@ class MemoViewModel @Inject constructor(
 
     val PAGE_SIZE = 15
 
+    // 첫 로그인 시 launcher에서 로딩 후 받아오기
+    fun useInitialMemoCacheIfAvailable(): Boolean {
+        val cached = memoRepository.getCachedInitialMemos()
+        return if (cached != null && cached.isNotEmpty()) {
+            _memoList.value = cached!!
+            currentPage = 2
+            isinitialPaging = true
+            true
+        } else {
+            false
+        }
+    }
+
     fun resetAndLoadFirstPage() {
         currentPage = 1
         isLastPage = false
@@ -179,7 +192,8 @@ class MemoViewModel @Inject constructor(
             content = content,
             tagIds = tagIds,
             onSuccess = { ids ->
-                _recommendedMemoIds.postValue(ids)
+                val sorted = ids.distinct().sortedDescending()
+                _recommendedMemoIds.postValue(sorted)
                 onComplete()
             },
             onError = { error ->

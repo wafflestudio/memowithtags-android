@@ -17,6 +17,7 @@ import javax.inject.Inject
 class MemoRepository @Inject constructor(
     private val memoApi: MemoApi
 ) {
+    private var cachedInitialMemos: List<Memo>? = null
 
     fun getMyMemos(
         content: String?,
@@ -193,5 +194,13 @@ class MemoRepository @Inject constructor(
                 onError(t)
             }
         })
+    }
+
+    fun cacheInitialMemos(memos: List<Memo>) {
+        cachedInitialMemos = memos
+    }
+
+    fun getCachedInitialMemos(): List<Memo>? {
+        return cachedInitialMemos
     }
 }

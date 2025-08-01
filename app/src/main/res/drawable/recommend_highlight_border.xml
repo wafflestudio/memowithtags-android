@@ -1,49 +1,17 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!-- Top shadow -->
+    <!-- Shadow layer -->
     <item>
         <shape android:shape="rectangle">
-            <gradient
-                android:angle="90"
-                android:startColor="#22000000"
-                android:endColor="#00000000" />
+            <solid android:color="@color/memo_highlight_shadow"/>
+            <corners android:radius="18dp"/>
         </shape>
     </item>
 
-    <!-- Bottom shadow -->
-    <item>
+    <!-- Highlighted border and content -->
+    <item android:left="1.5dp" android:top="1.5dp" android:right="1.5dp" android:bottom="1.5dp">
         <shape android:shape="rectangle">
-            <gradient
-                android:angle="270"
-                android:startColor="#22000000"
-                android:endColor="#00000000" />
-        </shape>
-    </item>
-
-    <!-- Left shadow -->
-    <item>
-        <shape android:shape="rectangle">
-            <gradient
-                android:angle="0"
-                android:startColor="#22000000"
-                android:endColor="#00000000" />
-        </shape>
-    </item>
-
-    <!-- Right shadow -->
-    <item>
-        <shape android:shape="rectangle">
-            <gradient
-                android:angle="180"
-                android:startColor="#22000000"
-                android:endColor="#00000000" />
-        </shape>
-    </item>
-
-    <!-- Main content with white background -->
-    <item android:left="2dp" android:top="2dp" android:right="2dp" android:bottom="2dp">
-        <shape android:shape="rectangle">
-            <solid android:color="@android:color/white"/>
+            <solid android:color="@color/bg_memo" />
+            <stroke android:width="1dp" android:color="@color/memo_highlight_border"/>
             <corners android:radius="16dp"/>
         </shape>
     </item>

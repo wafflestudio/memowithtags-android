@@ -5,12 +5,14 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -143,34 +145,29 @@ class MainMemoFragment : Fragment() {
         }
 
         memoViewModel.memoList.observe(viewLifecycleOwner) { memoList ->
-            memoAdapter.submitList(
-                memoList.map { memo ->
-                    val sortedTagIds = tagViewModel.sortTagIds(memo.tagIds)
-                    val tags = tagViewModel.tagList.value?.filter { it.id in sortedTagIds } ?: emptyList()
-                    MemoWithTags(memo, tags)
-                }
-            ) {
-                memoViewModel.shouldScrollToTop.value?.let { shouldScroll ->
-                    if (shouldScroll) {
-                        binding.memoRecyclerView.viewTreeObserver.addOnPreDrawListener(
-                            object : ViewTreeObserver.OnPreDrawListener {
-                                override fun onPreDraw(): Boolean {
-                                    binding.memoRecyclerView.viewTreeObserver.removeOnPreDrawListener(this)
-                                    binding.memoRecyclerView.scrollToPosition(0)
-                                    memoViewModel.consumeScrollToTopFlag()
-                                    return true
-                                }
-                            }
-                        )
-                    }
+            val mapped = memoList.map { memo ->
+                val sortedTagIds = tagViewModel.sortTagIds(memo.tagIds)
+                val tags = tagViewModel.tagList.value?.filter { it.id in sortedTagIds } ?: emptyList()
+                MemoWithTags(memo, tags)
+            }
+
+            memoAdapter.submitList(mapped) {
+                if (initialFlag) {
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        binding.memoRecyclerView.scrollToPosition(0)
+                        Log.d("InitialScroll", "scrollToPosition(0) 실행됨")
+                        initialFlag = false
+                    }, 200)
                 }
             }
         }
 
         if (initialFlag) {
-            memoViewModel.resetAndLoadFirstPage()
-            memoViewModel.triggerScrollToTop()
-            initialFlag = false
+            val usedCache = memoViewModel.useInitialMemoCacheIfAvailable()
+
+            if (!usedCache) {
+                memoViewModel.resetAndLoadFirstPage()
+            }
         }
 
         // 키보드 활성화 -> 태그 생성창 보이기, 메모 수정 아이콘 바 보이기
@@ -197,12 +194,23 @@ class MainMemoFragment : Fragment() {
                 val text = s?.toString()?.trim()
 
                 if (!text.isNullOrEmpty()) {
-                    binding.inputTagButton.text = text
-                    binding.inputTagButton.visibility = View.VISIBLE
-                    binding.makeTagText.visibility = View.VISIBLE
+                    val isDuplicate = tagViewModel.tagList.value
+                        ?.any { it.name.equals(text, ignoreCase = true) } == true
 
-                    if (selectedColor == null) { selectedColor = tagColors.random() }
-                    binding.inputTagButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor(selectedColor))
+                    if (isDuplicate) {
+                        binding.inputTagButton.visibility = View.GONE
+                        binding.makeTagText.visibility = View.GONE
+                    } else {
+                        binding.inputTagButton.text = text
+                        binding.inputTagButton.visibility = View.VISIBLE
+                        binding.makeTagText.visibility = View.VISIBLE
+
+                        if (selectedColor == null) {
+                            selectedColor = tagColors.random()
+                        }
+                        binding.inputTagButton.backgroundTintList =
+                            ColorStateList.valueOf(Color.parseColor(selectedColor))
+                    }
                 } else {
                     selectedColor = null
                     binding.inputTagButton.visibility = View.GONE
