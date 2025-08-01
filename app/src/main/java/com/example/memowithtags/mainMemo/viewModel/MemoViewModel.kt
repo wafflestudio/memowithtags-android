@@ -192,7 +192,7 @@ class MemoViewModel @Inject constructor(
             content = content,
             tagIds = tagIds,
             onSuccess = { ids ->
-                val sorted = ids.sortedDescending()
+                val sorted = ids.distinct().sortedDescending()
                 _recommendedMemoIds.postValue(sorted)
                 onComplete()
             },
