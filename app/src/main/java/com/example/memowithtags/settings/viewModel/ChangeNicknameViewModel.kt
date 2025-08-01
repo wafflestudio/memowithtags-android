@@ -31,7 +31,7 @@ class ChangeNicknameViewModel @Inject constructor(
 
     fun onTextChanged(text: String) {
         _nicknameInput.value = text
-        _nicknameConfirmBtnEnabled.value = text.length >= 8
+        _nicknameConfirmBtnEnabled.value = text.length in 1..16
     }
 
     fun changeNickname() {
