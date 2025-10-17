@@ -2,6 +2,7 @@ package com.example.memowithtags.signup.fragments
 
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
@@ -21,6 +22,7 @@ import com.example.memowithtags.databinding.FragmentSignupStep2Binding
 import com.example.memowithtags.signup.viewModel.SignupViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 @AndroidEntryPoint
 class SignupStep2Fragment : Fragment() {
@@ -28,6 +30,10 @@ class SignupStep2Fragment : Fragment() {
     private val binding get() = _binding!!
 
     private val signupViewModel: SignupViewModel by activityViewModels()
+
+    private var countDownTimer: CountDownTimer? = null
+    private var isExpired: Boolean = true
+    private val verifyWindowMs: Long = 5 * 60_000
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,10 +51,21 @@ class SignupStep2Fragment : Fragment() {
 
         if (md == "findPw") { binding.signupTitle.text = "비밀번호 찾기" }
 
+        startTimer()
+        binding.resendButton.isEnabled = false
+        binding.timerTextView.text = formatMs(verifyWindowMs)
+
         // 다음 버튼
         binding.nextButton.setOnClickListener {
             binding.nextButton.isEnabled = false
             binding.nextButton.isClickable = false
+
+            if (isExpired) {
+                showExpiredMessage()
+                binding.nextButton.isEnabled = true
+                binding.nextButton.isClickable = true
+                return@setOnClickListener
+            }
 
             val text1 = binding.certifinum1.text.toString().trim()
             val text2 = binding.certifinum2.text.toString().trim()
@@ -65,6 +82,29 @@ class SignupStep2Fragment : Fragment() {
         // 이전 버튼
         binding.prevButton.setOnClickListener {
             findNavController().popBackStack()
+        }
+
+        binding.resendButton.setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                signupViewModel.resendCode()
+            }
+            Toast.makeText(requireContext(), "인증번호를 재발송했습니다.", Toast.LENGTH_SHORT).show()
+            startTimer()
+            binding.resendButton.isEnabled = false
+            val edits = listOf(
+                binding.certifinum1,
+                binding.certifinum2,
+                binding.certifinum3,
+                binding.certifinum4,
+                binding.certifinum5,
+                binding.certifinum6
+            )
+            edits.forEach { it.setText("") }
+            edits.first().requestFocus()
+
+            setVerificationInput(edits)
+            binding.nextButton.isEnabled = false
+            binding.nextButton.isClickable = false
         }
 
         val editTexts = listOf(
@@ -84,6 +124,7 @@ class SignupStep2Fragment : Fragment() {
                 when (result) {
                     is VerifyEmailResult.Success -> {
                         Toast.makeText(requireContext(), "인증 코드가 확인되었습니다.", Toast.LENGTH_SHORT).show()
+                        stopTimer()
 
                         if (md == "signUp") {
                             findNavController().navigate(R.id.action_step2_to_step3)
@@ -110,6 +151,39 @@ class SignupStep2Fragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun startTimer() {
+        stopTimer()
+        isExpired = false
+        updateTimerText(verifyWindowMs)
+        countDownTimer = object : CountDownTimer(verifyWindowMs, 1_000L) {
+            override fun onTick(millisUntilFinished: Long) {
+                updateTimerText(millisUntilFinished)
+            }
+            override fun onFinish() {
+                isExpired = true
+                updateTimerText(0L)
+                // 만료되면 재발송 버튼 활성화
+                binding.resendButton.isEnabled = true
+            }
+        }.start()
+    }
+
+    private fun stopTimer() {
+        countDownTimer?.cancel()
+        countDownTimer = null
+    }
+
+    private fun updateTimerText(ms: Long) {
+        binding.timerTextView.text = formatMs(ms)
+    }
+
+    private fun formatMs(ms: Long): String {
+        val totalSec = (ms / 1000L).coerceAtLeast(0L)
+        val m = totalSec / 60
+        val s = totalSec % 60
+        return String.format(Locale.getDefault(), "%02d:%02d", m, s)
     }
 
     private fun setupVerificationInputs(editTexts: List<EditText>) {
@@ -180,6 +254,16 @@ class SignupStep2Fragment : Fragment() {
         }
         binding.nextButton.isEnabled = true
         binding.nextButton.isClickable = true
+    }
+
+    private fun showExpiredMessage() {
+        binding.certifinumTitle.text = "인증 시간이 초과되었습니다."
+        Toast.makeText(requireContext(), "인증 시간이 초과되었습니다", Toast.LENGTH_SHORT).show()
+        binding.resendButton.isEnabled = true
+        setVerificationInput(listOf(
+            binding.certifinum1, binding.certifinum2, binding.certifinum3,
+            binding.certifinum4, binding.certifinum5, binding.certifinum6
+        ))
     }
 
     override fun onDestroyView() {
