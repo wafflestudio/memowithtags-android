@@ -260,10 +260,16 @@ class SignupStep2Fragment : Fragment() {
         binding.certifinumTitle.text = "인증 시간이 초과되었습니다."
         Toast.makeText(requireContext(), "인증 시간이 초과되었습니다", Toast.LENGTH_SHORT).show()
         binding.resendButton.isEnabled = true
-        setVerificationInput(listOf(
-            binding.certifinum1, binding.certifinum2, binding.certifinum3,
-            binding.certifinum4, binding.certifinum5, binding.certifinum6
-        ))
+        setVerificationInput(
+            listOf(
+                binding.certifinum1,
+                binding.certifinum2,
+                binding.certifinum3,
+                binding.certifinum4,
+                binding.certifinum5,
+                binding.certifinum6
+            )
+        )
     }
 
     override fun onDestroyView() {

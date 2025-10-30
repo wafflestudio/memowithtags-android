@@ -162,6 +162,21 @@ class MainMemoFragment : Fragment() {
             }
         }
 
+        memoViewModel.editingMemo.observe(viewLifecycleOwner) { editing ->
+            val isEditing = (editing != null)
+
+            // 새 메모 버튼/아이콘 숨기기
+            binding.newMemoButton.visibility = if (isEditing) View.GONE else View.VISIBLE
+            binding.newMemoIcon.visibility = if (isEditing) View.GONE else View.VISIBLE
+
+            // 확인/취소 버튼 보이기
+            binding.btnEditConfirm.visibility = if (isEditing) View.VISIBLE else View.GONE
+            binding.btnEditCancel.visibility = if (isEditing) View.VISIBLE else View.GONE
+
+            // 편집 중엔 아이콘 바 항상 보이게 (키보드 상태 상관없이)
+            if (isEditing) binding.newMemoIconBar.visibility = View.VISIBLE
+        }
+
         if (initialFlag) {
             val usedCache = memoViewModel.useInitialMemoCacheIfAvailable()
 
@@ -178,10 +193,14 @@ class MainMemoFragment : Fragment() {
             val keypadHeight = screenHeight - r.bottom
 
             val isKeyboardVisible = keypadHeight > screenHeight * 0.15
+            val isEditing = memoViewModel.editingMemo.value != null
 
             binding.tagInputLayout.visibility = if (isKeyboardVisible) View.VISIBLE else View.GONE
             binding.newMemoIconBar.visibility = if (isKeyboardVisible) View.VISIBLE else View.GONE
             binding.newMemoIcon.visibility = if (isKeyboardVisible) View.GONE else View.VISIBLE
+
+            binding.newMemoIconBar.visibility = if (isEditing || isKeyboardVisible) View.VISIBLE else View.GONE
+            binding.newMemoIcon.visibility = if (!isEditing && !isKeyboardVisible) View.VISIBLE else View.GONE
         }
 
         var selectedColor: String? = null
@@ -233,6 +252,14 @@ class MainMemoFragment : Fragment() {
         // 메모 쓰기 버튼
         binding.newMemoButton.setOnClickListener(postOrUpdateMemoClickListener)
         binding.newMemoIcon.setOnClickListener(postOrUpdateMemoClickListener)
+
+        // 메모 수정 및 수정 취소 버튼
+        binding.btnEditConfirm.setOnClickListener(postOrUpdateMemoClickListener)
+        binding.btnEditCancel.setOnClickListener {
+            memoViewModel.clearEditing()
+            binding.newMemoText.text.clear()
+            tagViewModel.clearSelectedTags()
+        }
 
         // 편집 화면으로 이동 버튼
         binding.zoomButton.setOnClickListener {

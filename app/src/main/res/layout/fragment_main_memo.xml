@@ -229,6 +229,21 @@
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:id="@+id/btnEditCancel"
+                    android:layout_width="24dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/memoedit_cancel_icon"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/btnEditConfirm"
+                    android:layout_width="24dp"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/memoedit_confirm_icon"
+                    android:visibility="gone" />
+
+                <ImageView
                     android:id="@+id/newMemoButton"
                     android:layout_width="24dp"
                     android:layout_height="25dp"
