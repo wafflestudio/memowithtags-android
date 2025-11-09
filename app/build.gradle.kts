@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.retrofit.gson)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging.interceptor)
+    implementation(libs.okhttp.urlconnection)
     implementation(libs.hilt)
     implementation(libs.flexbox)
     kapt(libs.hilt.compiler)

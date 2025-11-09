@@ -40,10 +40,32 @@ class SignupStep4Fragment : Fragment() {
         }
 
         binding.nextButton.setOnClickListener {
-            val intent = Intent(requireContext(), MainActivity::class.java)
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            startActivity(intent)
+            if (md == "findPw") {
+                val newPw = arguments?.getString("newPassword").orEmpty()
+                if (newPw.isBlank()) {
+                    goToLogin()
+                    return@setOnClickListener
+                }
+                binding.nextButton.isEnabled = false
+                binding.nextButton.text = "자동 로그인 중..."
+
+                signupViewModel.loginAfterPwChange(
+                    password = newPw,
+                    onSuccess = { goToMain() },
+                    onFail = {
+                        goToLogin()
+                    }
+                )
+            } else {
+                goToMain()
+            }
         }
+    }
+
+    private fun goToMain() {
+        val intent = Intent(requireContext(), MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
     }
 
     private fun goToLogin() {

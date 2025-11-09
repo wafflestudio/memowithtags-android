@@ -81,7 +81,8 @@ class SignupStep1Fragment : Fragment() {
             // 이메일 발송
             binding.nextButton.text = "인증 코드 전송 중..."
 
-            signupViewModel.sendEmail(email)
+            val mode = requireActivity().intent.getStringExtra("mode") ?: "signUp"
+            signupViewModel.sendEmail(email, mode)
         }
 
         binding.emailEditText.addTextChangedListener(object : TextWatcher {

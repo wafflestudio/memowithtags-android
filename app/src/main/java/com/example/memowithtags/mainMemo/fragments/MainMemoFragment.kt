@@ -168,6 +168,7 @@ class MainMemoFragment : Fragment() {
             // 새 메모 버튼/아이콘 숨기기
             binding.newMemoButton.visibility = if (isEditing) View.GONE else View.VISIBLE
             binding.newMemoIcon.visibility = if (isEditing) View.GONE else View.VISIBLE
+            binding.cancelNewMemoButton.visibility = if (isEditing) View.GONE else View.VISIBLE
 
             // 확인/취소 버튼 보이기
             binding.btnEditConfirm.visibility = if (isEditing) View.VISIBLE else View.GONE
@@ -259,6 +260,13 @@ class MainMemoFragment : Fragment() {
             memoViewModel.clearEditing()
             binding.newMemoText.text.clear()
             tagViewModel.clearSelectedTags()
+        }
+
+        binding.cancelNewMemoButton.setOnClickListener {
+            binding.newMemoText.text.clear()
+            tagViewModel.clearSelectedTags()
+            binding.newMemoText.clearFocus()
+            binding.tagInputEditText.text.clear()
         }
 
         // 편집 화면으로 이동 버튼

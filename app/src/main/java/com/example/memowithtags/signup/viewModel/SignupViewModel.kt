@@ -93,20 +93,24 @@ class SignupViewModel @Inject constructor(
         }
     }
 
-    fun sendEmail(email: String) {
+    fun sendEmail(email: String, mode: String) {
         viewModelScope.launch {
-            val result = repository.sendEmail(SendEmailRequest(email))
+            val normalized = email.trim().lowercase()
+            val type = if (mode == "findPw") "ResetPassword" else "Register"
+
+            val result = repository.sendEmail(type, SendEmailRequest(normalized))
             if (result is SendEmailResult.Success) {
-                this@SignupViewModel.email = email
+                this@SignupViewModel.email = normalized
             }
             _emailSentEvent.emit(result)
         }
     }
 
-    fun resendCode() {
+    fun resendCode(mode: String) {
         viewModelScope.launch {
+            val type = if (mode == "findPw") "ResetPassword" else "Register"
             if (email.isBlank()) return@launch
-            val result = repository.sendEmail(SendEmailRequest(email))
+            val result = repository.sendEmail(type, SendEmailRequest(email))
             if (result is SendEmailResult.Success) {
                 resetAndStartVerifyTimer()
             }
@@ -114,9 +118,10 @@ class SignupViewModel @Inject constructor(
         }
     }
 
-    fun verifyEmail(code: String) {
+    fun verifyEmail(mode: String, code: String) {
         viewModelScope.launch {
-            val result = repository.verifyEmail(VerifyEmailRequest(email, code))
+            val type = if (mode == "findPw") "ResetPassword" else "Register"
+            val result = repository.verifyEmail(type, VerifyEmailRequest(email, code))
             if (result is VerifyEmailResult.Success) {
                 _isVerified.value = true
                 stopVerifyTimer()
@@ -126,6 +131,32 @@ class SignupViewModel @Inject constructor(
             _verifyEmailEvent.emit(result)
         }
     }
+
+    fun loginAfterPwChange(
+        password: String,
+        onSuccess: () -> Unit,
+        onFail: (String?) -> Unit
+    ) {
+        viewModelScope.launch {
+            val emailNorm = email.trim().lowercase()
+            val res = repository.login(com.example.memowithtags.common.model.request.auth.LoginRequest(emailNorm, password))
+            when (res) {
+                is com.example.memowithtags.common.model.result.LoginResult.Success -> {
+                    repository.saveAccessToken(res.response.accessToken)
+                    repository.saveRefreshToken(res.response.refreshToken)
+                    repository.saveEmail(emailNorm)
+                    onSuccess()
+                }
+                is com.example.memowithtags.common.model.result.LoginResult.Error -> {
+                    onFail(res.message)
+                }
+                is com.example.memowithtags.common.model.result.LoginResult.Exception -> {
+                    onFail(res.throwable.message)
+                }
+            }
+        }
+    }
+
 
     fun changePw(password: String) {
         viewModelScope.launch {

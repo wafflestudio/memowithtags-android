@@ -57,7 +57,9 @@ class ChangePWFragment : Fragment() {
                     is ChangePwResult.Success -> {
                         Toast.makeText(requireContext(), "비밀번호가 변경되었습니다.", Toast.LENGTH_SHORT).show()
 
-                        findNavController().navigate(R.id.action_chpw_to_step4)
+                        val newPw = binding.passwordEditText.text.toString()
+                        val bundle = Bundle().apply { putString("newPassword", newPw) }
+                        findNavController().navigate(R.id.action_chpw_to_step4, bundle)
                     }
                     is ChangePwResult.Error -> {
                         when (result.code) {

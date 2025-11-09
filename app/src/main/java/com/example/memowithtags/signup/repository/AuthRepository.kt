@@ -115,9 +115,9 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun sendEmail(request: SendEmailRequest): SendEmailResult {
+    suspend fun sendEmail(type: String, request: SendEmailRequest): SendEmailResult {
         return try {
-            val response = authApi.sendEmail(request)
+            val response = authApi.sendEmail(type, request)
             if (response.isSuccessful) {
                 SendEmailResult.Success
             } else {
@@ -131,9 +131,9 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun verifyEmail(request: VerifyEmailRequest): VerifyEmailResult {
+    suspend fun verifyEmail(type: String, request: VerifyEmailRequest): VerifyEmailResult {
         return try {
-            val response = authApi.verifyEmail(request)
+            val response = authApi.verifyEmail(type, request)
             if (response.isSuccessful) {
                 VerifyEmailResult.Success
             } else {

@@ -68,6 +68,10 @@ class SearchFragment : Fragment() {
                     queryTagAdapter.submitList(selectedQueryTags.toList().map { tagViewModel.getTag(it) })
                     binding.querytagRecyclerView.visibility = View.VISIBLE
                     memoViewModel.addSelectedTagId(tagId)
+
+                    binding.searchText.text?.clear()
+                    memoViewModel.updateQuery("")
+                    tagViewModel.updateQuery("")
                 }
             }
 

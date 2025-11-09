@@ -22,11 +22,17 @@ interface AuthApi {
     @POST("api/v1/auth/register")
     suspend fun signup(@Body signupRequest: SignupRequest): Response<SignupResponse>
 
-    @POST("api/v1/auth/send-email")
-    suspend fun sendEmail(@Body sendEmailRequest: SendEmailRequest): Response<Unit>
+    @POST("api/v1/mail")
+    suspend fun sendEmail(
+        @Query("type") type: String,
+        @Body request: SendEmailRequest
+    ): Response<Unit>
 
-    @POST("api/v1/auth/verify-email")
-    suspend fun verifyEmail(@Body verifyEmailRequest: VerifyEmailRequest): Response<Unit>
+    @POST("api/v1/mail/verify")
+    suspend fun verifyEmail(
+        @Query("type") type: String,
+        @Body verifyEmailRequest: VerifyEmailRequest
+    ): Response<Unit>
 
     @POST("api/v1/auth/login")
     suspend fun login(@Body loginRequest: LoginRequest): Response<LoginResponse>

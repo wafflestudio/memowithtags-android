@@ -76,7 +76,8 @@ class SignupStep2Fragment : Fragment() {
 
             val verifyCode = "$text1$text2$text3$text4$text5$text6"
 
-            signupViewModel.verifyEmail(verifyCode)
+            val mode = requireActivity().intent.getStringExtra("mode") ?: "signUp"
+            signupViewModel.verifyEmail(mode, verifyCode)
         }
 
         // 이전 버튼
@@ -86,7 +87,8 @@ class SignupStep2Fragment : Fragment() {
 
         binding.resendButton.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {
-                signupViewModel.resendCode()
+                val mode = requireActivity().intent.getStringExtra("mode") ?: "signUp"
+                signupViewModel.resendCode(mode)
             }
             Toast.makeText(requireContext(), "인증번호를 재발송했습니다.", Toast.LENGTH_SHORT).show()
             startTimer()
@@ -164,7 +166,6 @@ class SignupStep2Fragment : Fragment() {
             override fun onFinish() {
                 isExpired = true
                 updateTimerText(0L)
-                // 만료되면 재발송 버튼 활성화
                 binding.resendButton.isEnabled = true
             }
         }.start()
