@@ -99,6 +99,34 @@
                 android:textSize="16sp"
                 android:textFontWeight="400"/>
 
+            <TextView
+                android:id="@+id/passwordLengthCheck"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="✓ 최소 8자 ~ 최대 16자"
+                android:textSize="12sp"
+                android:textFontWeight="400"
+                android:layout_marginTop="8dp"
+                android:paddingHorizontal="6dp"
+                android:textColor="@color/text_secondary"
+                app:layout_constraintTop_toBottomOf="@+id/newPasswordInput"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/passwordCharacterCheck"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="✓ 최소 하나 이상의 숫자, 대문자와 소문자, 특수 문자"
+                android:textSize="12sp"
+                android:textFontWeight="400"
+                android:layout_marginTop="6dp"
+                android:paddingHorizontal="6dp"
+                android:textColor="@color/text_secondary"
+                app:layout_constraintTop_toBottomOf="@+id/passwordLengthCheck"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
         </LinearLayout>
 
         <Button

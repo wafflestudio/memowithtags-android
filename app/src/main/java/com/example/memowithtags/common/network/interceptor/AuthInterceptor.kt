@@ -14,7 +14,9 @@ class AuthInterceptor(
             original.newBuilder()
                 .header("Authorization", "Bearer $token")
                 .build()
-        } else original
+        } else {
+            original
+        }
         return chain.proceed(req)
     }
 }

@@ -157,7 +157,6 @@ class SignupViewModel @Inject constructor(
         }
     }
 
-
     fun changePw(password: String) {
         viewModelScope.launch {
             val result = repository.changePw(ChangePwRequest(email, password))

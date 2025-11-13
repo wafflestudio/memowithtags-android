@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -36,6 +37,8 @@ class ChangeNicknameFragment : Fragment() {
             findNavController().popBackStack()
         }
 
+        binding.nicknameInput.filters = arrayOf(android.text.InputFilter.LengthFilter(16))
+
         binding.nicknameInput.addTextChangedListener {
             viewModel.onTextChanged(it.toString())
             binding.limitText.text = "${it.toString().length}/16"
@@ -55,6 +58,7 @@ class ChangeNicknameFragment : Fragment() {
 
         viewModel.changeNicknameResult.observe(viewLifecycleOwner) { result ->
             result.onSuccess {
+                Toast.makeText(requireContext(), "아이디가 변경되었습니다.", Toast.LENGTH_SHORT).show()
                 findNavController().popBackStack()
             }.onFailure {
             }

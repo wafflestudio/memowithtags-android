@@ -95,7 +95,8 @@
                     android:text="관련 검색"
                     android:textSize="12sp"
                     android:textColor="@color/text_primary"
-                    android:textFontWeight="500"/>
+                    android:textFontWeight="500"
+                    android:visibility="gone"/>
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/editButton"

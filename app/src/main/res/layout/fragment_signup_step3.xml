@@ -158,7 +158,8 @@
                     android:textFontWeight="400"
                     android:background="@drawable/tag_background"
                     android:backgroundTint="@color/bg_tag_back"
-                    android:textColor="@color/text_tag" />
+                    android:textColor="@color/text_tag"
+                    android:visibility="gone"/>
 
                 <View
                     android:layout_weight="1"
