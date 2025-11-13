@@ -15,10 +15,13 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.JavaNetCookieJar
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.net.CookieManager
+import java.net.CookiePolicy
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -26,7 +29,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = "https://memowithtags.kro.kr"
+    private const val BASE_URL = "https://memowithtags-api.wafflestudio.com"
 
     @Provides
     @Singleton
@@ -50,6 +53,12 @@ object NetworkModule {
         return SharedPrefsTokenProvider(sharedPreferences)
     }
 
+    @Provides @Singleton
+    fun provideCookieManager(): java.net.CookieManager =
+        java.net.CookieManager().apply {
+            setCookiePolicy(java.net.CookiePolicy.ACCEPT_ALL)
+        }
+
     @Provides
     fun provideTokenAuthenticator(
         tokenProvider: TokenProvider,
@@ -62,8 +71,12 @@ object NetworkModule {
     @Provides
     @Singleton
     @Named("NoAuth")
-    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+    fun provideOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+        cookieManager: CookieManager
+    ): OkHttpClient {
         return OkHttpClient.Builder()
+            .cookieJar(JavaNetCookieJar(cookieManager))
             .addInterceptor(loggingInterceptor)
             .build()
     }
@@ -74,9 +87,11 @@ object NetworkModule {
     fun provideOkHttpClientWithAuth(
         loggingInterceptor: HttpLoggingInterceptor,
         authInterceptor: AuthInterceptor,
-        tokenAuthenticator: TokenAuthenticator
+        tokenAuthenticator: TokenAuthenticator,
+        cookieManager: CookieManager
     ): OkHttpClient {
         return OkHttpClient.Builder()
+            .cookieJar(JavaNetCookieJar(cookieManager))
             .authenticator(tokenAuthenticator)
             .addInterceptor(loggingInterceptor)
             .addInterceptor(authInterceptor)

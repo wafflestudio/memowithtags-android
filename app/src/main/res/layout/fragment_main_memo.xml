@@ -109,7 +109,7 @@
             android:text="- / -"
             android:textSize="13sp"
             android:textColor="@color/text_primary"
-            android:background="@drawable/bg_recommend_text" />
+            android:background="@drawable/rounded_edittext" />
 
         <FrameLayout
             android:id="@+id/recommendButtonGroup"
@@ -227,6 +227,28 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/btnEditCancel"
+                    android:layout_width="24dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/memoedit_cancel_icon"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/btnEditConfirm"
+                    android:layout_width="24dp"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/memoedit_confirm_icon"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/cancelNewMemoButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="4dp"
+                    android:src="@drawable/newmemo_cancel_icon" />
 
                 <ImageView
                     android:id="@+id/newMemoButton"

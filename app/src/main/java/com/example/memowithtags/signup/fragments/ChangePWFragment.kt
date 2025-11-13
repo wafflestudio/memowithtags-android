@@ -2,10 +2,14 @@ package com.example.memowithtags.signup.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -51,13 +55,33 @@ class ChangePWFragment : Fragment() {
             goToLogin()
         }
 
+        binding.passwordEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                val password = s.toString()
+                if (password.length in 8..16) {
+                    binding.passwordLengthCheck.setTextColor(ContextCompat.getColor(binding.passwordLengthCheck.context, R.color.text_primary))
+                } else {
+                    binding.passwordLengthCheck.setTextColor(ContextCompat.getColor(binding.passwordLengthCheck.context, R.color.text_secondary))
+                }
+                if (containsRequiredCharacters(password)) {
+                    binding.passwordCharacterCheck.setTextColor(ContextCompat.getColor(binding.passwordCharacterCheck.context, R.color.text_primary))
+                } else {
+                    binding.passwordCharacterCheck.setTextColor(ContextCompat.getColor(binding.passwordCharacterCheck.context, R.color.text_secondary))
+                }
+            }
+        })
+
         viewLifecycleOwner.lifecycleScope.launch {
             signupViewModel.changePwEvent.collect { result ->
                 when (result) {
                     is ChangePwResult.Success -> {
                         Toast.makeText(requireContext(), "비밀번호가 변경되었습니다.", Toast.LENGTH_SHORT).show()
 
-                        findNavController().navigate(R.id.action_chpw_to_step4)
+                        val newPw = binding.passwordEditText.text.toString()
+                        val bundle = Bundle().apply { putString("newPassword", newPw) }
+                        findNavController().navigate(R.id.action_chpw_to_step4, bundle)
                     }
                     is ChangePwResult.Error -> {
                         when (result.code) {
@@ -76,12 +100,30 @@ class ChangePWFragment : Fragment() {
                 }
             }
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // 뒤로가기 무시
+                }
+            }
+        )
     }
 
     private fun goToLogin() {
         val intent = Intent(requireContext(), LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
+    }
+
+    private fun containsRequiredCharacters(input: String): Boolean {
+        // 숫자 1개 이상: (?=.*[0-9])
+        // 대문자 1개 이상: (?=.*[A-Z])
+        // 소문자 1개 이상: (?=.*[a-z])
+        // 특수문자 1개 이상: (?=.*[!@#\$%^&*(),.?":{}|<>])
+        val pattern = Regex("^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#\$%^&*(),.?\":{}|<>]).+$")
+        return pattern.containsMatchIn(input)
     }
 
     override fun onDestroyView() {

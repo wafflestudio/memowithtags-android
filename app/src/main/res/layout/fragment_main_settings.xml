@@ -140,7 +140,8 @@
             android:backgroundTint="@color/bg_memo"
             android:layout_marginBottom="12dp"
             android:paddingTop="16dp"
-            android:paddingBottom="5dp">
+            android:paddingBottom="5dp"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
