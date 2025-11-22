@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/mainSettingsFragment"
-        android:name="com.example.memowithtags.settings.fragments.MainSettingsFragment"
+        android:name="com.wafflestudio.memowithtags.settings.fragments.MainSettingsFragment"
         tools:layout="@layout/fragment_main_settings">
         <action
             android:id="@+id/action_mainSettings_to_accountSettings"
@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/tagSettingsFragment"
-        android:name="com.example.memowithtags.settings.fragments.TagSettingsFragment"
+        android:name="com.wafflestudio.memowithtags.settings.fragments.TagSettingsFragment"
         tools:layout="@layout/fragment_tag_settings">
         <action
             android:id="@+id/action_tagSettingsFragment_to_editTagSettingsFragment"
@@ -39,13 +39,13 @@
 
     <fragment
         android:id="@+id/editTagSettingsFragment"
-        android:name="com.example.memowithtags.settings.fragments.EditTagSettingsFragment"
+        android:name="com.wafflestudio.memowithtags.settings.fragments.EditTagSettingsFragment"
         tools:layout="@layout/fragment_edit_tag_settings">
     </fragment>
 
     <fragment
         android:id="@+id/accountSettingsFragment"
-        android:name="com.example.memowithtags.settings.fragments.AccountSettingsFragment"
+        android:name="com.wafflestudio.memowithtags.settings.fragments.AccountSettingsFragment"
         tools:layout="@layout/fragment_account_settings">
         <action
             android:id="@+id/action_accountSettings_to_changeNickname"
@@ -65,13 +65,13 @@
 
     <fragment
         android:id="@+id/changeNicknameFragment"
-        android:name="com.example.memowithtags.settings.fragments.ChangeNicknameFragment"
+        android:name="com.wafflestudio.memowithtags.settings.fragments.ChangeNicknameFragment"
         tools:layout="@layout/fragment_change_nickname">
     </fragment>
 
     <fragment
         android:id="@+id/changePWLoginedFragment"
-        android:name="com.example.memowithtags.settings.fragments.ChangePWLoginedFragment"
+        android:name="com.wafflestudio.memowithtags.settings.fragments.ChangePWLoginedFragment"
         tools:layout="@layout/fragment_change_pw_logined">
     </fragment>
 

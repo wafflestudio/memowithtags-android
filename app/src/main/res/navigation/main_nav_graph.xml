@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/mainMemoFragment"
-        android:name="com.example.memowithtags.mainMemo.fragments.MainMemoFragment"
+        android:name="com.wafflestudio.memowithtags.mainMemo.fragments.MainMemoFragment"
         tools:layout="@layout/fragment_main_memo">
         <action
             android:id="@+id/action_mainMemo_to_editMemo"
@@ -33,7 +33,7 @@
 
     <fragment
         android:id="@+id/editMemoFragment"
-        android:name="com.example.memowithtags.mainMemo.fragments.EditMemoFragment"
+        android:name="com.wafflestudio.memowithtags.mainMemo.fragments.EditMemoFragment"
         tools:layout="@layout/fragment_edit_memo">
         <action
             android:id="@+id/action_editMemo_to_editTag"
@@ -46,7 +46,7 @@
 
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.memowithtags.mainMemo.fragments.SearchFragment"
+        android:name="com.wafflestudio.memowithtags.mainMemo.fragments.SearchFragment"
         tools:layout="@layout/fragment_search">
         <action
             android:id="@+id/action_searchFragment_to_editMemoFragment"
@@ -66,7 +66,7 @@
 
     <fragment
         android:id="@+id/editTagFragment"
-        android:name="com.example.memowithtags.mainMemo.fragments.EditTagFragment"
+        android:name="com.wafflestudio.memowithtags.mainMemo.fragments.EditTagFragment"
         tools:layout="@layout/fragment_edit_tag_settings"/>
 
 </navigation>

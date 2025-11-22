@@ -10,7 +10,7 @@ hilt {
 }
 
 android {
-    namespace = "com.example.memowithtags"
+    namespace = "com.wafflestudio.memowithtags"
     compileSdk = 35
 
     viewBinding {
@@ -18,7 +18,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.memowithtags"
+        applicationId = "com.wafflestudio.memowithtags"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
